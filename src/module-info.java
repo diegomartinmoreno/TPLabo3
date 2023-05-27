@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * @author Diego
- *
- */
-module PedidosYa {
-}
