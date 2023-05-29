@@ -4,7 +4,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 public class Tarjeta {
-	
+
+	private String numeroTarjeta; /// (16 digitos)
+	private String titular;
+	private LocalDate fechaDeVencimiento;
+	private String codigoDeSeguridad; /// (3 digitos)
+	private double saldo;
+	private boolean activa;
 
 	public Tarjeta() {
 		super();
@@ -157,13 +163,6 @@ public class Tarjeta {
 		return "Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 4) + ", titular=" + titular;
 	}
 
-
-	private String numeroTarjeta; /// (16 digitos)
-	private String titular;
-	private LocalDate fechaDeVencimiento;
-	private String codigoDeSeguridad; /// (3 digitos)
-	private double saldo;
-	private boolean activa;
 
 	public String mostrarTarjeta (){
 		return this.toString();

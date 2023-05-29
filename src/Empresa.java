@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Empresa {
 
-   private LinkedList <String> listaDeCupones;
+   private List <String> listaDeCupones;
     private String Nombre;
 
     private  double CostoDeEnvio;
@@ -14,8 +14,14 @@ public class Empresa {
 
     private HashMap<Integer, String> Zonas;
 
-   public boolean validarCupon(String cupon){
-        boolean bool = true;
+   public boolean validarCupon(String cupon){///Hay que verificar
+       boolean bool = false;
+        for (int i=0;i<listaDeCupones.size() && bool == false;i++){
+            if (listaDeCupones.get(i).equals(cupon)){
+                bool = true;
+                listaDeCupones.remove(listaDeCupones.get(i));
+            }
+        }
         return bool;
     }
 
@@ -29,8 +35,14 @@ public class Empresa {
         ProductosEmpresa = new LinkedHashMap<>();
         Zonas = new HashMap<>();
         listaDeCupones = new LinkedList<>();
+        generarCupones();
     }
 
+    private void generarCupones(){
+       for(int i=0;i<6;i++){
+           listaDeCupones.add(" ");
+       }
+    }
     public String getNombre() {
         return Nombre;
     }
