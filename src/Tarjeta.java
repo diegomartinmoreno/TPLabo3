@@ -1,16 +1,11 @@
 import java.util.Objects;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;  
 import java.util.Scanner;
+import java.io.IOException;
+import java.time.YearMonth;
 
 public class Tarjeta {
-
-	private String numeroTarjeta; /// (16 digitos)
-	private String titular;
-	private LocalDate fechaDeVencimiento;
-	private String codigoDeSeguridad; /// (3 digitos)
-	private double saldo;
-	private boolean activa;
+	
 
 	public Tarjeta() {
 		super();
@@ -19,7 +14,7 @@ public class Tarjeta {
 		System.out.println("Inicio de carga de nueva tarjeta.");
 		do {
 			System.out.println("Ingrese nombre del titular:");
-			this.titular= lectura.next();
+			this.titular= lectura.nextLine();
 			if (!this.titular.matches("[0-9]+")) {
 				flag=false;
 			}else {
@@ -31,7 +26,7 @@ public class Tarjeta {
 		
 		do {
 			System.out.println("Ingrese numero de la tarjeta:");
-			this.numeroTarjeta=lectura.next();
+			this.numeroTarjeta=lectura.nextLine();
 			if (this.numeroTarjeta.matches("[0-9]+") && this.numeroTarjeta.length()==16) {
 				flag=false;
 			}else {
@@ -43,10 +38,15 @@ public class Tarjeta {
 		
 		do {
 			System.out.println("Ingrese fecha de vencimiento (MM/AA):");
-			DateTimeFormatter formato = DateTimeFormatter.ofPattern("mm/yy");
-			String auxiliar=lectura.next();
-			this.fechaDeVencimiento.format(formato); /// configuro la fecha de vencimiento a mm/aa.
-			this.fechaDeVencimiento= LocalDate.parse(auxiliar, formato);
+			try {
+				DateTimeFormatter formato = DateTimeFormatter.ofPattern("MM/yy");
+				String auxiliar=lectura.nextLine();
+				this.fechaDeVencimiento=YearMonth.parse(auxiliar, formato);
+				
+			} catch(Exception e) {
+				System.out.println("Error en la carga de la fecha de vencimiento.");
+			}
+
 			if (this.VerificarVencimiento()) {
 				flag=false;
 			}else {
@@ -58,7 +58,7 @@ public class Tarjeta {
 		
 		do {
 			System.out.println("Ingrese codigo de seguridad:");
-			this.codigoDeSeguridad=lectura.next();
+			this.codigoDeSeguridad=lectura.nextLine();
 			if (this.codigoDeSeguridad.matches("[0-9]+") && this.codigoDeSeguridad.length()==3) {
 				flag=false;
 			}else {
@@ -70,7 +70,7 @@ public class Tarjeta {
 		
 		do {
 			System.out.println("Ingrese saldo limite de la tarjeta:");
-			this.saldo=lectura.nextDouble();
+			this.saldo=Double.parseDouble(lectura.nextLine());
 			if (this.saldo>0) {
 				flag=false;
 			}else {
@@ -79,10 +79,11 @@ public class Tarjeta {
 		}while(flag);
 		
 		this.activa=true;
+		
 		lectura.close();
 	}
 
-	public Tarjeta(String numeroTarjeta, String titular, LocalDate fechaDeVencimiento, String codigoDeSeguridad,
+	public Tarjeta(String numeroTarjeta, String titular, YearMonth fechaDeVencimiento, String codigoDeSeguridad,
 			double saldo, boolean activa) {
 		super();
 		this.numeroTarjeta = numeroTarjeta;
@@ -126,11 +127,11 @@ public class Tarjeta {
 		this.titular = titular;
 	}
 
-	public LocalDate getFechaDeVencimiento() {
+	public YearMonth getFechaDeVencimiento() {
 		return fechaDeVencimiento;
 	}
 
-	public void setFechaDeVencimiento(LocalDate fechaDeVencimiento) {
+	public void setFechaDeVencimiento(YearMonth fechaDeVencimiento) {
 		this.fechaDeVencimiento = fechaDeVencimiento;
 	}
 
@@ -160,9 +161,16 @@ public class Tarjeta {
 
 	@Override
 	public String toString() {
-		return "Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 4) + ", titular=" + titular;
+		return "Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 16) + ", titular=" + titular;
 	}
 
+
+	private String numeroTarjeta; /// (16 digitos)
+	private String titular;
+	private YearMonth fechaDeVencimiento;
+	private String codigoDeSeguridad; /// (3 digitos)
+	private double saldo;
+	private boolean activa;
 
 	public String mostrarTarjeta (){
 		return this.toString();
@@ -186,12 +194,14 @@ public class Tarjeta {
 	}
 	
 	public boolean VerificarVencimiento() {
-		LocalDate ahora;
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("mm/yy");
-		ahora= java.time.LocalDate.now();
-		ahora.format(formato);
-		if (this.fechaDeVencimiento.isBefore(ahora)) {
-			return true;
+		try {
+			YearMonth ahora;
+			ahora= YearMonth.now();
+			if (this.fechaDeVencimiento.isAfter(ahora)) {
+				return true;
+			}
+		} catch(Exception e) {
+			System.out.println("Error en fecha de vencimiento de la tarjeta.");
 		}
 		return false;
 	}
@@ -210,6 +220,11 @@ public class Tarjeta {
 				return false;
 			}
 		}
+	}
+	
+	public static void main (String[] Args) {
+		Tarjeta tar= new Tarjeta();
+		System.out.println(tar.toString());
 	}
 }
 
