@@ -221,11 +221,14 @@ public class Tarjeta {
 			}
 		}
 	}
-	
+
+/*   ///PARA TESTEAR
 	public static void main (String[] Args) {
 		Tarjeta tar= new Tarjeta();
 		System.out.println(tar.toString());
 	}
+*/
+	
 }
 
 
