@@ -8,7 +8,13 @@ public class HistorialDeCompras {
         pedidos = new ArrayList<>();
     }
 
-    public void agregarPedido(Carrito carrito){
-        pedidos.add(carrito);
+    public void listarHistorial(){
+        for (Carrito carrito : pedidos){
+            carrito.listarCarrito();
+        }
+    }
+
+    public boolean agregarPedido(Carrito carrito){
+        return pedidos.add(carrito);
     }
 }
