@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -5,8 +6,8 @@ import java.util.Set;
 
 public class Usuario extends Persona{
     private Set<String> zonas;
-    //TARJETA...
-    //HISTORIAL DE COMPRA...
+    private Tarjeta tarjeta;
+    private HistorialDeCompras historialDeCompras;
     private String contrasenia;
     /*
         La contrasenia no deberia tener un getter, es un campo privado al usuario, sino perderia seguridad el sistema.
@@ -59,7 +60,7 @@ public class Usuario extends Persona{
         this.zonaActual = zonaActual;
     }
 
-    public int contarNumerosDeCadena (String cadena){
+    private static int contarNumerosDeCadena (String cadena){
         int contador=0;
         for (int i=0; i<cadena.length();i++){
             char c = cadena.charAt(i);
@@ -69,7 +70,7 @@ public class Usuario extends Persona{
         return contador;
     }
 
-    public int contarLetrasCadena (String cadena){
+    private static int contarLetrasCadena (String cadena){
         int contador=0;
         for (int i=0; i<cadena.length();i++){
             char c = cadena.charAt(i);
@@ -79,7 +80,7 @@ public class Usuario extends Persona{
         return contador;
     }
 
-    public boolean verificarContraseniaSegura (String contrasenia) throws NullPointerException{
+    public static boolean verificarContraseniaSegura (String contrasenia) throws NullPointerException{
         if (contrasenia == null) throw new NullPointerException("Error! La contrasenia enviada es nula.");
         if (contrasenia.length()<7) //verificamos primero la longitud, ya que si esta ya es menor a la solicitada, es incorrecta.
             return false;
