@@ -1,7 +1,7 @@
 import java.security.PublicKey;
 import java.util.Objects;
 
-public class Persona {
+public abstract class Persona {
     private String nombre;
     private String apellido;
     private String nroDeTelefono;
@@ -74,8 +74,14 @@ public class Persona {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(dni);
+    }
+
+    @Override
     public String toString() {
-        return  nombre + "\n" +
+        return  "------------------------\n"
+                + nombre + "\n" +
                 apellido + "\n" +
                 nroDeTelefono + "\n" +
                 edad + " anios" + "\n" +
@@ -83,7 +89,8 @@ public class Persona {
                 "DNI: " + dni + "\n";
     }
 
-    public boolean verificarEsLetra (String cadena){
+    public boolean verificarEsLetra (String cadena) throws NullPointerException{
+        if(cadena==null)throw new NullPointerException("Error! La cadena no puede ser nula.");
         return cadena.matches("[a-zA-Z]+");
     }
 
@@ -91,39 +98,25 @@ public class Persona {
         return edad>=MAYOR_EDAD;
     }
 
-    public boolean verificarLongitudDNI (String dni){
+    public boolean verificarLongitudDNI (String dni) throws NullPointerException{
+        if(dni==null) throw new NullPointerException("Error! El DNI no puede ser nulo.");
         return dni.length()==LONGITUD_DNI;
     }
 
-    public boolean verificarEsNumero (String cadena){
+    public boolean verificarEsNumero (String cadena) throws NullPointerException{
+        if(cadena==null) throw new NullPointerException("Error! La cadena no puede ser nula.");
         return cadena.matches("[0-9]+");
     }
 
-    public boolean verificarLongitudTelefono (String nroDeTelefono){
+    public boolean verificarLongitudTelefono (String nroDeTelefono) throws NullPointerException{
+        if(nroDeTelefono==null) throw new NullPointerException("Error! El telefono no puede ser nulo.");
         return nroDeTelefono.length()==LONGITUD_TELEFONO_MODERNA || nroDeTelefono.length()==LONGITUD_TELEFONO_ANTERIOR;
     }
 
-    public boolean verificarCodigoDeArea (String nroDeTelefono){
-        return nroDeTelefono.substring(0, 3).equals("223");
+    public boolean verificarCodigoDeArea (String codigoArea){
+        if(codigoArea==null) throw new NullPointerException("Error! El codigo de area no puede ser nulo.");
+        return codigoArea.substring(0, 3).equals("223");
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

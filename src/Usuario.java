@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Usuario extends Persona{
-    private List <String> zonas;
+    private Set<String> zonas;
     //TARJETA...
     //HISTORIAL DE COMPRA...
     private String contrasenia;
@@ -17,22 +19,22 @@ public class Usuario extends Persona{
 
     public Usuario() {
         super();
-        zonas = new ArrayList<>();
+        zonas = new HashSet<>();
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, List<String> zonas, String contrasenia) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas, String contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         this.zonas = zonas;
         this.contrasenia = contrasenia;
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, List<String> zonas) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         this.zonas = zonas;
     }
 
-    public List<String> getZonas() {
+    public Set<String> getZonas() {
         return zonas;
     }
-    public void setZonas(List<String> zonas) {
+    public void setZonas(Set<String> zonas) {
         this.zonas = zonas;
     }
 
@@ -42,14 +44,18 @@ public class Usuario extends Persona{
 
     @Override
     public String toString() {
-        return super.toString() + "\nZonas disponibles: " + zonas;
+        return super.toString()
+                + "Zonas disponibles: " + zonas +
+                "\n------------------------\n";
     }
 
-    public boolean agregarUnaZona (String zonaNueva){
+    public boolean agregarUnaZona (String zonaNueva) throws NullPointerException{
+        if (zonaNueva == null) throw new NullPointerException("Error! La nueva zona es nula.");
         return zonas.add(zonaNueva);
     }
 
-    public void establecerZonaActual (String zonaActual){
+    public void establecerZonaActual (String zonaActual) throws NullPointerException {
+        if (zonaActual == null) throw new NullPointerException("Error! La zona es nula.");
         this.zonaActual = zonaActual;
     }
 
@@ -73,7 +79,8 @@ public class Usuario extends Persona{
         return contador;
     }
 
-    public boolean verificarContraseniaSegura (String contrasenia){
+    public boolean verificarContraseniaSegura (String contrasenia) throws NullPointerException{
+        if (contrasenia == null) throw new NullPointerException("Error! La contrasenia enviada es nula.");
         if (contrasenia.length()<7) //verificamos primero la longitud, ya que si esta ya es menor a la solicitada, es incorrecta.
             return false;
         return contarLetrasCadena(contrasenia)>=5 && contarNumerosDeCadena(contrasenia)>=2;
