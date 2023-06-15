@@ -1,6 +1,7 @@
+import java.util.UUID;
+
 public class Producto {
-    private static int contadorId=0;
-    private int id;
+    private UUID id;
     private String nombreProducto;
     private String tipo;
     private String descripcion;
@@ -9,8 +10,7 @@ public class Producto {
     private String nombreDeLaEmpresa;
 
     public Producto(String nombreProducto, String tipo, String descripcion, double precio, String nombreDeLaEmpresa) {
-        contadorId++;
-        this.id = contadorId;
+        id = UUID.randomUUID();
         this.nombreProducto = nombreProducto;
         this.tipo = tipo;
         this.descripcion = descripcion;
@@ -36,5 +36,17 @@ public class Producto {
 
     public void setNombreDeLaEmpresa(String nombreDeLaEmpresa) {
         this.nombreDeLaEmpresa = nombreDeLaEmpresa;
+    }
+
+    @Override
+    public String toString() {
+        return "Producto{" +
+                ", nombreProducto='" + nombreProducto + '\'' +
+                ", tipo='" + tipo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", precio=" + precio +
+                ", cantidadPedido=" + cantidadPedido +
+                ", nombreDeLaEmpresa='" + nombreDeLaEmpresa + '\'' +
+                '}';
     }
 }

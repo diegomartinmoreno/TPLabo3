@@ -14,19 +14,7 @@ public class Empresa {
 
     private HashMap<Integer, String> Zonas;
 
-   public boolean validarCupon(String cupon){///Hay que verificar
-       boolean bool = false;
-        for (int i=0;i<listaDeCupones.size() && bool == false;i++){
-            if (listaDeCupones.get(i).equals(cupon)){
-                bool = true;
-                listaDeCupones.remove(listaDeCupones.get(i));
-            }
-        }
-        return bool;
-    }
-
-    public String eliminarCupon(String cupon){
-        return cupon;
+    public Empresa() {
     }
 
     public Empresa(String nombre, double costoDeEnvio) {
@@ -36,6 +24,27 @@ public class Empresa {
         Zonas = new HashMap<>();
         listaDeCupones = new LinkedList<>();
         generarCupones();
+    }
+
+   public boolean validarCupon(String cupon) throws NullPointerException{
+       if(cupon==null) throw new NullPointerException("Error! La cadena no puede ser vacia.//***");
+
+       boolean bool = false;
+
+        for (int i = 0; i<listaDeCupones.size() && !bool; i++){
+            if (listaDeCupones.get(i).equals(cupon)){
+                bool = true;
+                listaDeCupones.remove(listaDeCupones.get(i));
+            }
+        }
+
+        return bool;
+    }
+
+    public boolean eliminarCupon(String cupon){
+       if (cupon==null) {throw new NullPointerException("Error! La cadena no puede ser vacia.//***");}
+
+        return listaDeCupones.remove(cupon);
     }
 
     private void generarCupones(){

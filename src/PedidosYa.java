@@ -7,20 +7,16 @@ public class PedidosYa {
 
     private List<Empresa>listaDeEmpresas;
 
+    public Empresa buscarEmpresaSegunNombre(String empresa) throws NullPointerException{
+        if (empresa==null) throw new NullPointerException("Error! La empresa no puede ser nula.//***");
 
-    public int buscarPosEmpresaSegunNombre(String nombre){
-        int pos=-1;
-        for (Empresa empresa1 : listaDeEmpresas){
-            if (empresa1.getNombre().equals(nombre)){
-                pos = listaDeEmpresas.indexOf(empresa1);
+        for(Empresa auxiliar : listaDeEmpresas){
+            if(empresa.equals(auxiliar.getNombre())){
+                return auxiliar;
             }
         }
 
-        if (pos==-1){
-            System.out.println("ERROR///// no se encuentra la empresa");
-        }
-
-        return pos;
+        return null;
     }
 
     public List<Empresa> getListaDeEmpresas() {
@@ -60,6 +56,28 @@ public class PedidosYa {
         ///El primer atributo del hashmap es el tipo, el cual es un atributo del producto, el segundo ya es el producto especifico, de ese modo se los encuentra.
 
 
+
+
+
+
+
+
+
+
+        /* public int buscarPosEmpresaSegunNombre(String nombre){
+        int pos=-1;
+        for (Empresa empresa1 : listaDeEmpresas){
+            if (empresa1.getNombre().equals(nombre)){
+                pos = listaDeEmpresas.indexOf(empresa1);
+            }
+        }
+
+        if (pos==-1){
+            System.out.println("ERROR///// no se encuentra la empresa");
+        }
+
+        return pos;
+    }*/
     }
 }
 
