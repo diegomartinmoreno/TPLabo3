@@ -5,9 +5,9 @@ import java.util.List;
 public class Carrito {
     private List<Producto> productos;
     private double montoTotal=0;
-    private double porcentajeDeDescuento; //SE DETERMIAN A PARTIR DE LAS COMPRAS REALIZADAS
     private String nota;
     private LocalDate fechaPedido;
+    private static final double PORCENTAJE_DESCUENTO = 0.85;
 
     public Carrito() {
         productos = new ArrayList<>();
@@ -21,55 +21,90 @@ public class Carrito {
         System.out.println("(3) Editar cantidad del producto");
         System.out.println("(4) Agregar cupon");
         System.out.println("(5) Ir a pagar");
-        System.out.println("(6) salir");
+        System.out.println("(6) Ver carrito");
+        System.out.println("(7) salir");
     }
 
-    public void pagarCarrito (HistorialDeCompras historial){ ///SE DEBE PASAR TARJETA POR PARAMETRO
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        //
-        historial.agregarPedido(this);
-        clear();
+    //1
+    public boolean agregarProductoAlCarrito(Producto producto, String nota) throws NullPointerException{
+        if (producto==null || nota==null) throw new NullPointerException("Error! El producto o la nota no puede ser nula.//***");
 
-
-    }
-    public void agregarProductoAlCarrito(Producto producto, String nota){
-
-        productos.add(producto);
         montoTotal += producto.getPrecio();
         this.nota = nota;
+        return productos.add(producto);
+    }
+    public boolean agregarProductoAlCarrito(Producto producto) throws NullPointerException{
+        if(producto==null) throw new NullPointerException("Error! El producto no puede ser nulo.//***");
+
+        montoTotal += producto.getPrecio();
+        return productos.add(producto);
     }
 
-    public void agregarDescuento(String cupon, PedidosYa pedidosYa){
-        int pos = pedidosYa.buscarPosEmpresaSegunNombre(productos.get(0).getNombreDeLaEmpresa());
-        Empresa empresa = pedidosYa.getListaDeEmpresas().get(pos);
 
-        if (empresa.validarCupon(cupon)){
-            porcentajeDeDescuento = 0.15;
-            pedidosYa.getListaDeEmpresas().get(pos).eliminarCupon(cupon);
-            montoTotal *= porcentajeDeDescuento;
-            ////////////////////ELIMINA EL CUPON UTILIZADO DE LA EMPRESA CORRESPONDIENTE
+    //2
+    public void eliminarProductoDelCarrito(String nombre) throws RuntimeException, NullPointerException{
+        if (nombre==null) throw new NullPointerException("Error! La cadena no puede ser nula.//***");
+
+        int posicion = buscarProductoPorNombre(nombre);
+
+        if(posicion > -1){
+            productos.remove(posicion);
         } else {
-            System.out.println("El cupon no es valido");
+            throw new RuntimeException("El producto no se encuentra en el carrito.//***");
+        }
+
+    }
+
+    //3
+    public void editarCantidadDeProducto(int cantidad, String nombreProducto) throws RuntimeException, NullPointerException{
+        if(nombreProducto==null) throw new NullPointerException("Error! La cadena no puede ser nula.//***");
+
+        int pos = buscarProductoPorNombre(nombreProducto);
+        if(pos > -1){
+            productos.get(pos).setCantidadPedido(cantidad);
+        } else {
+            throw new RuntimeException("El producto no se encuentra en el carrito");
+        }
+
+    }
+
+    //4
+    public void agregarDescuento(String cupon, PedidosYa pedidosYa) throws NullPointerException, RuntimeException{
+        if(pedidosYa==null || cupon==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
+
+        Empresa empresa = pedidosYa.buscarEmpresaSegunNombre(productos.get(0).getNombreDeLaEmpresa());
+
+        if (empresa.validarCupon(cupon)){ ///Busca el cupon y lo elimina de la empresa.
+            montoTotal *= PORCENTAJE_DESCUENTO;
+        } else {
+            throw new RuntimeException("Error! Cupon no valido.//***");
         }
     }
 
-    public void editarCantidadDeProducto(int cantidad, String nombreProducto){
-        int pos = buscarProductoPorNombre(nombreProducto);
-        productos.get(pos).setCantidadPedido(cantidad);
+    //5
+    public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta) throws NullPointerException{
+        if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
+
+        tarjeta.RealizarPago(montoTotal);
+
+        historial.agregarPedido(this);
+
+        clear();
     }
 
-    public void eliminarProductoDelCarrito(String nombre){
-        int posicion = buscarProductoPorNombre(nombre);
-        productos.remove(posicion);
+    //6
+    public void listarCarrito(){
+        System.out.println("PRODUCTOS:");
+        System.out.println(productos);
+
+        System.out.println("Monto total: " + montoTotal);
+        System.out.println("Nota: " + nota);
+        System.out.println("Fecha del Pedido: " + fechaPedido + "\n");
     }
 
-    public int buscarProductoPorNombre(String nombre){
+    public int buscarProductoPorNombre(String nombre) throws NullPointerException, RuntimeException{
+        if(nombre==null) throw new NullPointerException("Error! La cadena no puede ser nula.//***");
+
         int aux=-1;
         for (Producto prod : productos){
             if (nombre.equals(prod.getNombreProducto())){
@@ -78,7 +113,7 @@ public class Carrito {
         }
 
         if (aux==-1){
-            System.out.println("ERROR/////////PRODUCTO NO ENCONTRADO/////////");
+            throw new RuntimeException("Error! El producto no se encuentra.//***");
         }
 
         return aux;
@@ -87,7 +122,6 @@ public class Carrito {
     public void clear(){
         productos.clear();
         montoTotal=0;
-        porcentajeDeDescuento=1;
         nota="";
     }
 
