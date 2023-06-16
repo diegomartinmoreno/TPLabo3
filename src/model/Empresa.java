@@ -1,9 +1,6 @@
 package model;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Empresa {
 
@@ -12,9 +9,9 @@ public class Empresa {
 
     private  double CostoDeEnvio;
 
-    private LinkedHashMap <String, Producto> ProductosEmpresa;
+    private LinkedHashMap <String, Producto> ProductosEmpresa; ///AAAAA
 
-    private HashMap<Integer, String> Zonas;
+    private HashSet<Zonas> ListaZonas; /// AAAAAA
 
     public Empresa() {
     }
@@ -23,8 +20,8 @@ public class Empresa {
         Nombre = nombre;
         CostoDeEnvio = costoDeEnvio;
         ProductosEmpresa = new LinkedHashMap<>();
-        Zonas = new HashMap<>();
         listaDeCupones = new LinkedList<>();
+        ListaZonas = new HashSet<>();
         generarCupones();
     }
 
@@ -78,11 +75,19 @@ public class Empresa {
         ProductosEmpresa = productosEmpresa;
     }
 
-    public HashMap<Integer, String> getZonas() {
-        return Zonas;
+    public List<String> getListaDeCupones() {
+        return listaDeCupones;
     }
 
-    public void setZonas(HashMap<Integer, String> zonas) {
-        this.Zonas = Zonas;
+    public void setListaDeCupones(List<String> listaDeCupones) {
+        this.listaDeCupones = listaDeCupones;
+    }
+
+    public HashSet<Zonas> getListaZonas() {
+        return ListaZonas;
+    }
+
+    public void setListaZonas(HashSet<Zonas> listaZonas) {
+        ListaZonas = listaZonas;
     }
 }

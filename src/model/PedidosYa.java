@@ -6,7 +6,6 @@ import java.util.List;
 public class PedidosYa {
 
     private List<Empresa>listaDeEmpresas;
-
     public Empresa buscarEmpresaSegunNombre(String empresa) throws NullPointerException{
         if (empresa==null) throw new NullPointerException("Error! La empresa no puede ser nula.//***");
 

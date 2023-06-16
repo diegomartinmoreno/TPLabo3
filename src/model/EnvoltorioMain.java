@@ -1,12 +1,15 @@
 package model;
 
 import Exceptions.MenorDeEdadException;
+import Persona.Persona;
+import Persona.Usuario;
 
 import java.util.Scanner;
 
 public class EnvoltorioMain {
 
-    public static Usuario registroDeCuenta (Scanner scanner) throws MenorDeEdadException {
+    public static Usuario main(String[] args, Scanner scanner) throws MenorDeEdadException {
+
         Usuario usuario = new Usuario();
         String cadenaAux=null;
         boolean flag=false;
