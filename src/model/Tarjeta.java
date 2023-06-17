@@ -1,27 +1,51 @@
-package model;
-
 import java.util.Objects;
 import java.time.format.DateTimeFormatter;  
 import java.util.Scanner;
 import java.time.YearMonth;
 
+
+
+
 public class Tarjeta {
+	
 	private String numeroTarjeta; /// (16 digitos)
 	private String titular;
 	private YearMonth fechaDeVencimiento;
 	private String codigoDeSeguridad; /// (3 digitos)
-	private double saldo=0;
+	private double saldo;
 	private boolean activa;
-
+	
+	
 	public Tarjeta() {
 		super();
+		this.numeroTarjeta= "N/D.";
+		this.titular= "N/D.";
+		this.fechaDeVencimiento=YearMonth.now();
+		this.fechaDeVencimiento.minusYears(1);
+		this.codigoDeSeguridad="N/D";
+		this.saldo=0;
+		this.activa=false;
+	}
+	
+
+	public Tarjeta(String numeroTarjeta, String titular, YearMonth fechaDeVencimiento, String codigoDeSeguridad,
+			double saldo, boolean activa) {
+		super();
+		this.numeroTarjeta = numeroTarjeta;
+		this.titular = titular;
+		this.fechaDeVencimiento = fechaDeVencimiento;
+		this.codigoDeSeguridad = codigoDeSeguridad;
+		this.saldo = saldo;
+		this.activa = activa;
+	}
+	
+	public boolean cargarTarjeta (Scanner lectura) {
 		boolean flag=true;
-		Scanner lectura= new Scanner (System.in);
 		System.out.println("Inicio de carga de nueva tarjeta.");
 		do {
 			System.out.println("Ingrese nombre del titular:");
 			this.titular= lectura.nextLine();
-			if (!this.titular.matches("[0-9]+")) {
+			if (!Tarjeta.verificaEsNumero(this.titular)) {
 				flag=false;
 			}else {
 				System.out.println("Nombre invalido.");
@@ -33,7 +57,7 @@ public class Tarjeta {
 		do {
 			System.out.println("Ingrese numero de la tarjeta:");
 			this.numeroTarjeta=lectura.nextLine();
-			if (this.numeroTarjeta.matches("[0-9]+") && this.numeroTarjeta.length()==16) {
+			if (Tarjeta.verificaEsNumero(this.numeroTarjeta) && this.numeroTarjeta.length()==16) {
 				flag=false;
 			}else {
 				System.out.println("Numero invalido.");
@@ -44,19 +68,9 @@ public class Tarjeta {
 		
 		do {
 			System.out.println("Ingrese fecha de vencimiento (MM/AA):");
-			try {
-				DateTimeFormatter formato = DateTimeFormatter.ofPattern("MM/yy");
-				String auxiliar=lectura.nextLine();
-				this.fechaDeVencimiento=YearMonth.parse(auxiliar, formato);
-				
-			} catch(Exception e) {
-				System.out.println("Error en la carga de la fecha de vencimiento.");
-			}
-
-			if (this.VerificarVencimiento()) {
+			String auxiliar=lectura.nextLine();
+			if (this.verificarFormatoFecha(auxiliar)&&this.VerificarVencimiento()) {
 				flag=false;
-			}else {
-				System.out.println("La fecha ingresada es invalida.");
 			}
 		}while (flag);
 		
@@ -65,7 +79,7 @@ public class Tarjeta {
 		do {
 			System.out.println("Ingrese codigo de seguridad:");
 			this.codigoDeSeguridad=lectura.nextLine();
-			if (this.codigoDeSeguridad.matches("[0-9]+") && this.codigoDeSeguridad.length()==3) {
+			if (Tarjeta.verificaEsNumero(this.codigoDeSeguridad) && this.codigoDeSeguridad.length()==3) {
 				flag=false;
 			}else {
 				System.out.println("Numero invalido.");
@@ -86,20 +100,40 @@ public class Tarjeta {
 		
 		this.activa=true;
 		
-		lectura.close();
+		return !flag;
 	}
 
-	public Tarjeta(String numeroTarjeta, String titular, YearMonth fechaDeVencimiento, String codigoDeSeguridad,
-			double saldo, boolean activa) {
-		super();
-		this.numeroTarjeta = numeroTarjeta;
-		this.titular = titular;
-		this.fechaDeVencimiento = fechaDeVencimiento;
-		this.codigoDeSeguridad = codigoDeSeguridad;
-		this.saldo = saldo;
-		this.activa = activa;
+	public static boolean verificaEsNumero(String numero) {
+		if (numero.matches("[0-9]+")){
+			return true;
+		}else {
+			return false;
+		}
 	}
-
+	
+	public boolean verificarFormatoFecha(String input) {
+		try {
+			DateTimeFormatter formato = DateTimeFormatter.ofPattern("MM/yy");
+			this.fechaDeVencimiento=YearMonth.parse(input, formato);
+		} catch(Exception e){
+			System.out.println("La fecha ingresada no es correcta.");
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean VerificarVencimiento() {
+		YearMonth ahora;
+		ahora= YearMonth.now();
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("MM/yy");
+		ahora.format(formato);
+		if (this.fechaDeVencimiento.isAfter(ahora)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(numeroTarjeta);
@@ -167,7 +201,12 @@ public class Tarjeta {
 
 	@Override
 	public String toString() {
-		return "model.Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 16) + ", titular=" + titular;
+		if (this.numeroTarjeta.length()==16) {
+			return "Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 16) + ", titular=" + titular;
+		}else {
+			return "La tarjeta no ha sido cargada aun.";
+		}
+		
 	}
 
 	public String mostrarTarjeta (){
@@ -191,19 +230,6 @@ public class Tarjeta {
 		return true;
 	}
 	
-	public boolean VerificarVencimiento() {
-		try {
-			YearMonth ahora;
-			ahora= YearMonth.now();
-			if (this.fechaDeVencimiento.isAfter(ahora)) {
-				return true;
-			}
-		} catch(Exception e) {
-			System.out.println("Error en fecha de vencimiento de la tarjeta.");
-		}
-		return false;
-	}
-	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
 		if (this.VerificarSaldoSuficiente(monto)){
 			System.out.println("El saldo de la tarjeta es insuficiente para realizar la compra.");
@@ -219,11 +245,15 @@ public class Tarjeta {
 			}
 		}
 	}
-
-/*   ///PARA TESTEAR
+/*
+   ///PARA TESTEAR
 	public static void main (String[] Args) {
-		model.Tarjeta tar= new model.Tarjeta();
+		Tarjeta tar= new Tarjeta();
 		System.out.println(tar.toString());
+		Scanner s= new Scanner(System.in);
+		if (tar.cargarTarjeta(s)) {
+			System.out.println(tar.toString());
+		}
 	}
 */
 	
