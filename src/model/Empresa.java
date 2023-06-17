@@ -3,29 +3,30 @@ package model;
 import java.util.*;
 
 public class Empresa {
-
-   private List <String> listaDeCupones;
-    private String Nombre;
-
+    private String nombre;
+    private LinkedHashMap <TipoDeProductos, HashSet<Producto>> productosEmpresa; ///AAAAA
+    private Set<Zonas> zonas; /// AAAAAA
+    private List <String> listaDeCupones;
     private  double CostoDeEnvio;
-
-    private LinkedHashMap <String, Producto> ProductosEmpresa; ///AAAAA
-
-    private HashSet<Zonas> ListaZonas; /// AAAAAA
 
     public Empresa() {
     }
 
-    public Empresa(String nombre, double costoDeEnvio) {
-        Nombre = nombre;
+    public Empresa(String nombre, LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa, Set<Zonas> zonas, double costoDeEnvio) {
+        listaDeCupones = new ArrayList<>();
+
+        this.nombre = nombre;
+        this.productosEmpresa = productosEmpresa;
+        this.zonas = zonas;
         CostoDeEnvio = costoDeEnvio;
-        ProductosEmpresa = new LinkedHashMap<>();
-        listaDeCupones = new LinkedList<>();
-        ListaZonas = new HashSet<>();
         generarCupones();
     }
 
-   public boolean validarCupon(String cupon) throws NullPointerException{
+
+
+
+
+    public boolean validarCupon(String cupon) throws NullPointerException{
        if(cupon==null) throw new NullPointerException("Error! La cadena no puede ser vacia.//***");
 
        boolean bool = false;
@@ -33,7 +34,7 @@ public class Empresa {
         for (int i = 0; i<listaDeCupones.size() && !bool; i++){
             if (listaDeCupones.get(i).equals(cupon)){
                 bool = true;
-                listaDeCupones.remove(listaDeCupones.get(i));
+                eliminarCupon(listaDeCupones.get(i));
             }
         }
 
@@ -48,15 +49,31 @@ public class Empresa {
 
     private void generarCupones(){
        for(int i=0;i<6;i++){
-           listaDeCupones.add(" ");
+           listaDeCupones.add(generarCuponAleatorio(6));
        }
     }
+
+    public static String generarCuponAleatorio(int longitud) {
+        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder(longitud);
+
+        for (int i = 0; i < longitud; i++) {
+            int indice = random.nextInt(caracteres.length());
+            char caracterAleatorio = caracteres.charAt(indice);
+            sb.append(caracterAleatorio);
+        }
+
+        return sb.toString();
+    }
+
+
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
     public void setNombre(String nombre) {
-        this.Nombre = nombre;
+        this.nombre = nombre;
     }
 
     public double getCostoDeEnvio() {
@@ -67,12 +84,12 @@ public class Empresa {
         CostoDeEnvio = costoDeEnvio;
     }
 
-    public LinkedHashMap<String, Producto> getProductosEmpresa() {
-        return ProductosEmpresa;
+    public LinkedHashMap<TipoDeProductos, HashSet<Producto>> getProductosEmpresa() {
+        return productosEmpresa;
     }
 
-    public void setProductosEmpresa(LinkedHashMap<String, Producto> productosEmpresa) {
-        ProductosEmpresa = productosEmpresa;
+    public void setProductosEmpresa(LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa) {
+        this.productosEmpresa = productosEmpresa;
     }
 
     public List<String> getListaDeCupones() {
@@ -83,11 +100,35 @@ public class Empresa {
         this.listaDeCupones = listaDeCupones;
     }
 
-    public HashSet<Zonas> getListaZonas() {
-        return ListaZonas;
+    private void mostrarProductosEmpresa(){
+        for (Map.Entry<TipoDeProductos, HashSet<Producto>> entry : productosEmpresa.entrySet()) {
+            TipoDeProductos tipoDeProducto = entry.getKey();
+            HashSet<Producto> listaDeProductos = entry.getValue();
+
+            System.out.println("Producto: " +  tipoDeProducto.name());
+            System.out.println("Lista de productos: " + listaDeProductos);
+        }
     }
 
-    public void setListaZonas(HashSet<Zonas> listaZonas) {
-        ListaZonas = listaZonas;
+    public void mostrarEmpresa(){
+        System.out.println("Empresa{" + "nombre='" + nombre + '\'');
+
+        mostrarProductosEmpresa();
+        System.out.println(zonas);
+        System.out.println(listaDeCupones + "\nCostoDeEnvio= " + CostoDeEnvio + "\n\n");
+    }
+
+    @Override
+    public String toString() {
+        return "Empresa{" +
+                "nombre='" + nombre + '\'' +
+                ", productosEmpresa=" + productosEmpresa + "\n" +
+                ", ListaZonas=" +          "\n"  +
+
+
+
+                ", listaDeCupones=" + listaDeCupones + "\n" +
+                ",CostoDeEnvio=" + CostoDeEnvio +
+                "}\n";
     }
 }

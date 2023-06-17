@@ -42,13 +42,14 @@ public class Producto {
 
     @Override
     public String toString() {
-        return "model.Producto{" +
+        return "Producto{" +
+                "id=" + id +
                 ", nombreProducto='" + nombreProducto + '\'' +
                 ", tipo='" + tipo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", cantidadPedido=" + cantidadPedido +
                 ", nombreDeLaEmpresa='" + nombreDeLaEmpresa + '\'' +
-                '}';
+                "}";
     }
 }
