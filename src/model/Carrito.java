@@ -4,10 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+ //HOLA RAMIRO
 public class Carrito {
     private List<Producto> productos;
     private double montoTotal=0;
-    private String nota;
+
+
+	private String nota;
     private LocalDate fechaPedido;
     private static final double PORCENTAJE_DESCUENTO = 0.85;
 
@@ -16,6 +19,10 @@ public class Carrito {
         fechaPedido = LocalDate.now();
     }
 
+    public double getMontoTotal() {
+		return montoTotal;
+	}
+    
     public void mostrarMenuDeCarrito(){
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
