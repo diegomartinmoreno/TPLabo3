@@ -12,7 +12,7 @@ public class Tarjeta {
 	
 	private String numeroTarjeta; /// (16 digitos)
 	private String titular;
-	private LocalDate fechaDeVencimiento;
+	private String fechaDeVencimiento;
 	private String codigoDeSeguridad; /// (3 digitos)
 	private double saldo;
 	private boolean activa;
@@ -22,15 +22,14 @@ public class Tarjeta {
 		super();
 		this.numeroTarjeta= "N/D.";
 		this.titular= "N/D.";
-		this.fechaDeVencimiento=LocalDate.now();
-		this.fechaDeVencimiento.minusYears(1);
+		this.fechaDeVencimiento="N/D.";
 		this.codigoDeSeguridad="N/D";
 		this.saldo=-1;
 		this.activa=false;
 	}
 	
 
-	public Tarjeta(String numeroTarjeta, String titular, LocalDate fechaDeVencimiento, String codigoDeSeguridad,
+	public Tarjeta(String numeroTarjeta, String titular, String fechaDeVencimiento, String codigoDeSeguridad,
 			double saldo, boolean activa) {
 		super();
 		this.numeroTarjeta = numeroTarjeta;
@@ -70,8 +69,8 @@ public class Tarjeta {
 		
 		do {
 			System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
-			String auxiliar=lectura.nextLine();
-			if (this.verificarFormatoFecha(auxiliar)&&this.VerificarVencimiento()) {
+			this.fechaDeVencimiento=lectura.nextLine();
+			if (this.VerificarVencimiento()) {
 				flag=false;
 			}
 		}while (flag);
@@ -112,36 +111,31 @@ public class Tarjeta {
 			return false;
 		}
 	}
+		
+
 	
-	public boolean verificarFormatoFecha(String input) {
+	public boolean VerificarVencimiento() {
+		
+		LocalDate ahora=LocalDate.now();
+		
+		//Convierto String almacenado a LocalDate para comparar las fechas.
 		try {
-			this.fechaDeVencimiento=this.fechaDeVencimiento.withDayOfMonth(1); 
+			LocalDate LDfechaDeVencimiento=LocalDate.now();
 			DateTimeFormatter fmt = new DateTimeFormatterBuilder()
 				    .appendPattern("MM/yyyy")
 				    .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
 				    .toFormatter();
-			this.fechaDeVencimiento=LocalDate.parse(input, fmt);
+			LDfechaDeVencimiento=LocalDate.parse(this.fechaDeVencimiento, fmt);
+			if (LDfechaDeVencimiento.isAfter(ahora)) {
+				return true;
+			}else {
+				System.out.println("La fecha de expiracion de la tarjeta ya esta vencida.");
+				return false;
+			}
 		} catch(Exception e){
 			System.out.println("La fecha ingresada es invalida.");
-			return false;
 		}
-		return true;
-	}
-	
-
-	
-	public boolean VerificarVencimiento() {
-		LocalDate ahora;
-		ahora= LocalDate.now();
-		DateTimeFormatter formato = DateTimeFormatter.ofPattern("MM/yy");
-		ahora=ahora.withDayOfMonth(1);
-		ahora.format(formato);
-		if (this.fechaDeVencimiento.isAfter(ahora)) {
-			return true;
-		}else {
-			System.out.println("La fecha ingresada es invalida.");
-			return false;
-		}
+		return false;
 	}
 	
 	@Override
@@ -177,11 +171,11 @@ public class Tarjeta {
 		this.titular = titular;
 	}
 
-	public LocalDate getFechaDeVencimiento() {
+	public String getFechaDeVencimiento() {
 		return fechaDeVencimiento;
 	}
 
-	public void setFechaDeVencimiento(LocalDate fechaDeVencimiento) {
+	public void setFechaDeVencimiento(String fechaDeVencimiento) {
 		this.fechaDeVencimiento = fechaDeVencimiento;
 	}
 
@@ -255,7 +249,7 @@ public class Tarjeta {
 			}
 		}
 	}
-/*
+
 	public static void main (String[] Args) {
 		Tarjeta tar= new Tarjeta();
 		System.out.println(tar.toString());
@@ -264,7 +258,7 @@ public class Tarjeta {
 			System.out.println(tar.toString());
 		}
 	}
-	*/
+
 }
 
 
