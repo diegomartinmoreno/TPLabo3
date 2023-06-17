@@ -6,21 +6,17 @@ import java.util.List;
 
 public class Carrito {
     private List<Producto> productos;
-    private double montoTotal=0;
-
-
+    private Empresa vendedor;
 	private String nota;
     private LocalDate fechaPedido;
     private static final double PORCENTAJE_DESCUENTO = 0.85;
+    private boolean tieneCupon=false;
 
     public Carrito() {
         productos = new ArrayList<>();
         fechaPedido = LocalDate.now();
     }
 
-    public double getMontoTotal() {
-		return montoTotal;
-	}
     
     public void mostrarMenuDeCarrito(){
         System.out.println("Que desea hacer?");
@@ -34,17 +30,16 @@ public class Carrito {
     }
 
     //1
-    public boolean agregarProductoAlCarrito(Producto producto, String nota) throws NullPointerException{
+    public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto, String nota) throws NullPointerException{
         if (producto==null || nota==null) throw new NullPointerException("Error! El producto o la nota no puede ser nula.//***");
 
-        montoTotal += producto.getPrecio();
+
         this.nota = nota;
         return productos.add(producto);
     }
-    public boolean agregarProductoAlCarrito(Producto producto) throws NullPointerException{
+    public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto) throws NullPointerException{
         if(producto==null) throw new NullPointerException("Error! El producto no puede ser nulo.//***");
 
-        montoTotal += producto.getPrecio();
         return productos.add(producto);
     }
 
@@ -83,7 +78,7 @@ public class Carrito {
         Empresa empresa = pedidosYa.buscarEmpresaSegunNombre(productos.get(0).getNombreDeLaEmpresa());
 
         if (empresa.validarCupon(cupon)){ ///Busca el cupon y lo elimina de la empresa.
-            montoTotal *= PORCENTAJE_DESCUENTO;
+            tieneCupon = true;
         } else {
             throw new RuntimeException("Error! Cupon no valido.//***");
         }
@@ -93,19 +88,33 @@ public class Carrito {
     public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta) throws NullPointerException{
         if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
-        tarjeta.RealizarPago(montoTotal);
+
+
+        tarjeta.RealizarPago(calcularMontoTotalDeLaCompra());
 
         historial.agregarPedido(this);
 
         clear();
     }
 
+    public double calcularMontoTotalDeLaCompra(){
+        double montoTotal =0;
+        for (Producto producto : productos){
+            montoTotal += producto.getPrecio();
+        }
+
+        if (tieneCupon){
+
+        }
+
+        return montoTotal;
+    }
+
     //6
     public void listarCarrito(){
         System.out.println("PRODUCTOS:");
         System.out.println(productos);
-
-        System.out.println("Monto total: " + montoTotal);
+        System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
         System.out.println("Nota: " + nota);
         System.out.println("Fecha del Pedido: " + fechaPedido + "\n");
     }
@@ -129,8 +138,8 @@ public class Carrito {
 
     public void clear(){
         productos.clear();
-        montoTotal=0;
         nota="";
+        vendedor=null;
     }
 
     public LocalDate getFechaPedido() {

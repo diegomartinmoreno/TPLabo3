@@ -316,75 +316,59 @@ public class PedidosYa {
     private HashSet<Producto> crearHashSetSegunTipoDeProducto(TipoDeProductos tipoDeProducto){
         HashSet<Producto> listaDeProductos = new HashSet<>();
 
-        /////////////HACER SWITCH
 
-        if(tipoDeProducto.equals(BEBIDAS)){
-            listaDeProductos.add(new Producto("cocucha", "bebida", "coca con banda de azucar", 23, "asda"));
+        switch (tipoDeProducto){
 
-        } else if (tipoDeProducto.equals(CARNES)) {
+            case BEBIDAS -> {
+                listaDeProductos.add(new Producto("cocucha", "bebida", "coca con banda de azucar", 23, "asda"));
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23, "asda"));
+            }
+            case CARNES -> {
 
-        } else if (tipoDeProducto.equals(EMPANADAS)) {
+            }
+            case EMPANADAS -> {
 
-        } else if (tipoDeProducto.equals(ENSALADAS)) {
+            }
+            case ENSALADAS -> {
 
-        }  else if (tipoDeProducto.equals(HAMBURGUESAS)) {
-            listaDeProductos.add(new Producto("doble con queso", "hamburjesita", "alta burger", 111, "aaa"));
+            }
+            case HAMBURGUESAS -> {
 
-        } else if (tipoDeProducto.equals(HELADOS)) {
+            }
+            case HELADOS -> {
 
-        } else if (tipoDeProducto.equals(LOMITOS)) {
+            }
+            case LOMITOS -> {
 
-        } else if (tipoDeProducto.equals(MILANESAS)) {
+            }
+            case MILANESAS -> {
 
-        } else if (tipoDeProducto.equals(PAPAS)) {
+            }
+            case PAPAS -> {
 
-        } else if (tipoDeProducto.equals(PARRILLA)) {
+            }
+            case PARRILLA -> {
 
-        } else if (tipoDeProducto.equals(PASTAS)) {
+            }
+            case POSTRES -> {
 
-        } else if (tipoDeProducto.equals(PIZZA)) {
-            listaDeProductos.add(new Producto("Pizza con jyq", "Pizza", "RICA LA PISA", 555, "La musa PERO ES INCORRECTO"));
+            }
+            case SUSHI -> {
 
-        } else if (tipoDeProducto.equals(POLLO)) {
+            }
+            case KIOSCO -> {
 
-        } else if (tipoDeProducto.equals(POSTRES)) {
+            }
 
-        } else if (tipoDeProducto.equals(SUSHI)) {
-            listaDeProductos.add(new Producto("Sushi", "suhi", "wachiwa", 22354, "asd"));
 
-        } else if (tipoDeProducto.equals(KIOSCO)) {
+
 
         }
+
 
         return listaDeProductos;
     }
 
-    public void PasarListaDeProductosAHashMapDeEmpresas (){ ///Primero creo una lista de productos, en base al nombre de la empresa lo acomodo.
-        ///El primer atributo del hashmap es el tipo, el cual es un atributo del producto, el segundo ya es el producto especifico, de ese modo se los encuentra.
-
-
-
-
-
-
-
-
-
-
-        /* public int buscarPosEmpresaSegunNombre(String nombre){
-        int pos=-1;
-        for (model.Empresa empresa1 : listaDeEmpresas){
-            if (empresa1.getNombre().equals(nombre)){
-                pos = listaDeEmpresas.indexOf(empresa1);
-            }
-        }
-
-        if (pos==-1){
-            System.out.println("ERROR///// no se encuentra la empresa");
-        }
-
-        return pos;
-    }*/
-    }
 }
+
 
