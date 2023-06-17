@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
+import static model.TipoDeProductos.*;
+import static model.Zonas.*;
+
 public class PedidosYa {
 
     private List<Empresa>listaDeEmpresas;
@@ -81,6 +84,8 @@ public class PedidosYa {
         }
         return usuarioHashSet;
     }
+
+
 
     private boolean verificarContraseniaExistente (String cadenaArevisar, Set <Usuario> users){
         boolean flag = true;
@@ -281,33 +286,77 @@ public class PedidosYa {
         return null;
     }
 
-    public void CargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
-        listaDeEmpresas.add(new Empresa("La Musa", 310));
-        listaDeEmpresas.add(new Empresa("Lolapapusa", 420));
-        listaDeEmpresas.add(new Empresa("La Hamburgueseria", 0));
-        listaDeEmpresas.add(new Empresa("Torombolo", 310));
-        listaDeEmpresas.add(new Empresa("Antares", 219));
-        listaDeEmpresas.add(new Empresa("DeDiez", 310));
-        listaDeEmpresas.add(new Empresa("Loris", 0));
-        listaDeEmpresas.add(new Empresa("McDonalds", 310));
-        listaDeEmpresas.add(new Empresa("El Club de la Milanesa", 420));
-        listaDeEmpresas.add(new Empresa("Ogham", 310));
-        listaDeEmpresas.add(new Empresa("Grido", 219));
-        listaDeEmpresas.add(new Empresa("La Cremerie", 0));
+    public void mostrarEmpresas(){
+        for(Empresa empresa : listaDeEmpresas){
+            empresa.mostrarEmpresa();
+        }
     }
 
-    public LinkedList<Producto> CrearListaDeProductos (){
-        LinkedList <Producto> lista= new LinkedList<>();
-        //lista.add(new model.Producto("La Musa Gold", "Pizza", "Pizza de Mozzarella premium", 2000,"La Musa"));
-        //lista.add(new model.Producto("La Musa Gold", "Pizza", "Pizza de Mozzarella premium", 2000,"La Musa"));
-        //lista.add(new model.Producto("La Musa Gold", "Pizza", "Pizza de Mozzarella premium", 2000,"La Musa"));
-        //lista.add(new model.Producto("La Musa Gold", "Pizza", "Pizza de Mozzarella premium", 2000,"La Musa"));
-        //lista.add(new model.Producto("La Musa Gold", "Pizza", "Pizza de Mozzarella premium", 2000,"La Musa"));
+    public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
+        listaDeEmpresas.add(new Empresa("La Musa", crearListaDeProductos(Set.of(PIZZA, BEBIDAS)), Set.of(CENTRO, RUMENCO),250));
 
-        //lista.add(new model.Producto("Big Popa", "Hamburguesa", "Hamburguesa con cheddar, panceta, cebolla caramelizada y salsa mil islas", 1800,"Lolapapusa"));
+        listaDeEmpresas.add(new Empresa("Hamburgo", crearListaDeProductos(Set.of(HAMBURGUESAS, BEBIDAS)), Set.of(BOSQUE, INDEPENDENCIA),250));
+
+        listaDeEmpresas.add(new Empresa("Konichiwa la mejor comida japonesa papi", crearListaDeProductos(Set.of(SUSHI, BEBIDAS)), Set.of(LOS_TRONCOS, COLINAS),250));
+
+    }
 
 
-        return lista;
+
+    private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos(Set<TipoDeProductos> tipoDeProductos){  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
+        LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosTotal = new LinkedHashMap<>();
+
+        for (TipoDeProductos tipo : tipoDeProductos){ ///HAMBURGUESA, MILANESA, PAPASFRITAS
+            productosTotal.put(tipo, crearHashSetSegunTipoDeProducto(tipo));
+        }
+
+        return productosTotal;
+    }
+
+    private HashSet<Producto> crearHashSetSegunTipoDeProducto(TipoDeProductos tipoDeProducto){
+        HashSet<Producto> listaDeProductos = new HashSet<>();
+
+        /////////////HACER SWITCH
+
+        if(tipoDeProducto.equals(BEBIDAS)){
+            listaDeProductos.add(new Producto("cocucha", "bebida", "coca con banda de azucar", 23, "asda"));
+
+        } else if (tipoDeProducto.equals(CARNES)) {
+
+        } else if (tipoDeProducto.equals(EMPANADAS)) {
+
+        } else if (tipoDeProducto.equals(ENSALADAS)) {
+
+        }  else if (tipoDeProducto.equals(HAMBURGUESAS)) {
+            listaDeProductos.add(new Producto("doble con queso", "hamburjesita", "alta burger", 111, "aaa"));
+
+        } else if (tipoDeProducto.equals(HELADOS)) {
+
+        } else if (tipoDeProducto.equals(LOMITOS)) {
+
+        } else if (tipoDeProducto.equals(MILANESAS)) {
+
+        } else if (tipoDeProducto.equals(PAPAS)) {
+
+        } else if (tipoDeProducto.equals(PARRILLA)) {
+
+        } else if (tipoDeProducto.equals(PASTAS)) {
+
+        } else if (tipoDeProducto.equals(PIZZA)) {
+            listaDeProductos.add(new Producto("Pizza con jyq", "Pizza", "RICA LA PISA", 555, "La musa PERO ES INCORRECTO"));
+
+        } else if (tipoDeProducto.equals(POLLO)) {
+
+        } else if (tipoDeProducto.equals(POSTRES)) {
+
+        } else if (tipoDeProducto.equals(SUSHI)) {
+            listaDeProductos.add(new Producto("Sushi", "suhi", "wachiwa", 22354, "asd"));
+
+        } else if (tipoDeProducto.equals(KIOSCO)) {
+
+        }
+
+        return listaDeProductos;
     }
 
     public void PasarListaDeProductosAHashMapDeEmpresas (){ ///Primero creo una lista de productos, en base al nombre de la empresa lo acomodo.
