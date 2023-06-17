@@ -30,6 +30,12 @@ public class Carrito {
         System.out.println("(6) Ver carrito");
         System.out.println("(7) salir");
 
+        int decision = scanner.nextInt();
+
+        switch (decision){
+            case 1:
+                //agregarProductoAlCarrito()
+        }
 
     }
 
@@ -82,7 +88,7 @@ public class Carrito {
     public void agregarDescuento(String cupon, PedidosYa pedidosYa) throws NullPointerException, RuntimeException{
         if(pedidosYa==null || cupon==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
-        Empresa empresa = pedidosYa.buscarEmpresaSegunNombre(productos.get(0).getNombreDeLaEmpresa());
+        Empresa empresa = pedidosYa.buscarEmpresaSegunNombre(vendedor.getNombre());
 
         if (empresa.validarCupon(cupon)){ ///Busca el cupon y lo elimina de la empresa.
             tieneCupon = true;

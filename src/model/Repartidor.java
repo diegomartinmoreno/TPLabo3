@@ -59,7 +59,7 @@ public class Repartidor {
 	}
 
 	public double calcularMontoACobrar() {
-		return this.pedidoAtrasladar.getMontoTotal()+this.gananciaPorPedido;
+		return this.pedidoAtrasladar.calcularMontoTotalDeLaCompra()+this.gananciaPorPedido;
 	}
 	
 	public void llevarPedido(){
