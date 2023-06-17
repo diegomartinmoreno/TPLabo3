@@ -44,6 +44,9 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
+    public String getContrasenia() {
+        return contrasenia;
+    } //A PESAR DE QUE LA CONTRASENIA ES PRIVADA, SE TUVO QUE HACER UN GET PARA METODOS DONDE ERA NECESARIA, PERO PARA CONTROLAR ESTO, SE LO LLAMA DENTRO DE UN METODO PRIVADO.
 
     @Override
     public String toString() {
