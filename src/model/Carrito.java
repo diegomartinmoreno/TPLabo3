@@ -1,8 +1,10 @@
 package model;
 
+import javax.crypto.spec.DESedeKeySpec;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Carrito {
     private List<Producto> productos;
@@ -18,7 +20,7 @@ public class Carrito {
     }
 
     
-    public void mostrarMenuDeCarrito(){
+    public void mostrarMenuDeCarrito(Scanner scanner){
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
         System.out.println("(2) Eliminar producto del carrito");
@@ -27,18 +29,23 @@ public class Carrito {
         System.out.println("(5) Ir a pagar");
         System.out.println("(6) Ver carrito");
         System.out.println("(7) salir");
+
+
     }
 
     //1
     public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto, String nota) throws NullPointerException{
         if (producto==null || nota==null) throw new NullPointerException("Error! El producto o la nota no puede ser nula.//***");
 
-
+        this.vendedor = vendedor;
         this.nota = nota;
+
         return productos.add(producto);
     }
     public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto) throws NullPointerException{
         if(producto==null) throw new NullPointerException("Error! El producto no puede ser nulo.//***");
+
+        this.vendedor = vendedor;
 
         return productos.add(producto);
     }
@@ -104,7 +111,7 @@ public class Carrito {
         }
 
         if (tieneCupon){
-
+            montoTotal *= PORCENTAJE_DESCUENTO;
         }
 
         return montoTotal;

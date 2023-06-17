@@ -320,44 +320,51 @@ public class PedidosYa {
         switch (tipoDeProducto){
 
             case BEBIDAS -> {
-                listaDeProductos.add(new Producto("cocucha", "bebida", "coca con banda de azucar", 23, "asda"));
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23, "asda"));
+                listaDeProductos.add(new Producto("Coca Cola", "Gaseosa", "Gaseosa sabor Cola", 420));
+                listaDeProductos.add(new Producto("Fanta Naranja", "Gaseosa", "Gaseosa sabor naranja", 420));
+                listaDeProductos.add(new Producto("Seven Up", "Gaseosa", "Gaseosa Lima Limon", 500));
+                listaDeProductos.add(new Producto("Agua sin gas", "", "Gaseosa Lima Limon", 500));
+                listaDeProductos.add(new Producto("Quilmes clasica 473cm", "Cerveza", "Lata de cerveza Quilmes rubia", 600));
+                listaDeProductos.add(new Producto("Quilmes roja 473cm", "Cerveza", "Lata de cerveza Quilmes roja", 600));
+                listaDeProductos.add(new Producto("Quilmes Black Stout 473cm", "Cerveza", "Lata de cerveza Quilmes negra", 600));
+
+
             }
             case CARNES -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case EMPANADAS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case ENSALADAS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case HAMBURGUESAS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case HELADOS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case LOMITOS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case MILANESAS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case PAPAS -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case PARRILLA -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case POSTRES -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case SUSHI -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
             case KIOSCO -> {
-
+                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
             }
 
 

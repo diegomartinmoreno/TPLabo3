@@ -9,15 +9,15 @@ public class Producto {
     private String descripcion;
     private double precio;
     private int cantidadPedido=0;
-    private String nombreDeLaEmpresa;
 
-    public Producto(String nombreProducto, String tipo, String descripcion, double precio, String nombreDeLaEmpresa) {
+
+    public Producto(String nombreProducto, String tipo, String descripcion, double precio) {
         id = UUID.randomUUID();
         this.nombreProducto = nombreProducto;
         this.tipo = tipo;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.nombreDeLaEmpresa = nombreDeLaEmpresa;
+
     }
 
     public double getPrecio() {
@@ -32,13 +32,6 @@ public class Producto {
         return nombreProducto;
     }
 
-    public String getNombreDeLaEmpresa() {
-        return nombreDeLaEmpresa;
-    }
-
-    public void setNombreDeLaEmpresa(String nombreDeLaEmpresa) {
-        this.nombreDeLaEmpresa = nombreDeLaEmpresa;
-    }
 
     @Override
     public String toString() {
@@ -49,7 +42,6 @@ public class Producto {
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
                 ", cantidadPedido=" + cantidadPedido +
-                ", nombreDeLaEmpresa='" + nombreDeLaEmpresa + '\'' +
                 "}";
     }
 }
