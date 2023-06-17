@@ -249,7 +249,7 @@ public class Tarjeta {
 			}
 		}
 	}
-
+/*
 	public static void main (String[] Args) {
 		Tarjeta tar= new Tarjeta();
 		System.out.println(tar.toString());
@@ -258,7 +258,7 @@ public class Tarjeta {
 			System.out.println(tar.toString());
 		}
 	}
-
+*/
 }
 
 
