@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
- //HOLA RAMIRO
 public class Carrito {
     private List<Producto> productos;
     private double montoTotal=0;
