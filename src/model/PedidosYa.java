@@ -293,11 +293,24 @@ public class PedidosYa {
     }
 
     public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
-        listaDeEmpresas.add(new Empresa("La Musa", crearListaDeProductos(Set.of(PIZZA, BEBIDAS)), Set.of(CENTRO, RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("La Musa", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("Hamburgo", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(CENTRO,RUMENCO, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("Konichiwa", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI)), Set.of(PUERTO,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("DeDiez", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(ALEM,RUMENCO, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("Grido", crearListaDeProductos(Set.of(HELADOS)), Set.of(ALEM,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("Banderita", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("La Hamburgueseria", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("Italia", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("Mandinga", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,CONSTITUCION, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("Kiosco Da", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM,INDEPENDENCIA),250));
+        listaDeEmpresas.add(new Empresa("Lo de Mario", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, POSTRES)), Set.of(PUERTO,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("Antares", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("Baum", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("Cheverry", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("Gianelli", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
+        listaDeEmpresas.add(new Empresa("El Club de la Milanesa", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
 
-        listaDeEmpresas.add(new Empresa("Hamburgo", crearListaDeProductos(Set.of(HAMBURGUESAS, BEBIDAS)), Set.of(BOSQUE, INDEPENDENCIA),250));
 
-        listaDeEmpresas.add(new Empresa("Konichiwa la mejor comida japonesa papi", crearListaDeProductos(Set.of(SUSHI, BEBIDAS)), Set.of(LOS_TRONCOS, COLINAS),250));
 
     }
 
@@ -316,62 +329,167 @@ public class PedidosYa {
     private HashSet<Producto> crearHashSetSegunTipoDeProducto(TipoDeProductos tipoDeProducto){
         HashSet<Producto> listaDeProductos = new HashSet<>();
 
-
         switch (tipoDeProducto){
 
             case BEBIDAS -> {
                 listaDeProductos.add(new Producto("Coca Cola", "Gaseosa", "Gaseosa sabor Cola", 420));
                 listaDeProductos.add(new Producto("Fanta Naranja", "Gaseosa", "Gaseosa sabor naranja", 420));
                 listaDeProductos.add(new Producto("Seven Up", "Gaseosa", "Gaseosa Lima Limon", 500));
-                listaDeProductos.add(new Producto("Agua sin gas", "", "Gaseosa Lima Limon", 500));
+                listaDeProductos.add(new Producto("Agua sin gas", "", "Agua mineral sin gas", 500));
+                listaDeProductos.add(new Producto("Agua con gas", "", "Agua mineral con gas", 500));
                 listaDeProductos.add(new Producto("Quilmes clasica 473cm", "Cerveza", "Lata de cerveza Quilmes rubia", 600));
                 listaDeProductos.add(new Producto("Quilmes roja 473cm", "Cerveza", "Lata de cerveza Quilmes roja", 600));
                 listaDeProductos.add(new Producto("Quilmes Black Stout 473cm", "Cerveza", "Lata de cerveza Quilmes negra", 600));
-
-
+                break;
+            }case CERVEZA -> {
+                listaDeProductos.add(new Producto("IPA", "Cerveza Artesanal", "Cerveza India Pale Ale con notas cítricas y amargas", 200));
+                listaDeProductos.add(new Producto("Stout", "Cerveza Artesanal", "Cerveza negra de estilo stout con sabor a café y chocolate", 220));
+                listaDeProductos.add(new Producto("Amber Ale", "Cerveza Artesanal", "Cerveza de color ámbar con notas caramelizadas y suaves", 190));
+                listaDeProductos.add(new Producto("APA", "Cerveza Artesanal", "Cerveza American Pale Ale con equilibrio entre malta y lúpulo", 210));
+                listaDeProductos.add(new Producto("Golden Ale", "Cerveza Artesanal", "Cerveza dorada y refrescante de estilo ale", 180));
+                listaDeProductos.add(new Producto("Witbier", "Cerveza Artesanal", "Cerveza belga de trigo con especias y sabor cítrico", 200));
+                listaDeProductos.add(new Producto("Barley Wine", "Cerveza Artesanal", "Cerveza de alta graduación alcohólica y sabor intenso", 250));
+                listaDeProductos.add(new Producto("Red Ale", "Cerveza Artesanal", "Cerveza roja de cuerpo medio y sabor maltoso", 190));
             }
             case CARNES -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Bife de Costilla", "Bife", "Fantatico Bife Costilla Gourmet", 1100));
+                listaDeProductos.add(new Producto("Chorizo", "Achura", "Chorizo de cancha", 600));
+                listaDeProductos.add(new Producto("Morcilla", "Achura", "Morcilla salada", 600));
+                listaDeProductos.add(new Producto("Asado", "Plato para compartir", "", 1700));
+                listaDeProductos.add(new Producto("Vacio", "Plato para compartir", "", 1800));
+                break;
             }
             case EMPANADAS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Emapanada de carne", "Porcion", "Empanada de carne, ciruela y huevo", 500));
+                listaDeProductos.add(new Producto("Empanada de pollo", "Porcion", "Empanada de pollo, morron y cebolla", 600));
+                listaDeProductos.add(new Producto("Empanada de Jamon y Queso", "Porcion", "Gran empanada con mucho queso", 200));
+                listaDeProductos.add(new Producto("Empanada de cebolla y queso", "Porcion", "El mejor sabor de empanada", 600));
+                listaDeProductos.add(new Producto("Empanada de matambre", "Porcion", "Empanada clasica con morron, cebolla y salsa", 500));
+                listaDeProductos.add(new Producto("Caprese", "Porcion", "Empanada con tomate, queso y albahaca", 600));
+                break;
             }
             case ENSALADAS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Ensalada Caesar", "Plato principal", "Deliciosa ensalada con pollo, lechuga, nuez y salsa Caesar", 1100));
+                listaDeProductos.add(new Producto("Ensalada Griega", "Entrante", "Deliciosa ensalada con tomate, pepino, cebolla, aceitunas y queso feta", 950));
+                listaDeProductos.add(new Producto("Ensalada Caprese", "Entrante", "Fresca ensalada con tomate, mozzarella y albahaca", 850));
+                listaDeProductos.add(new Producto("Ensalada de Pollo", "Plato principal", "Ensalada con pollo a la parrilla, lechuga, croutones y aderezo", 1100));
+                listaDeProductos.add(new Producto("Ensalada Mediterránea", "Plato principal", "Ensalada con ingredientes mediterráneos como aceitunas, tomate y queso feta", 1050));
+                break;
             }
             case HAMBURGUESAS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("CheeseBurger", "Hamburguesa simple", "Hamburguesa con cheddar, panceta, y salsa mil islas", 2000));
+                listaDeProductos.add(new Producto("Bacon Burger", "Hamburguesa gourmet", "Hamburguesa con queso cheddar, panceta crujiente y salsa barbacoa", 2200));
+                listaDeProductos.add(new Producto("Mushroom Burger", "Hamburguesa vegetariana", "Hamburguesa de champiñones con queso suizo y salsa especial", 2500));
+                listaDeProductos.add(new Producto("Spicy Burger", "Hamburguesa picante", "Hamburguesa con jalapeños, queso pepper jack y salsa picante", 2100));
+                listaDeProductos.add(new Producto("Chicken Burger", "Hamburguesa de pollo", "Hamburguesa de pollo crujiente con lechuga, tomate y mayonesa", 1900));
+                break;
             }
             case HELADOS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
-            }
-            case LOMITOS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Helado Banana Split", "Postre", "Helado sabor banana, con dulce de leche y pedazos de chocolate", 600));
+                listaDeProductos.add(new Producto("Helado de Vainilla", "Helado", "Clásico helado de vainilla cremoso", 500));
+                listaDeProductos.add(new Producto("Helado de Chocolate", "Helado", "Delicioso helado de chocolate con trozos de chocolate negro", 550));
+                listaDeProductos.add(new Producto("Helado de Fresa", "Helado", "Refrescante helado de fresa con trocitos de fruta", 550));
+                listaDeProductos.add(new Producto("Helado de Menta", "Helado", "Helado de menta con chispas de chocolate", 550));
+                listaDeProductos.add(new Producto("Helado de Dulce de Leche", "Helado", "Irresistible helado de dulce de leche con nueces caramelizadas", 600));
+                listaDeProductos.add(new Producto("Helado de Cookies & Cream", "Helado", "Helado de vainilla con trozos de galleta de chocolate", 550));
+                break;
             }
             case MILANESAS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Milanesa a caballo", "Milanesa de Carne", "Milanesa de carne o pollo con huevo frito", 1700));
+                listaDeProductos.add(new Producto("Milanesa Napolitana", "Milanesa de Carne", "Milanesa de carne cubierta con salsa de tomate, jamón y queso", 1900));
+                listaDeProductos.add(new Producto("Milanesa de Pollo", "Milanesa de Pollo", "Milanesa de pollo empanizada y frita", 1500));
+                listaDeProductos.add(new Producto("Milanesa Hawaiana", "Milanesa de Carne", "Milanesa de carne con piña, jamón, queso y salsa barbacoa", 2000));
+                listaDeProductos.add(new Producto("Milanesa Exótica", "Milanesa de Pollo", "Milanesa de pollo con especias exóticas y salsa de mango picante", 1800));
+                listaDeProductos.add(new Producto("Milanesa Infernal", "Milanesa de Carne", "Milanesa de carne empanizada con jalapeños, queso picante y salsa buffalo", 2100));
+                listaDeProductos.add(new Producto("Milanesa Fantástica", "Milanesa de Pollo", "Milanesa de pollo rellena de queso crema y espinacas, envuelta en panceta", 2200));
+                listaDeProductos.add(new Producto("Milanesa Explosiva", "Milanesa de Carne", "Milanesa de carne con chiles jalapeños, cebolla caramelizada y salsa de queso picante", 2300));
+                break;
             }
             case PAPAS -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Papas bomba", "Acompañamientos", "Papas con cheddar y panceta", 1400));
+                listaDeProductos.add(new Producto("Papas Deluxe", "Acompañamientos", "Papas con queso cheddar, tocino crujiente y crema agria", 1500));
+                listaDeProductos.add(new Producto("Papas Rancheras", "Acompañamientos", "Papas sazonadas con especias rancheras y salsa de queso", 1300));
+                listaDeProductos.add(new Producto("Papas Picantes", "Acompañamientos", "Papas fritas con salsa picante, jalapeños y queso fundido", 1600));
+                listaDeProductos.add(new Producto("Papas Gourmet", "Acompañamientos", "Papas con trufa negra, queso parmesano y aceite de oliva", 1800));
+                break;
             }
             case PARRILLA -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Bife de Chorizo", "Parrilla", "Sabroso bife de chorizo jugoso y tierno", 1800));
+                listaDeProductos.add(new Producto("Asado de Tira", "Parrilla", "Deliciosas tiras de carne asada a la parrilla", 1700));
+                listaDeProductos.add(new Producto("Churrasco de Res", "Parrilla", "Corte de carne de res tierno y jugoso, asado a la parrilla", 1900));
+                listaDeProductos.add(new Producto("Costillas de Cerdo", "Parrilla", "Costillas de cerdo marinadas y asadas a la parrilla con salsa barbacoa", 1600));
+                listaDeProductos.add(new Producto("Brochetas Mixtas", "Parrilla", "Brochetas de carne de res, pollo y vegetales asadas a la parrilla", 1700));
+                listaDeProductos.add(new Producto("Mollejas de Pollo", "Parrilla", "Deliciosas mollejas de pollo asadas a la parrilla", 1500));
+                listaDeProductos.add(new Producto("Choripán", "Parrilla", "Clásico sándwich argentino con chorizo a la parrilla", 1400));
+                break;
             }
             case POSTRES -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Tarta de Manzana", "Postre", "Tarta casera de manzana con crujiente de canela", 1200));
+                listaDeProductos.add(new Producto("Brownie con Helado", "Postre", "Brownie de chocolate caliente servido con helado de vainilla", 1300));
+                listaDeProductos.add(new Producto("Cheesecake de Frutos Rojos", "Postre", "Cheesecake cremoso con salsa de frutos rojos", 1400));
+                listaDeProductos.add(new Producto("Coulant de Chocolate", "Postre", "Delicioso coulant de chocolate con centro líquido y helado", 1500));
+                listaDeProductos.add(new Producto("Crepas de Nutella", "Postre", "Crepas rellenas de Nutella y espolvoreadas con azúcar glas", 1100));
+                break;
             }
             case SUSHI -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Sushi Nigiri de Salmón", "Sushi", "Salmón fresco sobre arroz de sushi", 1800));
+                listaDeProductos.add(new Producto("Sushi Maki de Aguacate", "Sushi", "Rollos de sushi rellenos de aguacate y envueltos en alga nori", 1500));
+                listaDeProductos.add(new Producto("Sushi California Roll", "Sushi", "Rollos de sushi con cangrejo, pepino y aguacate", 1700));
+                listaDeProductos.add(new Producto("Sushi Sashimi de Atún", "Sushi", "Finas láminas de atún fresco servido sin arroz", 2000));
+                listaDeProductos.add(new Producto("Sushi Temaki de Camarón", "Sushi", "Cono de alga nori relleno de camarones tempura y vegetales", 1600));
+                listaDeProductos.add(new Producto("Sushi Uramaki Philadelphia", "Sushi", "Rollos de sushi invertidos rellenos de salmón, queso crema y pepino", 1900));
+                listaDeProductos.add(new Producto("Sushi Nigiri de Pulpo", "Sushi", "Pulpo tierno sobre arroz de sushi", 2100));
+                break;
             }
             case KIOSCO -> {
-                listaDeProductos.add(new Producto("sevena", "bebida", "sevena banda de azucar", 23));
+                listaDeProductos.add(new Producto("Chocolinas", "Galletas", "Clásicas galletas de chocolate", 100));
+                listaDeProductos.add(new Producto("Alfajor de Maicena", "Dulces", "Delicioso alfajor relleno de dulce de leche y cubierto de coco rallado", 70));
+                listaDeProductos.add(new Producto("Papas Fritas", "Snacks", "Crunchy papas fritas de bolsa", 120));
+                listaDeProductos.add(new Producto("Agua Mineral", "Bebidas", "Botella de agua mineral natural", 80));
+                listaDeProductos.add(new Producto("Coca-Cola", "Bebidas", "Refresco de cola carbonatado", 150));
+                listaDeProductos.add(new Producto("KitKat", "Chocolates", "Barrita de chocolate con obleas crujientes", 110));
+                listaDeProductos.add(new Producto("Chicle Trident", "Chicles", "Paquete de chicles sabor menta", 60));
+                listaDeProductos.add(new Producto("Cigarrillos Marlboro", "Tabaco", "Paquete de cigarrillos Marlboro", 250));
+                listaDeProductos.add(new Producto("Revista", "Prensa", "Revista de entretenimiento y noticias", 80));
+                listaDeProductos.add(new Producto("Caramelos Sugus", "Dulces", "Caramelos masticables de distintos sabores", 50));
+                listaDeProductos.add(new Producto("Pancho", "Comida Rápida", "Hot dog con salchicha, pan y condimentos", 180));
+                listaDeProductos.add(new Producto("Barrita de Cereal", "Snacks", "Barrita de cereal con frutas y nueces", 90));
+                break;
+            }
+            case PIZZA -> {
+                listaDeProductos.add(new Producto("Pizza Margarita", "Pizza", "Clásica pizza italiana con salsa de tomate, mozzarella y albahaca", 1500));
+                listaDeProductos.add(new Producto("Pizza Pepperoni", "Pizza", "Pizza con salsa de tomate, mozzarella y abundantes rodajas de pepperoni", 1600));
+                listaDeProductos.add(new Producto("Pizza Hawaiana", "Pizza", "Pizza con salsa de tomate, mozzarella, jamón y piña", 1700));
+                listaDeProductos.add(new Producto("Pizza Cuatro Quesos", "Pizza", "Pizza con una deliciosa combinación de quesos: mozzarella, gorgonzola, parmesano y provolone", 1800));
+                listaDeProductos.add(new Producto("Pizza Vegetariana", "Pizza", "Pizza con salsa de tomate, mozzarella y una variedad de vegetales frescos", 1700));
+                listaDeProductos.add(new Producto("Pizza BBQ Chicken", "Pizza", "Pizza con salsa barbacoa, pollo desmenuzado, cebolla roja y queso", 1800));
+                listaDeProductos.add(new Producto("Pizza Diavola", "Pizza", "Pizza picante con salsa de tomate, mozzarella, salami y aceitunas", 1600));
+                break;
+            }
+            case POLLO -> {
+                listaDeProductos.add(new Producto("Pollo a la Parrilla", "Pollo", "Pechuga de pollo a la parrilla con especias y limón", 1500));
+                listaDeProductos.add(new Producto("Alitas de Pollo BBQ", "Pollo", "Alitas de pollo adobadas y asadas con salsa barbacoa", 1400));
+                listaDeProductos.add(new Producto("Pollo Frito Crujiente", "Pollo", "Trozos de pollo empanizados y fritos hasta obtener una textura crujiente", 1600));
+                listaDeProductos.add(new Producto("Pollo al Curry", "Pollo", "Pollo en salsa de curry con especias y leche de coco", 1700));
+                listaDeProductos.add(new Producto("Pechuga de Pollo Rellena", "Pollo", "Pechuga de pollo rellena de espinacas y queso, acompañada de salsa de champiñones", 1800));
+                listaDeProductos.add(new Producto("Pollo Teriyaki", "Pollo", "Pollo a la parrilla con salsa teriyaki, servido con arroz y vegetales salteados", 1600));
+                listaDeProductos.add(new Producto("Brochetas de Pollo", "Pollo", "Brochetas de pollo marinadas y asadas con vegetales", 1700));
+                break;
+            }
+            case PASTAS -> {
+                listaDeProductos.add(new Producto("Spaghetti Bolognese", "Pasta", "Spaghetti con salsa bolognesa de carne y tomate", 1200));
+                listaDeProductos.add(new Producto("Fettuccine Alfredo", "Pasta", "Fettuccine en salsa cremosa de queso parmesano", 1300));
+                listaDeProductos.add(new Producto("Penne Arrabiata", "Pasta", "Penne con salsa picante de tomate y ajo", 1250));
+                listaDeProductos.add(new Producto("Lasagna Tradicional", "Pasta", "Lasagna de carne con capas de pasta, salsa de tomate y queso", 1500));
+                listaDeProductos.add(new Producto("Ravioli de Espinacas y Ricotta", "Pasta", "Ravioli relleno de espinacas y queso ricotta, en salsa de tomate", 1400));
+                listaDeProductos.add(new Producto("Tortellini con Salsa Pesto", "Pasta", "Tortellini relleno de queso en salsa de pesto de albahaca", 1350));
+                listaDeProductos.add(new Producto("Tagliatelle con Salsa Carbonara", "Pasta", "Tagliatelle con salsa cremosa de huevo, panceta y queso parmesano", 1400));
+                break;
+            } default->{
+                System.out.println("Dato no valido");
             }
 
-
-
-
         }
-
 
         return listaDeProductos;
     }
