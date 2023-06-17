@@ -1,9 +1,9 @@
 package model;
+import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
 import Exceptions.MenorDeEdadException;
 import Persona.Persona;
 import Persona.Usuario;
 import Persona.Administrador;
-import Persona.UsuariosWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +15,15 @@ public class PedidosYa {
     private Set <Usuario> usuarios;
     private Set <Administrador> administradores;
     public static final String ARCHIVO_USUARIOS = "Users.json";
+    public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
 
     /*
         En esta clase decidimos manejarlo por separado a los usuarios y administradores ya que interactuan en ambitos distintos,
         el admin tiene acceso a todo y el user a lo que pueda ver del programa y no vimos conveniente tener que instanciar los metodos
         para verificar que sea una u otra instancia.
+
     */
+
 
     public PedidosYa() {
         listaDeEmpresas = new ArrayList<>();
@@ -54,10 +57,48 @@ public class PedidosYa {
         this.administradores = administradores;
     }
 
-    public static Usuario registroDeCuenta (Scanner scanner) throws MenorDeEdadException {
+    public void exportarUsuariosToJSON (String path, Set <Usuario> usuarios){
+        File file = new File(path);
+        ObjectMapper mapper = new ObjectMapper();
+
+        try{
+            mapper.writeValue(file, usuarios);
+        }catch (IOException e){
+            System.out.println("Error en la escritura del archivo.");
+        }
+    }
+
+    public Set<Usuario> extraerUsuariosFromJSON (String path){
+        File file = new File(path);
+        ObjectMapper mapper = new ObjectMapper();
+        Set<Usuario>usuarioHashSet = new HashSet<>();
+
+        try{
+            Usuario[] usuariosArray = mapper.readValue(file, Usuario[].class);
+            usuarioHashSet.addAll(Arrays.asList(usuariosArray));
+        }catch (IOException e){
+            System.out.println("Error en la lectura del archivo.");
+            System.out.println(e.getMessage());
+        }
+        return usuarioHashSet;
+    }
+
+    private boolean verificarContraseniaExistente (String cadenaArevisar, Set <Usuario> users){
+        boolean flag = true;
+
+        for (Usuario user : users) {
+            if (user.getContrasenia().equals(cadenaArevisar))
+                flag = false;
+        }
+
+        return flag;
+    }
+
+    public Usuario registroDeCuenta (Scanner scanner) throws MenorDeEdadException {
         Usuario usuario = new Usuario();
-        String cadenaAux=null;
+        String cadenaAux =null, contrasenia = null;
         boolean flag=false;
+        Set <Usuario> usuarioHashSet = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes >> ");
 
@@ -102,6 +143,7 @@ public class PedidosYa {
         usuario.setEdad(edad);
 
         do {
+            scanner.nextLine();
             System.out.println("4) Ingrese su DNI: ");
             cadenaAux = scanner.nextLine();
             try{
@@ -142,46 +184,78 @@ public class PedidosYa {
 
         do {
             System.out.println("7) Finalmente ingrese su contrasenia (debera recordarla): ");
-            String contrasenia = scanner.nextLine();
+            contrasenia = scanner.nextLine();
             try {
                 flag = Usuario.verificarContraseniaSegura(contrasenia);
+                if (flag){
+                    flag = verificarContraseniaExistente(contrasenia, usuarioHashSet);
+                    if (!flag)
+                        System.out.println("Contrasenia en uso. Elija otra.");
+                }else{
+                    System.out.println("Contrasenia no segura. Elija otra.");
+                }
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
             }
         } while (!flag);
 
-        usuario.setContrasenia(cadenaAux);
+        usuario.setContrasenia(contrasenia);
 
         //FALTA PARTE DE TARJETA.
 
-
+        usuarioHashSet.add(usuario);
+        exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarioHashSet);
 
         return usuario;
     }
 
-    public void exportarUsuariosToJSON (String path, Set <Usuario> usuarios){
-        File file = new File(path);
-        ObjectMapper mapper = new ObjectMapper();
+    private boolean verificarInicioDeSesion (String email, String contrasenia, Set <Usuario> usuarios){
+        boolean flag=false;
 
-        try{
-            mapper.writeValue(file, usuarios);
-        }catch (IOException e){
-            System.out.println("Error en la escritura del archivo.");
+        for (Usuario user : usuarios ) {
+            if (user.getContrasenia().equals(contrasenia) && user.getEmail().equals(email))
+                flag = true;
         }
+        return flag;
     }
 
-    public Set<Usuario> extraerUsuariosFromJSON (String path){
-        File file = new File(path);
-        ObjectMapper mapper = new ObjectMapper();
-        Set<Usuario>usuarioHashSet = new HashSet<>();
-
-        try{
-            UsuariosWrapper usuariosWrapper = mapper.readValue(file, UsuariosWrapper.class);
-            usuarioHashSet = usuariosWrapper.getUsuarios();
-        }catch (IOException e){
-            System.out.println("Error en la lectura del archivo.");
+    private Usuario retornarUserEnInicioSesion (String email, String contrasenia, Set <Usuario> usuarios){
+        Usuario user = null;
+        for (Usuario usuario : usuarios ) {
+            if (usuario.getContrasenia().equals(contrasenia) && usuario.getEmail().equals(email))
+                user = usuario;
         }
-        return usuarioHashSet;
+        return user;
+    }
+
+    public Usuario iniciarSesion (Scanner scanner) throws IntentosMaximosDeInicioSesionAlcanzadoException {
+        String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
+        boolean flag=false; //VARIABLE BOOLEANA PARA EL MANEJO DEL BUCLE DO-WHILE.
+        Usuario usuario = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
+        int i=0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
+
+        System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
+        Set <Usuario> usuarioHashSet = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO LOS DATOS PARA VERIFICAR LUEGO CON LO INGRESADO SI COINCIDE.
+
+        do {
+            System.out.println("1) Ingrese el email: ");
+            email = scanner.nextLine();
+            System.out.println("2) Ingrese su contrasenia: ");
+            contrasenia = scanner.nextLine();
+
+            flag = verificarInicioDeSesion(email, contrasenia, usuarioHashSet);
+            if (!flag){
+                System.out.println("\nError en los datos ingresados!.");
+                i++;
+            }else{
+                usuario = retornarUserEnInicioSesion(email, contrasenia, usuarioHashSet); //OBTENGO EL USUARIO PARA RETORNARLO.
+            }
+
+            if (i==CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
+
+        }while (i<CANTIDAD_INTENTOS_INICIO_SESION && flag==false);
+
+        return usuario;
     }
 
     public Empresa buscarEmpresaSegunNombre(String empresa) throws NullPointerException{
