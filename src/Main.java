@@ -14,10 +14,19 @@ public class Main {
         PedidosYa pedidosYa = new PedidosYa();
         Carrito carrito = new Carrito();
         Scanner scanner = new Scanner(System.in);
+        pedidosYa.cargarListaDeEmpresas();
+        pedidosYa.mostrarEmpresas();
 
-        Usuario usuario = pedidosYa.registroDeCuenta(scanner);
+        /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
-        pedidosYa.modificarContrasenia(scanner);
+        pedidosYa.modificarContrasenia(scanner);*/
+
+
+        ////Luego de haber inciiado sesion se muestra.... menuPrincipal()...
+        ////QUE DESEA COMER?
+        ///MUESTRA TODOS LOS RESTAURANTES, ELIJE UNO
+        ///Muestra la empresa elejida con mostrarEmpresa()
+        ///mostrarMenuDeCarrito()
 
 
 
@@ -32,16 +41,9 @@ public class Main {
 
     }
 
+    public static void menuPrincipal(){
 
-
-
-
-
-
-
-
-
-
+    }
 
     public static void mostrarMenuDeCarrito(Scanner scanner){
         System.out.println("Que desea hacer?");

@@ -106,7 +106,7 @@ public class Empresa {
             HashSet<Producto> listaDeProductos = entry.getValue();
 
             System.out.println("Producto: " +  tipoDeProducto.name());
-            System.out.println("Lista de productos: " + listaDeProductos);
+            System.out.println("Lista de productos: \n" + listaDeProductos + "\n");
         }
     }
 
@@ -114,8 +114,8 @@ public class Empresa {
         System.out.println("Empresa{" + "nombre='" + nombre + '\'');
 
         mostrarProductosEmpresa();
-        System.out.println(zonas);
-        System.out.println(listaDeCupones + "\nCostoDeEnvio= " + CostoDeEnvio + "\n\n");
+        System.out.println("Zonas: " + zonas);
+        System.out.println("Cupones: " + listaDeCupones + "\nCostoDeEnvio= " + CostoDeEnvio + "\n///////////////////////////////////////////////////////////\n");
     }
 
     @Override
