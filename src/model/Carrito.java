@@ -20,24 +20,7 @@ public class Carrito {
     }
 
     
-    public void mostrarMenuDeCarrito(Scanner scanner){
-        System.out.println("Que desea hacer?");
-        System.out.println("(1) Agregar producto al carrito");
-        System.out.println("(2) Eliminar producto del carrito");
-        System.out.println("(3) Editar cantidad del producto");
-        System.out.println("(4) Agregar cupon");
-        System.out.println("(5) Ir a pagar");
-        System.out.println("(6) Ver carrito");
-        System.out.println("(7) salir");
 
-        int decision = scanner.nextInt();
-
-        switch (decision){
-            case 1:
-                //agregarProductoAlCarrito()
-        }
-
-    }
 
     //1
     public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto, String nota) throws NullPointerException{
@@ -84,18 +67,7 @@ public class Carrito {
 
     }
 
-    //4
-    public void agregarDescuento(String cupon, PedidosYa pedidosYa) throws NullPointerException, RuntimeException{
-        if(pedidosYa==null || cupon==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
-        Empresa empresa = pedidosYa.buscarEmpresaSegunNombre(vendedor.getNombre());
-
-        if (empresa.validarCupon(cupon)){ ///Busca el cupon y lo elimina de la empresa.
-            tieneCupon = true;
-        } else {
-            throw new RuntimeException("Error! Cupon no valido.//***");
-        }
-    }
 
     //5
     public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta) throws NullPointerException{
@@ -157,5 +129,13 @@ public class Carrito {
 
     public LocalDate getFechaPedido() {
         return fechaPedido;
+    }
+
+    public Empresa getVendedor() {
+        return vendedor;
+    }
+
+    public void setTieneCupon(boolean tieneCupon) {
+        this.tieneCupon = tieneCupon;
     }
 }

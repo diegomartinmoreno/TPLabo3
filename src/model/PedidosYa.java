@@ -376,6 +376,53 @@ public class PedidosYa {
         return listaDeProductos;
     }
 
+    public void agregarDescuento(String cupon, Carrito carrito) throws NullPointerException, RuntimeException{
+        if(cupon==null) throw new NullPointerException("Error! El cupon no puede ser nulo.//***");
+        if (!carrito.getVendedor().validarCupon(cupon)) throw new RuntimeException("Error! Cupon no valido.//***");
+
+        carrito.setTieneCupon(true);
+    }
+
+    public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios){
+        Usuario user = null;
+        for (Usuario aux : usuarios) {
+            if (aux.getDni().equals(dni))
+                user = aux;
+        }
+        return user;
+    }
+
+    public boolean modificarContrasenia (Scanner scanner){
+        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
+            boolean flag=false;
+
+            do {
+                System.out.println("Ingrese su nueva contrasenia: ");
+                String contraseniaNueva = scanner.nextLine();
+
+                flag = verificarContraseniaExistente(contraseniaNueva, usuarios);
+                if (flag){
+                    System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+                    String dni = scanner.nextLine();
+
+                    Usuario user = buscarUserPorDNI(dni, usuarios);
+                    user.setContrasenia(contraseniaNueva);
+                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
+                    usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
+                    System.out.println("\nVERIFICO QUE SE HAYA CAMBIADO EN EL ARCHIVO.\n"+usuarios);
+                }else{
+                    System.out.println("Contrasenia ingresada incorrecta. No existe.");
+                }
+
+            }while (flag == false);
+        }
+        return false;
+    }
+
 }
 
 
