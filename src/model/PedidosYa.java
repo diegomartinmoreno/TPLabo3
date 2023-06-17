@@ -24,7 +24,6 @@ public class PedidosYa {
 
     */
 
-
     public PedidosYa() {
         listaDeEmpresas = new ArrayList<>();
         usuarios = new HashSet<>();
@@ -201,7 +200,19 @@ public class PedidosYa {
 
         usuario.setContrasenia(contrasenia);
 
-        //FALTA PARTE DE TARJETA.
+        int decision=0;
+
+        System.out.println("Desea anadir la tarjeta ahora o luego?. ");
+        System.out.println("[1] Ahora.\n[2] Mas tarde.");
+        decision= scanner.nextInt();
+
+        if(decision == 1){
+            usuario.getTarjeta().cargarTarjeta(scanner);
+        }else if (decision == 2){
+            System.out.println("Cuando desee comprar, debera cargar su tarjeta.");
+        }else{
+            System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
+        }
 
         usuarioHashSet.add(usuario);
         exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarioHashSet);
