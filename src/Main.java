@@ -14,8 +14,6 @@ import java.util.Set;
 
 public class Main {
     public static void main(String[] args) {
-        PedidosYa pedidosYa = new PedidosYa();
-        pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, pedidosYa.getUsuarios());
 
 
     }
