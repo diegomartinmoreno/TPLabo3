@@ -41,67 +41,98 @@ public class Tarjeta {
 	}
 	
 	public boolean cargarTarjeta (Scanner lectura) {
-		boolean flag=true;
+		boolean flag;
 		System.out.println("Inicio de carga de nueva tarjeta.");
 		do {
 			System.out.println("Ingrese nombre del titular:");
-			this.titular= lectura.nextLine();
-			if (!Tarjeta.verificaEsNumero(this.titular)) {
-				flag=false;
-			}else {
-				System.out.println("Nombre invalido.");
-			}
+			flag=!this.cargarNombreTitular(lectura.nextLine());
 		}while (flag);
-		
-		flag=true;
-		
+		////
 		do {
 			System.out.println("Ingrese numero de la tarjeta:");
-			this.numeroTarjeta=lectura.nextLine();
-			if (Tarjeta.verificaEsNumero(this.numeroTarjeta) && this.numeroTarjeta.length()==16) {
-				flag=false;
-			}else {
-				System.out.println("Numero invalido.");
-			}
+			flag=!this.cargarNumeroDeTarjeta(lectura.nextLine());
 		}while(flag);
-		
-		flag=true;
-		
+		////
 		do {
+			flag=true;
 			System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
 			this.fechaDeVencimiento=lectura.nextLine();
 			if (this.VerificarVencimiento()) {
 				flag=false;
 			}
 		}while (flag);
-		
-		flag= true;
-		
+		////
 		do {
 			System.out.println("Ingrese codigo de seguridad:");
-			this.codigoDeSeguridad=lectura.nextLine();
-			if (Tarjeta.verificaEsNumero(this.codigoDeSeguridad) && this.codigoDeSeguridad.length()==3) {
-				flag=false;
-			}else {
-				System.out.println("Numero invalido.");
-			}
+			flag=!this.cargarCodigoDeSeguridad(lectura.nextLine());
 		}while(flag);
-		
-		flag= true;
-		
+		///
 		do {
 			System.out.println("Ingrese saldo limite de la tarjeta:");
-			this.saldo=Double.parseDouble(lectura.nextLine());
-			if (this.saldo>0) {
-				flag=false;
-			}else {
-				System.out.println("Ingrese un saldo limite positivo.");
-			}
+			flag=!this.cargarSaldoLimiteTarjeta(lectura.nextLine());
 		}while(flag);
 		
 		this.activa=true;
 		
 		return !flag;
+	}
+	
+	public void modificarTarjeta (Scanner lectura) {
+		boolean flag;
+		System.out.println("Inicio de modificacion de tarjeta:");
+		///
+		System.out.println("Desea modificar nombre del titular? S/N");
+		if (this.SINO(lectura.nextLine())) {
+			do {
+				System.out.println("Ingrese nombre del titular:");
+				flag=!this.cargarNombreTitular(lectura.nextLine());
+			}while (flag);
+		}
+		///
+		System.out.println("Desea modificar numero de la tarjeta? S/N");
+		if (this.SINO(lectura.nextLine())) {
+			do {
+				System.out.println("Ingrese numero de la tarjeta:");
+				flag=!this.cargarNumeroDeTarjeta(lectura.nextLine());
+			}while(flag);
+		}
+		///
+		System.out.println("Desea modificar la fecha de vencimiento de la tarjeta? S/N");
+		if (this.SINO(lectura.nextLine())) {
+			do {
+				flag=true;
+				System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
+				this.fechaDeVencimiento=lectura.nextLine();
+				if (this.VerificarVencimiento()) {
+					flag=false;
+				}
+			}while (flag);
+		}
+		///
+		System.out.println("Desea modificar el codigo de seguridad de la tarjeta? S/N");
+		if (this.SINO(lectura.nextLine())) {
+			do {
+				System.out.println("Ingrese codigo de seguridad:");
+				flag=!this.cargarCodigoDeSeguridad(lectura.nextLine());
+			}while(flag);
+		}
+		System.out.println("Desea modificar el saldo limite de la tarjeta? S/N");
+		if (this.SINO(lectura.nextLine())) {
+			do {
+				System.out.println("Ingrese saldo limite de la tarjeta:");
+				flag=!this.cargarSaldoLimiteTarjeta(lectura.nextLine());
+			}while(flag);
+		}
+	}
+	
+	public boolean SINO (String lectura) {
+		lectura=lectura.toLowerCase();
+		lectura=lectura.substring(0, 1);
+		if (lectura.contains("s")) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 	public static boolean verificaEsNumero(String numero) {
@@ -112,7 +143,45 @@ public class Tarjeta {
 		}
 	}
 		
-
+	private boolean cargarNombreTitular(String lectura) {
+		this.titular= lectura;
+		if (!Tarjeta.verificaEsNumero(this.titular)) {
+			return true;
+		}else {
+			System.out.println("Nombre invalido.");
+			return false;
+		}
+	}
+	
+	private boolean cargarNumeroDeTarjeta(String lectura) {
+		this.numeroTarjeta=lectura;
+		if (Tarjeta.verificaEsNumero(this.numeroTarjeta) && this.numeroTarjeta.length()==16) {
+			return true;
+		}else {
+			System.out.println("Numero invalido. Se esperan 16 digitos en este campo.");
+			return false;
+		}
+	}
+	
+	private boolean cargarCodigoDeSeguridad(String lectura) {
+		this.codigoDeSeguridad=lectura;
+		if (Tarjeta.verificaEsNumero(this.codigoDeSeguridad) && this.codigoDeSeguridad.length()==3) {
+			return true;
+		}else {
+			System.out.println("Numero invalido. Se esperan 3 digitos en este campo.");
+			return false;
+		}
+	}
+	
+	private boolean cargarSaldoLimiteTarjeta(String lectura) {
+		this.saldo=Double.parseDouble(lectura);
+		if (this.saldo>0) {
+			return true;
+		}else {
+			System.out.println("Ingrese un saldo limite positivo.");
+			return false;
+		}
+	}
 	
 	public boolean VerificarVencimiento() {
 		
@@ -257,6 +326,8 @@ public class Tarjeta {
 		if (tar.cargarTarjeta(s)) {
 			System.out.println(tar.toString());
 		}
+		tar.modificarTarjeta(s);
+		System.out.println(tar.toString());
 	}
 */
 }
