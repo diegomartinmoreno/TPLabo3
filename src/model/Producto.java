@@ -3,7 +3,8 @@ package model;
 import java.util.UUID;
 
 public class Producto {
-    private UUID id;
+    private static int ContadorID=0;
+    private int Id;
     private String nombreProducto;
     private String tipo;
     private String descripcion;
@@ -12,7 +13,8 @@ public class Producto {
 
 
     public Producto(String nombreProducto, String tipo, String descripcion, double precio) {
-        id = UUID.randomUUID();
+        ContadorID++;
+        Id=ContadorID;
         this.nombreProducto = nombreProducto;
         this.tipo = tipo;
         this.descripcion = descripcion;
@@ -36,7 +38,8 @@ public class Producto {
     @Override
     public String toString() {
         return "Producto{" +
-                "Nombre='" + nombreProducto + '\'' +
+                "Id: " + Id +
+                " Nombre='" + nombreProducto + '\'' +
                 ", tipo='" + tipo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 ", precio=" + precio +
