@@ -85,8 +85,6 @@ public class PedidosYa {
         return usuarioHashSet;
     }
 
-
-
     private boolean verificarContraseniaExistente (String cadenaArevisar, Set <Usuario> users){
         boolean flag = true;
 
@@ -274,6 +272,108 @@ public class PedidosYa {
         return usuario;
     }
 
+    public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios){
+        Usuario user = null;
+        for (Usuario aux : usuarios) {
+            if (aux.getDni().equals(dni))
+                user = aux;
+        }
+        return user;
+    }
+
+    public boolean modificarContrasenia (Scanner scanner){
+        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
+            boolean flag=false;
+
+            do {
+                System.out.println("Ingrese su nueva contrasenia >>");
+                scanner.nextLine();
+                String contraseniaNueva = scanner.nextLine();
+
+                flag = verificarContraseniaExistente(contraseniaNueva, usuarios);
+                if (flag){
+                    try {
+                        flag = Usuario.verificarContraseniaSegura(contraseniaNueva);
+                        if (flag){
+                            System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+                            String dni = scanner.nextLine();
+
+                            Usuario user = buscarUserPorDNI(dni, usuarios);
+                            user.setContrasenia(contraseniaNueva); //le cambio la contrasenia al usuario que coincida con el dni, y luego lo subo al archivo.
+                            exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
+                        }else{
+                            System.out.println("Contrasenia no segura. Modifiquela.");
+                        }
+                    }catch (NullPointerException e){
+                        System.out.println(e.getMessage());
+                    }
+                }
+                else{
+                    System.out.println("Contrasenia ingresada incorrecta. Ya existe.");
+                }
+
+            }while (flag == false);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean modificarEmail (Scanner scanner){
+        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+
+            System.out.println("Ingrese su nuevo email para su cuenta de PedidosYa >>");
+            String emailNuevo = scanner.nextLine();
+
+            System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+            String dni = scanner.nextLine();
+
+            Usuario user = buscarUserPorDNI(dni, usuarios);
+            user.setEmail(emailNuevo); //SETEO EL NUEVO MAIL.
+            exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //APLICO LOS CAMBIOS EN EL ARCHIVO.
+            return true;
+        }
+        return false;
+    }
+
+    public boolean modificarNroTelefono (Scanner scanner){
+        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            boolean flag =false;
+
+            System.out.println("Ingrese su nuevo numero de telefono para su cuenta de PedidosYa >>");
+            String telefono = scanner.nextLine();
+
+            try {
+                flag = Usuario.verificarCodigoDeArea(telefono) && Usuario.verificarEsNumero(telefono) && Usuario.verificarLongitudTelefono(telefono);
+                if (!flag)
+                    System.out.println("Error en el telefono ingresado. Verifique el numero de area, si ha ingresado todos numeros o si la longitud es de 8 digitos.");
+                else{
+                    System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+                    String dni = scanner.nextLine();
+
+                    Usuario user = buscarUserPorDNI(dni, usuarios);
+                    user.setNroDeTelefono(telefono);
+                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
+                    return true;
+                }
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        return false;
+    }
+
     public Empresa buscarEmpresaSegunNombre(String empresa) throws NullPointerException{
         if (empresa==null) throw new NullPointerException("Error! La empresa no puede ser nula.//***");
 
@@ -309,12 +409,7 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("Cheverry", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
         listaDeEmpresas.add(new Empresa("Gianelli", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
         listaDeEmpresas.add(new Empresa("El Club de la Milanesa", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
-
-
-
     }
-
-
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos(Set<TipoDeProductos> tipoDeProductos){  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
         LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosTotal = new LinkedHashMap<>();
@@ -500,47 +595,6 @@ public class PedidosYa {
 
         carrito.setTieneCupon(true);
     }
-
-    public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios){
-        Usuario user = null;
-        for (Usuario aux : usuarios) {
-            if (aux.getDni().equals(dni))
-                user = aux;
-        }
-        return user;
-    }
-
-    public boolean modificarContrasenia (Scanner scanner){
-        System.out.println("Desea modificar su contrasenia? (s/n): ");
-        char c = scanner.next().charAt(0);
-
-        if (c == 's'){
-            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
-            boolean flag=false;
-
-            do {
-                System.out.println("Ingrese su nueva contrasenia: ");
-                String contraseniaNueva = scanner.nextLine();
-
-                flag = verificarContraseniaExistente(contraseniaNueva, usuarios);
-                if (flag){
-                    System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
-                    String dni = scanner.nextLine();
-
-                    Usuario user = buscarUserPorDNI(dni, usuarios);
-                    user.setContrasenia(contraseniaNueva);
-                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
-                    usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
-                    System.out.println("\nVERIFICO QUE SE HAYA CAMBIADO EN EL ARCHIVO.\n"+usuarios);
-                }else{
-                    System.out.println("Contrasenia ingresada incorrecta. No existe.");
-                }
-
-            }while (flag == false);
-        }
-        return false;
-    }
-
 }
 
 
