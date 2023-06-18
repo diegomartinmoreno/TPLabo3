@@ -4,6 +4,7 @@ import Exceptions.MenorDeEdadException;
 import Persona.Persona;
 import Persona.Usuario;
 import Persona.Administrador;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -272,12 +273,13 @@ public class PedidosYa {
         return usuario;
     }
 
-    public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios){
+    public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios) throws NullPointerException{
         Usuario user = null;
         for (Usuario aux : usuarios) {
             if (aux.getDni().equals(dni))
                 user = aux;
         }
+        if (user == null) throw new NullPointerException();
         return user;
     }
 
@@ -299,12 +301,17 @@ public class PedidosYa {
                     try {
                         flag = Usuario.verificarContraseniaSegura(contraseniaNueva);
                         if (flag){
-                            System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+                            System.out.println("Finalmente ingrese su dni para el cambio de contrasenia >>");
                             String dni = scanner.nextLine();
 
-                            Usuario user = buscarUserPorDNI(dni, usuarios);
-                            user.setContrasenia(contraseniaNueva); //le cambio la contrasenia al usuario que coincida con el dni, y luego lo subo al archivo.
-                            exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
+                            try {
+                                Usuario user = buscarUserPorDNI(dni, usuarios);
+                                user.setContrasenia(contraseniaNueva); //le cambio la contrasenia al usuario que coincida con el dni, y luego lo subo al archivo.
+                                exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
+                                return true;
+                            }catch (NullPointerException e) {
+                                System.out.println("Error! No se ha encontrado ningun resultado.");
+                            }
                         }else{
                             System.out.println("Contrasenia no segura. Modifiquela.");
                         }
@@ -317,13 +324,12 @@ public class PedidosYa {
                 }
 
             }while (flag == false);
-            return true;
         }
         return false;
     }
 
     public boolean modificarEmail (Scanner scanner){
-        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
 
         if (c == 's'){
@@ -332,19 +338,22 @@ public class PedidosYa {
             System.out.println("Ingrese su nuevo email para su cuenta de PedidosYa >>");
             String emailNuevo = scanner.nextLine();
 
-            System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+            System.out.println("Finalmente ingrese su dni para el cambio de email >>");
             String dni = scanner.nextLine();
-
-            Usuario user = buscarUserPorDNI(dni, usuarios);
-            user.setEmail(emailNuevo); //SETEO EL NUEVO MAIL.
-            exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //APLICO LOS CAMBIOS EN EL ARCHIVO.
-            return true;
+            try {
+                Usuario user = buscarUserPorDNI(dni, usuarios);
+                user.setEmail(emailNuevo); //SETEO EL NUEVO MAIL.
+                exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //APLICO LOS CAMBIOS EN EL ARCHIVO.
+                return true;
+            }catch (NullPointerException e){
+                System.out.println("Error! No se ha encontrado ningun resultado.");
+            }
         }
         return false;
     }
 
     public boolean modificarNroTelefono (Scanner scanner){
-        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
 
         if (c == 's'){
@@ -359,16 +368,75 @@ public class PedidosYa {
                 if (!flag)
                     System.out.println("Error en el telefono ingresado. Verifique el numero de area, si ha ingresado todos numeros o si la longitud es de 8 digitos.");
                 else{
-                    System.out.println("Finalmente ingrese su dni para el cambio de contrasenia.");
+                    System.out.println("Finalmente ingrese su dni para el cambio de numero de telefono >>");
                     String dni = scanner.nextLine();
 
-                    Usuario user = buscarUserPorDNI(dni, usuarios);
-                    user.setNroDeTelefono(telefono);
-                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
-                    return true;
+                    try {
+                        Usuario user = buscarUserPorDNI(dni, usuarios);
+                        user.setNroDeTelefono(telefono);
+                        exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
+                        return true;
+                    }catch (NullPointerException e){
+                        System.out.println("Error! No se ha encontrado ningun resultado.");
+                    }
                 }
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    public boolean modificarNombre (Scanner scanner){
+        System.out.println("Desea modificar su nombre de cuenta? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            boolean flag =false;
+
+            System.out.println("Ingrese su nuevo nombre para su cuenta de PedidosYa >>");
+            String nombreNuevo = scanner.nextLine();
+
+            try {
+                flag = Usuario.verificarEsLetra(nombreNuevo);
+                if (!flag)
+                    System.out.println("Error! El nombre no son todas letras.");
+                else {
+                    System.out.println("Finalmente ingrese su dni para el cambio de nombre >>");
+                    String dni = scanner.nextLine();
+
+                    try {
+                        Usuario user = buscarUserPorDNI(dni, usuarios);
+                        user.setNombre(nombreNuevo);
+                        exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
+                        return true;
+                    }catch (NullPointerException e){
+                        System.out.println("Error! No se ha encontrado ningun resultado.");
+                    }
+                }
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+        }
+        return false;
+    }
+
+    //EL METODO DE CAMBIAR TARJETA SE VA A MOSTRAR Y PODER ACCEDER SOLO SI HAY ACTIVA UNA TARJETA.
+    public boolean cambiarTarjeta (Scanner scanner){
+        System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            System.out.println("Ingrese su dni para luego poder cargar la nueva tarjeta >>");
+            String dni = scanner.nextLine();
+
+            try {
+                Usuario user = buscarUserPorDNI(dni, usuarios);
+                return user.getTarjeta().cargarTarjeta(scanner);
+            }catch (NullPointerException e){
+                System.out.println("Error! No se ha encontrado ningun resultado.");
             }
         }
         return false;
@@ -403,7 +471,7 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("Italia", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
         listaDeEmpresas.add(new Empresa("Mandinga", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,CONSTITUCION, BOSQUE),250));
         listaDeEmpresas.add(new Empresa("Kiosco Da", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM,INDEPENDENCIA),250));
-        listaDeEmpresas.add(new Empresa("Lo de Mario", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES)), Set.of(PUERTO,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("Lo de Mario", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, POSTRES)), Set.of(PUERTO,RUMENCO),250));
         listaDeEmpresas.add(new Empresa("Antares", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,CONSTITUCION, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("Baum", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("Cheverry", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
