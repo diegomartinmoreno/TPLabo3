@@ -45,7 +45,7 @@ public class Main {
 
     }
 
-    public static void mostrarMenuDeCarrito(Scanner scanner){
+    public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa){
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
         System.out.println("(2) Eliminar producto del carrito");
@@ -59,7 +59,9 @@ public class Main {
 
         switch (decision){
             case 1:
-                //agregarProductoAlCarrito()
+                pedidosYa.mostrarEmpresas();
+
+                //agregarProductoAlCarrito();
         }
 
     }

@@ -411,6 +411,12 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("El Club de la Milanesa", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
     }
 
+    public Producto buscarProducto(int id){
+        for(Empresa empresa : listaDeEmpresas){
+
+        }
+    }
+
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos(Set<TipoDeProductos> tipoDeProductos){  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
         LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosTotal = new LinkedHashMap<>();
 

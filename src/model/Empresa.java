@@ -118,6 +118,12 @@ public class Empresa {
         System.out.println("Cupones: " + listaDeCupones + "\nCostoDeEnvio= " + CostoDeEnvio + "\n///////////////////////////////////////////////////////////\n");
     }
 
+    public Producto buscarProductoPorID(int id){
+        for (HashSet<Producto> productos : productosEmpresa.values()){
+
+        }
+    }
+
     @Override
     public String toString() {
         return "Empresa{" +
