@@ -403,7 +403,7 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("Italia", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
         listaDeEmpresas.add(new Empresa("Mandinga", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,CONSTITUCION, BOSQUE),250));
         listaDeEmpresas.add(new Empresa("Kiosco Da", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM,INDEPENDENCIA),250));
-        listaDeEmpresas.add(new Empresa("Lo de Mario", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, POSTRES)), Set.of(PUERTO,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("Lo de Mario", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES)), Set.of(PUERTO,RUMENCO),250));
         listaDeEmpresas.add(new Empresa("Antares", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,CONSTITUCION, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("Baum", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("Cheverry", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
