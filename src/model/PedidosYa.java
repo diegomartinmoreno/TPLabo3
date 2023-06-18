@@ -4,6 +4,7 @@ import Exceptions.MenorDeEdadException;
 import Persona.Persona;
 import Persona.Usuario;
 import Persona.Administrador;
+import Persona.Password;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -84,17 +85,6 @@ public class PedidosYa {
             System.out.println(e.getMessage());
         }
         return usuarioHashSet;
-    }
-
-    private boolean verificarContraseniaExistente (String cadenaArevisar, Set <Usuario> users){
-        boolean flag = true;
-
-        for (Usuario user : users) {
-            if (user.getContrasenia().equals(cadenaArevisar))
-                flag = false;
-        }
-
-        return flag;
     }
 
     public Usuario registroDeCuenta (Scanner scanner) throws MenorDeEdadException {
@@ -189,20 +179,14 @@ public class PedidosYa {
             System.out.println("7) Finalmente ingrese su contrasenia (debera recordarla): ");
             contrasenia = scanner.nextLine();
             try {
-                flag = Usuario.verificarContraseniaSegura(contrasenia);
-                if (flag){
-                    flag = verificarContraseniaExistente(contrasenia, usuarioHashSet);
-                    if (!flag)
-                        System.out.println("Contrasenia en uso. Elija otra.");
-                }else{
-                    System.out.println("Contrasenia no segura. Elija otra.");
-                }
+                Password password = new Password(contrasenia);
+                usuario.setContrasenia(password);
+                flag = true;
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
+                flag =false;
             }
         } while (!flag);
-
-        usuario.setContrasenia(contrasenia);
 
         int decision=0;
 
@@ -224,53 +208,36 @@ public class PedidosYa {
         return usuario;
     }
 
-    private boolean verificarInicioDeSesion (String email, String contrasenia, Set <Usuario> usuarios){
-        boolean flag=false;
-
-        for (Usuario user : usuarios ) {
-            if (user.getContrasenia().equals(contrasenia) && user.getEmail().equals(email))
-                flag = true;
-        }
-        return flag;
-    }
-
-    private Usuario retornarUserEnInicioSesion (String email, String contrasenia, Set <Usuario> usuarios){
-        Usuario user = null;
-        for (Usuario usuario : usuarios ) {
-            if (usuario.getContrasenia().equals(contrasenia) && usuario.getEmail().equals(email))
-                user = usuario;
-        }
-        return user;
-    }
-
     public Usuario iniciarSesion (Scanner scanner) throws IntentosMaximosDeInicioSesionAlcanzadoException {
         String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
-        boolean flag=false; //VARIABLE BOOLEANA PARA EL MANEJO DEL BUCLE DO-WHILE.
         Usuario usuario = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
-        int i=0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
+        int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
-        Set <Usuario> usuarioHashSet = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO LOS DATOS PARA VERIFICAR LUEGO CON LO INGRESADO SI COINCIDE.
-
+        boolean login = false;
         do {
             System.out.println("1) Ingrese el email: ");
             email = scanner.nextLine();
             System.out.println("2) Ingrese su contrasenia: ");
             contrasenia = scanner.nextLine();
 
-            flag = verificarInicioDeSesion(email, contrasenia, usuarioHashSet);
-            if (!flag){
-                System.out.println("\nError en los datos ingresados!.");
-                i++;
-            }else{
-                usuario = retornarUserEnInicioSesion(email, contrasenia, usuarioHashSet); //OBTENGO EL USUARIO PARA RETORNARLO.
-            }
-
-            if (i==CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
-
-        }while (i<CANTIDAD_INTENTOS_INICIO_SESION && flag==false);
+            usuario = getUsuarioByEmail(email);
+            login = usuario.login(contrasenia);
+            if (!login) i++;
+            if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
+        } while (!login);
 
         return usuario;
+    }
+
+    private Usuario getUsuarioByEmail(String email) {
+        Set<Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
+        for (Usuario user : usuarios) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        throw new RuntimeException("Usuario no existe");
     }
 
     public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios) throws NullPointerException{
@@ -289,41 +256,30 @@ public class PedidosYa {
 
         if (c == 's'){
             Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
-            boolean flag=false;
 
-            do {
+            System.out.println("Ingrese su DNI para cambiar su contrasenia >>");
+            String dni = scanner.nextLine();
+            Usuario user=null;
+            try {
+                user = buscarUserPorDNI(dni, usuarios);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+
+            if (user != null){
                 System.out.println("Ingrese su nueva contrasenia >>");
-                scanner.nextLine();
                 String contraseniaNueva = scanner.nextLine();
-
-                flag = verificarContraseniaExistente(contraseniaNueva, usuarios);
-                if (flag){
-                    try {
-                        flag = Usuario.verificarContraseniaSegura(contraseniaNueva);
-                        if (flag){
-                            System.out.println("Finalmente ingrese su dni para el cambio de contrasenia >>");
-                            String dni = scanner.nextLine();
-
-                            try {
-                                Usuario user = buscarUserPorDNI(dni, usuarios);
-                                user.setContrasenia(contraseniaNueva); //le cambio la contrasenia al usuario que coincida con el dni, y luego lo subo al archivo.
-                                exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
-                                return true;
-                            }catch (NullPointerException e) {
-                                System.out.println("Error! No se ha encontrado ningun resultado.");
-                            }
-                        }else{
-                            System.out.println("Contrasenia no segura. Modifiquela.");
-                        }
-                    }catch (NullPointerException e){
-                        System.out.println(e.getMessage());
-                    }
+                try {
+                    Password password = new Password(contraseniaNueva);
+                    user.setContrasenia(password);
+                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
+                    return true;
+                }catch (IllegalArgumentException e) {
+                    System.out.println("Error con la contrasenia! Ingrese una nueva.");
                 }
-                else{
-                    System.out.println("Contrasenia ingresada incorrecta. Ya existe.");
-                }
-
-            }while (flag == false);
+            }else{
+                System.out.println("No se encontraron resultados...");
+            }
         }
         return false;
     }
@@ -335,18 +291,23 @@ public class PedidosYa {
         if (c == 's'){
             Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
-            System.out.println("Ingrese su nuevo email para su cuenta de PedidosYa >>");
-            String emailNuevo = scanner.nextLine();
-
-            System.out.println("Finalmente ingrese su dni para el cambio de email >>");
+            System.out.println("Ingrese su dni para el cambio de email >>");
             String dni = scanner.nextLine();
+            Usuario user=null;
             try {
-                Usuario user = buscarUserPorDNI(dni, usuarios);
+                user = buscarUserPorDNI(dni, usuarios);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+
+            if (user!=null){
+                System.out.println("Ingrese su nuevo email para su cuenta de PedidosYa >>");
+                String emailNuevo = scanner.nextLine();
                 user.setEmail(emailNuevo); //SETEO EL NUEVO MAIL.
                 exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //APLICO LOS CAMBIOS EN EL ARCHIVO.
                 return true;
-            }catch (NullPointerException e){
-                System.out.println("Error! No se ha encontrado ningun resultado.");
+            }else{
+                System.out.println("No se han encontrado resultados...");
             }
         }
         return false;
@@ -358,30 +319,34 @@ public class PedidosYa {
 
         if (c == 's'){
             Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
-            boolean flag =false;
 
-            System.out.println("Ingrese su nuevo numero de telefono para su cuenta de PedidosYa >>");
-            String telefono = scanner.nextLine();
+            System.out.println("Ingrese su dni para el cambio de numero de telefono >>");
+            String dni = scanner.nextLine();
+            Usuario user = null;
 
             try {
-                flag = Usuario.verificarCodigoDeArea(telefono) && Usuario.verificarEsNumero(telefono) && Usuario.verificarLongitudTelefono(telefono);
-                if (!flag)
-                    System.out.println("Error en el telefono ingresado. Verifique el numero de area, si ha ingresado todos numeros o si la longitud es de 8 digitos.");
-                else{
-                    System.out.println("Finalmente ingrese su dni para el cambio de numero de telefono >>");
-                    String dni = scanner.nextLine();
+                user = buscarUserPorDNI (dni, usuarios);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
 
-                    try {
-                        Usuario user = buscarUserPorDNI(dni, usuarios);
+            if (user != null) {
+                System.out.println("Ingrese su nuevo numero de telefono para su cuenta de PedidosYa >>");
+                String telefono = scanner.nextLine();
+
+                try {
+                    if (!Usuario.verificarCodigoDeArea(telefono) && Usuario.verificarEsNumero(telefono) && Usuario.verificarLongitudTelefono(telefono))
+                        System.out.println("Error en el telefono ingresado. Verifique el numero de area, si ha ingresado todos numeros o si la longitud es de 8 digitos.");
+                    else {
                         user.setNroDeTelefono(telefono);
                         exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
                         return true;
-                    }catch (NullPointerException e){
-                        System.out.println("Error! No se ha encontrado ningun resultado.");
                     }
+                }catch (NullPointerException e){
+                    System.out.println(e.getMessage());
                 }
-            }catch (NullPointerException e){
-                System.out.println(e.getMessage());
+            }else{
+                System.out.println("No se han encontrado resultados...");
             }
         }
         return false;
@@ -393,30 +358,31 @@ public class PedidosYa {
 
         if (c == 's'){
             Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
-            boolean flag =false;
 
-            System.out.println("Ingrese su nuevo nombre para su cuenta de PedidosYa >>");
-            String nombreNuevo = scanner.nextLine();
+            System.out.println("Finalmente ingrese su dni para el cambio de nombre >>");
+            String dni = scanner.nextLine();
+            Usuario user = null;
 
-            try {
-                flag = Usuario.verificarEsLetra(nombreNuevo);
-                if (!flag)
-                    System.out.println("Error! El nombre no son todas letras.");
-                else {
-                    System.out.println("Finalmente ingrese su dni para el cambio de nombre >>");
-                    String dni = scanner.nextLine();
+            try{
+                user = buscarUserPorDNI(dni, usuarios);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
 
-                    try {
-                        Usuario user = buscarUserPorDNI(dni, usuarios);
+            if (user!=null) {
+                System.out.println("Ingrese su nuevo nombre para su cuenta de PedidosYa >>");
+                String nombreNuevo = scanner.nextLine();
+                try {
+                    if (!Persona.verificarEsLetra(nombreNuevo))
+                        System.out.println("Error! El nombre no son todas letras.");
+                    else {
                         user.setNombre(nombreNuevo);
                         exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
                         return true;
-                    }catch (NullPointerException e){
-                        System.out.println("Error! No se ha encontrado ningun resultado.");
                     }
+                }catch (NullPointerException e){
+                    System.out.println(e.getMessage());
                 }
-            }catch (NullPointerException e){
-                System.out.println(e.getMessage());
             }
         }
         return false;
@@ -477,12 +443,6 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("Cheverry", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
         listaDeEmpresas.add(new Empresa("Gianelli", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
         listaDeEmpresas.add(new Empresa("El Club de la Milanesa", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
-    }
-
-    public Producto buscarProducto(int id){
-        for(Empresa empresa : listaDeEmpresas){
-
-        }
     }
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos(Set<TipoDeProductos> tipoDeProductos){  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
