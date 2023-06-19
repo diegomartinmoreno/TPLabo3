@@ -1,6 +1,10 @@
 package Persona;
+import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
+import Exceptions.MenorDeEdadException;
+
+import java.util.Scanner;
 
 public interface UtilidadUserAdm {
     void agregarDinero(double dinero);
-    boolean verificarClave();
+    boolean login (String contrasenia);
 }

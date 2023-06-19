@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class Administrador extends Persona implements UtilidadUserAdm {
     private UUID idAdmin;
-    private String claveInicio;
+    private Password password;
     private Tarjeta tarjeta;
 
     public Administrador() {
@@ -17,10 +17,10 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         idAdmin = UUID.randomUUID();
     }
-    public Administrador(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, String claveInicio) {
+    public Administrador(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Password password) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         idAdmin = UUID.randomUUID();
-        this.claveInicio = claveInicio;
+        this.password = password;
     }
 
     public UUID getIdAdmin() {
@@ -30,25 +30,27 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         this.idAdmin = idAdmin;
     }
 
+    public Tarjeta getTarjeta() {
+        return tarjeta;
+    }
+    public void setTarjeta(Tarjeta tarjeta) {
+        this.tarjeta = tarjeta;
+    }
+
+    public void setPassword(Password password) {
+        this.password = password;
+    }
+
     @Override
     public void agregarDinero(double dinero) {
         System.out.println("ADMIN.....//***...//");
         tarjeta.setSaldo(999999999);
-
     }
 
     @Override
-    public boolean verificarClave() {
-        return false;
+    public boolean login(String contrasenia) {
+        return password.validate(contrasenia);
     }
-
-    //el toString no deberia mostrar ni la clave ni la id dado que no es necesario.
-
-
-
-
-
-
 
 
 }

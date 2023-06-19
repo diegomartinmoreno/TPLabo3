@@ -26,7 +26,11 @@ public class Main {
 
     }
 
-    public static void menuPrincipal(){
+    public static void menuPrincipalUsuario(){
+
+    }
+
+    public static void menuPrincipalAdmin(){
 
     }
 

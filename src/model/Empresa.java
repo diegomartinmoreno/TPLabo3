@@ -22,10 +22,6 @@ public class Empresa {
         generarCupones();
     }
 
-
-
-
-
     public boolean validarCupon(String cupon) throws NullPointerException{
        if(cupon==null) throw new NullPointerException("Error! La cadena no puede ser vacia.//***");
 

@@ -3,6 +3,7 @@ import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
 import Exceptions.MenorDeEdadException;
 import Persona.Administrador;
 import Persona.Password;
+import Persona.Persona;
 import Persona.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -14,17 +15,20 @@ import static model.Zonas.*;
 
 public class PedidosYa {
 
+    /*
+        En esta clase decidimos manejarlo por separado a los usuarios y administradores ya que interactuan en ambitos distintos,
+        el admin tiene acceso a todo y el user a lo que pueda ver del programa y no vimos conveniente tener que instanciar los metodos
+        para verificar que sea una u otra instancia. Cuando se registre o inicie sesion, dependiendo en que modo se accede, son a los metodos
+        que se llaman.
+    */
+
     private List<Empresa>listaDeEmpresas;
     private Set <Usuario> usuarios;
     private Set <Administrador> administradores;
-    public static final String ARCHIVO_USUARIOS = "Users.json";
-    public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
 
-    /*
-        En este lugar decidimos manejarlo por separado a los usuarios y administradores ya que interactuan en ambitos distintos,
-        el admin tiene acceso a todo y el user a lo que pueda ver del programa y no vimos conveniente tener que instanciar los metodos
-        para verificar que sea una u otra instancia.
-    */
+    public static final String ARCHIVO_USUARIOS = "Users.json";
+    public static final String ARCHIVO_ADMINISTRADORES = "Administradores.json";
+    public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
 
     public PedidosYa() {
         listaDeEmpresas = new ArrayList<>();
@@ -58,6 +62,9 @@ public class PedidosYa {
         this.administradores = administradores;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////// PARTE DE USUARIO
+
     public void exportarUsuariosToJSON (String path, Set <Usuario> usuarios){
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper();
@@ -84,11 +91,11 @@ public class PedidosYa {
         return usuarioHashSet;
     }
 
-    public Usuario registroDeCuenta (Scanner scanner) throws MenorDeEdadException {
+    public Usuario registroDeCuentaDeUsuario (Scanner scanner) throws MenorDeEdadException {
         Usuario usuario = new Usuario();
         String cadenaAux =null, contrasenia = null;
         boolean flag=false;
-        Set <Usuario> usuarioHashSet = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
+        this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes >> ");
 
@@ -157,7 +164,7 @@ public class PedidosYa {
             try {
                 flag = Usuario.verificarEsNumero(cadenaAux);
                 if (flag) {
-                    flag = Usuario.verificarCodigoDeArea(cadenaAux); //NO HAGO TRY CATCH DE ESTE METODO PQ EN TEORIA VERIFICAR COD AREA SI NO LANZO EXCEPCION, ES QUE SON TODOS DIGITOS.
+                    flag = Persona.verificarCodigoDeArea(cadenaAux); //NO HAGO TRY CATCH DE ESTE METODO PQ EN TEORIA VERIFICAR COD AREA SI NO LANZO EXCEPCION, ES QUE SON TODOS DIGITOS.
                     if (!flag)
                         System.out.println("Error en el codigo de area del telefono!.");
                 } else
@@ -199,13 +206,23 @@ public class PedidosYa {
             System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
         }
 
-        usuarioHashSet.add(usuario);
-        exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarioHashSet);
+        this.usuarios.add(usuario);
+        exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
 
         return usuario;
     }
 
-    public Usuario iniciarSesion (Scanner scanner) throws IntentosMaximosDeInicioSesionAlcanzadoException {
+    private Usuario getUsuarioByEmail(String email) {
+        this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
+        for (Usuario user : usuarios) {
+            if (user.getEmail().equals(email)) {
+                return user;
+            }
+        }
+        throw new RuntimeException("Usuario no existe");
+    }
+
+    public Usuario iniciarSesionComoUsuario (Scanner scanner) throws IntentosMaximosDeInicioSesionAlcanzadoException {
         String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
         Usuario usuario = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
         int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
@@ -218,23 +235,18 @@ public class PedidosYa {
             System.out.println("2) Ingrese su contrasenia: ");
             contrasenia = scanner.nextLine();
 
-            usuario = getUsuarioByEmail(email);
-            login = usuario.login(contrasenia);
-            if (!login) i++;
-            if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
+            try {
+                usuario = getUsuarioByEmail(email);
+                login = usuario.login(contrasenia);
+                if (!login) i++;
+                if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
+            }catch (RuntimeException e){
+                System.out.println(e.getMessage());
+            }
+
         } while (!login);
 
         return usuario;
-    }
-
-    private Usuario getUsuarioByEmail(String email) {
-        Set<Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
-        for (Usuario user : usuarios) {
-            if (user.getEmail().equals(email)) {
-                return user;
-            }
-        }
-        throw new RuntimeException("Usuario no existe");
     }
 
     public Usuario buscarUserPorDNI (String dni, Set <Usuario> usuarios) throws NullPointerException{
@@ -247,18 +259,19 @@ public class PedidosYa {
         return user;
     }
 
-    public boolean modificarContrasenia (Scanner scanner){
+    public boolean modificarContraseniaDeUsuario (Scanner scanner){
         System.out.println("Desea modificar su contrasenia? (s/n): ");
         char c = scanner.next().charAt(0);
 
         if (c == 's'){
-            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
+            this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
 
             System.out.println("Ingrese su DNI para cambiar su contrasenia >>");
             String dni = scanner.nextLine();
             Usuario user=null;
+
             try {
-                user = buscarUserPorDNI(dni, usuarios);
+                user = buscarUserPorDNI(dni, this.usuarios);
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
             }
@@ -269,7 +282,7 @@ public class PedidosYa {
                 try {
                     Password password = new Password(contraseniaNueva);
                     user.setContrasenia(password);
-                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
+                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios); //aca se modifica la contrasenia de esa persona en el archivo.
                     return true;
                 }catch (IllegalArgumentException e) {
                     System.out.println("Error con la contrasenia! Ingrese una nueva.");
@@ -281,18 +294,18 @@ public class PedidosYa {
         return false;
     }
 
-    public boolean modificarEmail (Scanner scanner){
+    public boolean modificarEmailDeUsuario (Scanner scanner){
         System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
 
         if (c == 's'){
-            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
             System.out.println("Ingrese su dni para el cambio de email >>");
             String dni = scanner.nextLine();
             Usuario user=null;
             try {
-                user = buscarUserPorDNI(dni, usuarios);
+                user = buscarUserPorDNI(dni, this.usuarios);
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
             }
@@ -301,7 +314,7 @@ public class PedidosYa {
                 System.out.println("Ingrese su nuevo email para su cuenta de PedidosYa >>");
                 String emailNuevo = scanner.nextLine();
                 user.setEmail(emailNuevo); //SETEO EL NUEVO MAIL.
-                exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios); //APLICO LOS CAMBIOS EN EL ARCHIVO.
+                exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios); //APLICO LOS CAMBIOS EN EL ARCHIVO.
                 return true;
             }else{
                 System.out.println("No se han encontrado resultados...");
@@ -310,19 +323,19 @@ public class PedidosYa {
         return false;
     }
 
-    public boolean modificarNroTelefono (Scanner scanner){
+    public boolean modificarNroTelefonoDeUsuario (Scanner scanner){
         System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
 
         if (c == 's'){
-            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
             System.out.println("Ingrese su dni para el cambio de numero de telefono >>");
             String dni = scanner.nextLine();
             Usuario user = null;
 
             try {
-                user = buscarUserPorDNI (dni, usuarios);
+                user = buscarUserPorDNI (dni, this.usuarios);
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
             }
@@ -336,7 +349,7 @@ public class PedidosYa {
                         System.out.println("Error en el telefono ingresado. Verifique el numero de area, si ha ingresado todos numeros o si la longitud es de 8 digitos.");
                     else {
                         user.setNroDeTelefono(telefono);
-                        exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
+                        exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
                         return true;
                     }
                 }catch (NullPointerException e){
@@ -349,19 +362,19 @@ public class PedidosYa {
         return false;
     }
 
-    public boolean modificarNombre (Scanner scanner){
-        System.out.println("Desea modificar su nombre de cuenta? (s/n): ");
+    public boolean modificarNombreYapellidoDeUsuario (Scanner scanner){
+        System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
         char c = scanner.next().charAt(0);
 
-        if (c == 's'){
-            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+        Usuario user = null;
+        this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
-            System.out.println("Finalmente ingrese su dni para el cambio de nombre >>");
+        if (c == 's'){
+            System.out.println("Ingrese su dni para el cambio de nombre y apellido >>");
             String dni = scanner.nextLine();
-            Usuario user = null;
 
             try{
-                user = buscarUserPorDNI(dni, usuarios);
+                user = buscarUserPorDNI(dni, this.usuarios);
             }catch (NullPointerException e){
                 System.out.println(e.getMessage());
             }
@@ -369,12 +382,16 @@ public class PedidosYa {
             if (user!=null) {
                 System.out.println("Ingrese su nuevo nombre para su cuenta de PedidosYa >>");
                 String nombreNuevo = scanner.nextLine();
+                System.out.println("Ingrese su nuevo apellido para su cuenta de PedidosYa >>");
+                String apellidoNuevo = scanner.nextLine();
+
                 try {
-                    if (!Usuario.verificarEsLetra(nombreNuevo))
-                        System.out.println("Error! El nombre no son todas letras.");
+                    if (!Usuario.verificarEsLetra(nombreNuevo) && !Usuario.verificarEsLetra(apellidoNuevo))
+                        System.out.println("Error! Lo ingresado no son todas letras.");
                     else {
                         user.setNombre(nombreNuevo);
-                        exportarUsuariosToJSON(ARCHIVO_USUARIOS, usuarios);
+                        user.setApellido(apellidoNuevo);
+                        exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
                         return true;
                     }
                 }catch (NullPointerException e){
@@ -386,24 +403,403 @@ public class PedidosYa {
     }
 
     //EL METODO DE CAMBIAR TARJETA SE VA A MOSTRAR Y PODER ACCEDER SOLO SI HAY ACTIVA UNA TARJETA.
-    public boolean cambiarTarjeta (Scanner scanner){
+    public boolean cambiarTarjetaDeUsuario (Scanner scanner){
         System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
         char c = scanner.next().charAt(0);
 
         if (c == 's'){
-            Set <Usuario> usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
             System.out.println("Ingrese su dni para luego poder cargar la nueva tarjeta >>");
             String dni = scanner.nextLine();
 
             try {
-                Usuario user = buscarUserPorDNI(dni, usuarios);
-                return user.getTarjeta().cargarTarjeta(scanner);
+                Usuario user = buscarUserPorDNI(dni, this.usuarios);
+                if (user !=  null){
+                    user.getTarjeta().modificarTarjeta(scanner);
+                    exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
+                    return true;
+                }
             }catch (NullPointerException e){
                 System.out.println("Error! No se ha encontrado ningun resultado.");
             }
         }
         return false;
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////// FINALIZA PARTE DE USUARIO
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////// PARTE DE ADMIN
+
+    public void exportarAdministradoresToJSON (String path, Set<Administrador> administradores){
+        File file = new File(path);
+        ObjectMapper mapper = new ObjectMapper();
+
+        try{
+            mapper.writeValue(file, administradores);
+        }catch (IOException e){
+            System.out.println("Error en la escritura del archivo.");
+        }
+    }
+
+    public Set<Administrador> extraerAdministradoresFromJSON (String path){
+        File file = new File(path);
+        ObjectMapper mapper = new ObjectMapper();
+        Set<Administrador>usuarioHashSet = new HashSet<>();
+
+        try{
+            Administrador[] usuariosArray = mapper.readValue(file, Administrador[].class);
+            usuarioHashSet.addAll(Arrays.asList(usuariosArray));
+        }catch (IOException e){
+            System.out.println("Error en la lectura del archivo.");
+            System.out.println(e.getMessage());
+        }
+        return usuarioHashSet;
+    }
+
+    public Administrador registroDeCuentaDeAdmin (Scanner scanner) throws MenorDeEdadException {
+        Administrador administrador = new Administrador();
+        String cadenaAux =null, contrasenia = null;
+        boolean flag=false;
+        this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
+
+        System.out.println("Bienvenido Administrador! Ingrese los datos correspondientes >> ");
+
+        do {
+            System.out.println("1) Ingrese su nombre: ");
+            cadenaAux = scanner.nextLine();
+            try {
+                flag = Persona.verificarEsLetra(cadenaAux);
+                if (!flag)
+                    System.out.println("Recuerde que su nombre son solo letras!.");
+                else{
+                    administrador.setNombre(cadenaAux);
+                }
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+        }while (!flag);
+
+        do {
+            System.out.println("2) Ingrese su apellido: ");
+            cadenaAux = scanner.nextLine();
+            try {
+                flag = Persona.verificarEsLetra(cadenaAux);
+                if (!flag)
+                    System.out.println("Recuerde que su apellido son solo letras!.");
+                else{
+                    administrador.setApellido(cadenaAux);
+                }
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+        }while (!flag);
+
+        System.out.println("3) Ingrese su edad");
+        int edad = scanner.nextInt();
+        try {
+            flag = Persona.verificarEdad(edad);
+            if (!flag)
+                throw new MenorDeEdadException();
+            else
+                administrador.setEdad(edad);
+        }catch (NullPointerException e){
+            System.out.println(e.getMessage());
+        }
+
+        do {
+            scanner.nextLine();
+            System.out.println("4) Ingrese su DNI: ");
+            cadenaAux = scanner.nextLine();
+            try{
+                flag = Persona.verificarEsNumero(cadenaAux);
+                if (flag) {
+                    flag = Persona.verificarLongitudDNI(cadenaAux);
+                    if (!flag)
+                        System.out.println("Error en la longitud del DNI!. Son 8 digitos.");
+                    else
+                        administrador.setDni(cadenaAux);
+                }else
+                    System.out.println("Error en el dni, no son todos digitos.");
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+        }while (!flag);
+
+        do{
+            System.out.println("5) Ingrese su numero telefonico: ");
+            cadenaAux = scanner.nextLine();
+            try {
+                flag = Persona.verificarEsNumero(cadenaAux);
+                if (flag) {
+                    flag = Persona.verificarCodigoDeArea(cadenaAux); //NO HAGO TRY CATCH DE ESTE METODO PQ EN TEORIA VERIFICAR COD AREA SI NO LANZO EXCEPCION, ES QUE SON TODOS DIGITOS.
+                    if (!flag)
+                        System.out.println("Error en el codigo de area del telefono!.");
+                    else
+                        administrador.setNroDeTelefono(cadenaAux);
+                } else
+                    System.out.println("Error en el numero telefonico, no son todos digitos.");
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+        }while (!flag);
+
+        System.out.println("6) Ingrese su email: ");
+        administrador.setEmail(scanner.nextLine());
+
+        do {
+            System.out.println("7) Finalmente ingrese su clave de administrador (debera recordarla y saberla solo usted): ");
+            contrasenia = scanner.nextLine();
+            try {
+                Password password = new Password(contrasenia);
+                administrador.setPassword(password);
+                flag = true;
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+                flag =false;
+            }
+        } while (!flag);
+
+        int decision=0;
+
+        System.out.println("Desea anadir su tarjeta ahora o luego?. ");
+        System.out.println("[1] Ahora.\n[2] Mas tarde.");
+        decision= scanner.nextInt();
+
+        if(decision == 1){
+            administrador.getTarjeta().cargarTarjeta(scanner);
+        }else if (decision == 2){
+            System.out.println("Cuando desee comprar, debera cargar su tarjeta.");
+        }else{
+            System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
+        }
+
+        this.administradores.add(administrador);
+        exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
+
+        return administrador;
+    }
+
+    private Administrador getAdministradorByEmail(String email) {
+        this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
+        for (Administrador admin : this.administradores) {
+            if (admin.getEmail().equals(email)) {
+                return admin;
+            }
+        }
+        throw new RuntimeException("Usuario no existe");
+    }
+
+    public Administrador iniciarSesionComoAdmin (Scanner scanner){
+        String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
+        Administrador administrador = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
+
+        int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
+
+        System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
+        boolean login = false;
+        do {
+            System.out.println("1) Ingrese su email: ");
+            email = scanner.nextLine();
+            System.out.println("2) Ingrese su clave de administrador: ");
+            contrasenia = scanner.nextLine();
+
+            try {
+                administrador = getAdministradorByEmail(email);
+                login = administrador.login(contrasenia);
+                if (!login) i++;
+                if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
+            }catch (RuntimeException e){
+                System.out.println(e.getMessage());
+            }
+        } while (!login);
+
+        return administrador;
+    }
+
+    public Administrador buscarAdministradorPorDNI (String dni, Set <Administrador> administradores) throws NullPointerException{
+        Administrador administrador = null;
+        for (Administrador aux : administradores) {
+            if (aux.getDni().equals(dni))
+                administrador = aux;
+        }
+        if (administrador == null) throw new NullPointerException();
+        return administrador;
+    }
+
+    public boolean modificarContraseniaDeAdministrador (Scanner scanner){
+        System.out.println("Desea modificar su contrasenia? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            this.administradores = extraerAdministradoresFromJSON (ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
+
+            System.out.println("Ingrese su DNI para cambiar su contrasenia >>");
+            String dni = scanner.nextLine();
+            Administrador administrador=null;
+
+            try {
+                administrador = buscarAdministradorPorDNI(dni, this.administradores);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+
+            if (administrador != null){
+                System.out.println("Ingrese su nueva contrasenia >>");
+                String contraseniaNueva = scanner.nextLine();
+                try {
+                    Password password = new Password(contraseniaNueva);
+                    administrador.setPassword(password);
+                    exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores); //aca se modifica la contrasenia de ese admin en el archivo.
+                    return true;
+                }catch (IllegalArgumentException e) {
+                    System.out.println("Error con la contrasenia! Ingrese una nueva.");
+                }
+            }else{
+                System.out.println("No se encontraron resultados...");
+            }
+        }
+        return false;
+    }
+
+    public boolean modificarEmailDeAdministrador (Scanner scanner){
+        System.out.println("Desea modificar su email? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            this.administradores = extraerAdministradoresFromJSON (ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+
+            System.out.println("Ingrese su dni para el cambio de email >>");
+            String dni = scanner.nextLine();
+            Administrador administrador=null;
+
+            try {
+                administrador = buscarAdministradorPorDNI(dni, this.administradores);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+
+            if (administrador!=null){
+                System.out.println("Ingrese su nuevo email para su cuenta de PedidosYa >>");
+                String emailNuevo = scanner.nextLine();
+                administrador.setEmail(emailNuevo); //SETEO EL NUEVO MAIL.
+                exportarAdministradoresToJSON (ARCHIVO_ADMINISTRADORES, this.administradores); //APLICO LOS CAMBIOS EN EL ARCHIVO.
+                return true;
+            }else{
+                System.out.println("No se han encontrado resultados...");
+            }
+        }
+        return false;
+    }
+
+    public boolean modificarNroTelefonoDeAdministrador (Scanner scanner){
+        System.out.println("Desea modificar su numero de telefono? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            this.administradores = extraerAdministradoresFromJSON (ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+
+            System.out.println("Ingrese su dni para el cambio de numero de telefono >>");
+            String dni = scanner.nextLine();
+            Administrador administrador = null;
+
+            try {
+                administrador = buscarAdministradorPorDNI (dni, this.administradores);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+
+            if (administrador != null) {
+                System.out.println("Ingrese su nuevo numero de telefono para su cuenta de PedidosYa >>");
+                String telefono = scanner.nextLine();
+
+                try {
+                    if (!Persona.verificarCodigoDeArea(telefono) && Persona.verificarEsNumero(telefono) && Persona.verificarLongitudTelefono(telefono))
+                        System.out.println("Error en el telefono ingresado. Verifique el numero de area, si ha ingresado todos numeros o si la longitud es de 8 digitos.");
+                    else {
+                        administrador.setNroDeTelefono(telefono);
+                        exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
+                        return true;
+                    }
+                }catch (NullPointerException e){
+                    System.out.println(e.getMessage());
+                }
+            }else{
+                System.out.println("No se han encontrado resultados...");
+            }
+        }
+        return false;
+    }
+
+    public boolean modificarNombreYapellidoDeAdministrador (Scanner scanner){
+        System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            Administrador administrador = null;
+            this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+
+            System.out.println("Ingrese su dni para el cambio de nombre y apellido >>");
+            String dni = scanner.nextLine();
+
+            try{
+                administrador = buscarAdministradorPorDNI(dni, this.administradores);
+            }catch (NullPointerException e){
+                System.out.println(e.getMessage());
+            }
+
+            if (administrador!=null) {
+                System.out.println("Ingrese su nuevo nombre para su cuenta de PedidosYa >>");
+                String nombreNuevo = scanner.nextLine();
+                System.out.println("Ingrese su nuevo apellido para su cuenta de PedidosYa >>");
+                String apellidoNuevo = scanner.nextLine();
+
+                try {
+                    if (!Persona.verificarEsLetra(nombreNuevo) && !Persona.verificarEsLetra(apellidoNuevo))
+                        System.out.println("Error! Lo ingresado no son todas letras.");
+                    else {
+                        administrador.setNombre(nombreNuevo);
+                        administrador.setApellido(apellidoNuevo);
+                        exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
+                        return true;
+                    }
+                }catch (NullPointerException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean cambiarTarjetaDeAdministrador (Scanner scanner){
+        System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
+        char c = scanner.next().charAt(0);
+
+        if (c == 's'){
+            this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
+            System.out.println("Ingrese su dni para luego poder cargar la nueva tarjeta >>");
+            String dni = scanner.nextLine();
+
+            try {
+                Administrador administrador = buscarAdministradorPorDNI(dni, this.administradores);
+                if (administrador !=  null){
+                    administrador.getTarjeta().modificarTarjeta(scanner);
+                    exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
+                    return true;
+                }
+            }catch (NullPointerException e){
+                System.out.println("Error! No se ha encontrado ningun resultado.");
+            }
+        }
+        return false;
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////// FINALIZA PARTE DE ADMIN
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////// PARTE DE EMPRESA
 
     public Empresa buscarEmpresaSegunNombre(String empresa, List <Empresa>listaBuscador) throws NullPointerException{
         if (empresa==null) throw new NullPointerException("Error! La empresa no puede ser nula.//*");
@@ -485,7 +881,6 @@ public class PedidosYa {
             System.out.println(elemento);
         }
     }
-
 
     public List BuscarEmpresasConEsasComidas(TipoDeProductos comida){
         List <Empresa> listaBuscador= new ArrayList<>();
@@ -690,6 +1085,9 @@ public class PedidosYa {
 
         carrito.setTieneCupon(true);
     }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////// FINALIZA PARTE DE EMPRESA
 }
 
 

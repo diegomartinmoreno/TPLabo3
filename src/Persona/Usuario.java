@@ -1,17 +1,23 @@
 package Persona;
 
+import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
+import Exceptions.MenorDeEdadException;
 import model.HistorialDeCompras;
+import model.PedidosYa;
 import model.Tarjeta;
+import model.Zonas;
 
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
+
 
 public class Usuario extends Persona implements UtilidadUserAdm{
     private Set<String> zonas;
     private Tarjeta tarjeta;
     private HistorialDeCompras historialDeCompras;
     private Password contrasenia; // La contrasenia debe tener un minimo de 7 caracteres, donde al menos hayan 2 numeros y 5 letras.
-    private String zonaActual; //este atributo se vera modificado cada vez que se inicie el programa y el user elija su posicion actual. En caso
+    private Zonas zonaActual; //este atributo se vera modificado cada vez que se inicie el programa y el user elija su posicion actual. En caso
     //de ser nueva, se agregara al arraylist de zonas.
 
     public Usuario() {
@@ -69,11 +75,12 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         return zonas.add(zonaNueva);
     }
 
-    public void establecerZonaActual (String zonaActual) throws NullPointerException {
+    public void establecerZonaActual (Zonas zonaActual) throws NullPointerException {
         if (zonaActual == null) throw new NullPointerException("Error! La zona es nula.");
         this.zonaActual = zonaActual;
     }
 
+    @Override
     public boolean login (String contrasenia) {
         return this.contrasenia.validate(contrasenia);
     }
@@ -81,10 +88,5 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     @Override
     public void agregarDinero(double dinero) {
         tarjeta.setSaldo(tarjeta.getSaldo() + dinero);
-    }
-
-    @Override
-    public boolean verificarClave() {
-        return false;
     }
 }
