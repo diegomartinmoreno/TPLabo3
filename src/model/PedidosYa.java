@@ -1,11 +1,8 @@
 package model;
 import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
 import Exceptions.MenorDeEdadException;
-import Persona.Persona;
-import Persona.Usuario;
 import Persona.Administrador;
 import Persona.Password;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;

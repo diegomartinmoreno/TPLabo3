@@ -3,6 +3,9 @@ package Persona;
 import java.util.Objects;
 
 public abstract class Persona {
+    public static final String CODIGO_AREA = "223";
+    public static final String VALORES_NUMERICOS_ACEPTADOS = "[0-9]+";
+    public static final String CARACTERES_VALIDOS = "[a-zA-Z]+";
     private String nombre;
     private String apellido;
     private String nroDeTelefono;
@@ -92,7 +95,7 @@ public abstract class Persona {
 
     public static boolean verificarEsLetra (String cadena) throws NullPointerException{
         if(cadena==null)throw new NullPointerException("Error! La cadena no puede ser nula.");
-        return cadena.matches("[a-zA-Z]+");
+        return cadena.matches(CARACTERES_VALIDOS);
     }
 
     public static boolean verificarEdad (int edad){
@@ -106,7 +109,7 @@ public abstract class Persona {
 
     public static boolean verificarEsNumero (String cadena) throws NullPointerException{
         if(cadena==null) throw new NullPointerException("Error! La cadena no puede ser nula.");
-        return cadena.matches("[0-9]+");
+        return cadena.matches(VALORES_NUMERICOS_ACEPTADOS);
     }
 
     public static boolean verificarLongitudTelefono (String nroDeTelefono) throws NullPointerException{
@@ -116,8 +119,6 @@ public abstract class Persona {
 
     public static boolean verificarCodigoDeArea (String nroDeTelefono) {
         if(nroDeTelefono==null) throw new NullPointerException("Error! El codigo de area no puede ser nulo.");
-        return nroDeTelefono.substring(0, 3).equals("223");
+        return nroDeTelefono.startsWith(CODIGO_AREA);
     }
-
-
 }

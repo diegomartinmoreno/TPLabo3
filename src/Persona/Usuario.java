@@ -10,7 +10,7 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     private Set<String> zonas;
     private Tarjeta tarjeta;
     private HistorialDeCompras historialDeCompras;
-    private String contrasenia; // La contrasenia debe tener un minimo de 7 caracteres, donde al menos hayan 2 numeros y 5 letras.
+    private Password contrasenia; // La contrasenia debe tener un minimo de 7 caracteres, donde al menos hayan 2 numeros y 5 letras.
     private String zonaActual; //este atributo se vera modificado cada vez que se inicie el programa y el user elija su posicion actual. En caso
     //de ser nueva, se agregara al arraylist de zonas.
 
@@ -19,7 +19,7 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         zonas = new HashSet<>();
         tarjeta = new Tarjeta();
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas, String contrasenia) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas, Password contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         this.zonas = zonas;
         this.contrasenia = contrasenia;
@@ -36,10 +36,10 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         this.zonas = zonas;
     }
 
-    public void setContrasenia(String contrasenia) {
+    public void setContrasenia(Password contrasenia) {
         this.contrasenia = contrasenia;
     }
-    public String getContrasenia() {
+    public Password getContrasenia() {
         return contrasenia;
     } //A PESAR DE QUE LA CONTRASENIA ES PRIVADA, SE TUVO QUE HACER UN GET PARA METODOS DONDE ERA NECESARIA, PERO PARA CONTROLAR ESTO, SE LO LLAMA DENTRO DE UN METODO PRIVADO.
 
@@ -74,33 +74,9 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         this.zonaActual = zonaActual;
     }
 
-    private static int contarNumerosDeCadena (String cadena){
-        int contador=0;
-        for (int i=0; i<cadena.length();i++){
-            char c = cadena.charAt(i);
-            if (Character.isDigit(c))
-                contador++;
-        }
-        return contador;
+    public boolean login (String contrasenia) {
+        return this.contrasenia.validate(contrasenia);
     }
-
-    private static int contarLetrasCadena (String cadena){
-        int contador=0;
-        for (int i=0; i<cadena.length();i++){
-            char c = cadena.charAt(i);
-            if (Character.isAlphabetic(c))
-                contador++;
-        }
-        return contador;
-    }
-
-    public static boolean verificarContraseniaSegura (String contrasenia) throws NullPointerException{
-        if (contrasenia == null) throw new NullPointerException("Error! La contrasenia enviada es nula.");
-        if (contrasenia.length()<7) //verificamos primero la longitud, ya que si esta ya es menor a la solicitada, es incorrecta.
-            return false;
-        return contarLetrasCadena(contrasenia)>=5 && contarNumerosDeCadena(contrasenia)>=2;
-    }
-
 
     @Override
     public void agregarDinero(double dinero) {
