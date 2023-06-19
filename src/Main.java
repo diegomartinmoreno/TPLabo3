@@ -17,10 +17,13 @@ public class Main {
         //System.out.println(A);
 
 
-        pedidosYa.mostrarEmpresas();
-        pedidosYa.cargarListaDeEmpresas();
 
-        //mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+        pedidosYa.cargarListaDeEmpresas();
+        pedidosYa.mostrarEmpresas();
+
+        clearConsole();
+
+        mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
 
        /// pedidosYa.mostrarEmpresas();
         //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
@@ -129,4 +132,11 @@ public class Main {
         }while (scanner.next().charAt(0) != 'n');
     }
 
+    public static void clearConsole() {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
 }
