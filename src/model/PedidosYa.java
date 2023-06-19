@@ -405,16 +405,30 @@ public class PedidosYa {
         return false;
     }
 
-    public Empresa buscarEmpresaSegunNombre(String empresa) throws NullPointerException{
-        if (empresa==null) throw new NullPointerException("Error! La empresa no puede ser nula.//***");
+    public Empresa buscarEmpresaSegunNombre(String empresa, List <Empresa>listaBuscador) throws NullPointerException{
+        if (empresa==null) throw new NullPointerException("Error! La empresa no puede ser nula.//*");
+        Empresa buscada= null;
+        for(Empresa auxiliar : listaBuscador){
 
-        for(Empresa auxiliar : listaDeEmpresas){
-            if(empresa.equals(auxiliar.getNombre())){
-                return auxiliar;
+            if(auxiliar.getNombre().equals(empresa)){
+                System.out.println("entra");
+                buscada=auxiliar;
             }
         }
 
-        return null;
+        if (buscada == null)throw new NullPointerException("Error!! La empresa buscada no esta en la lista de opciones");
+        return buscada;
+    }
+
+    public Empresa buscarEmpresaSegunNombre(String empresa) throws NullPointerException{
+        Empresa empresa1=buscarEmpresaSegunNombre(empresa, listaDeEmpresas);
+        return empresa1;
+    }
+
+    public void mostrarEmpresasSoloNombre(List <Empresa> listaBuscador){
+        for (Empresa empresa1:listaBuscador) {
+            System.out.println(empresa1.getNombre());
+        }
     }
 
     public void mostrarEmpresas(){
@@ -424,23 +438,63 @@ public class PedidosYa {
     }
 
     public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
-        listaDeEmpresas.add(new Empresa("La Musa", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO, BOSQUE),250));
-        listaDeEmpresas.add(new Empresa("Hamburgo", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(CENTRO,RUMENCO, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("Konichiwa", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI)), Set.of(PUERTO,CONSTITUCION, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("DeDiez", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(ALEM,RUMENCO, LOS_TRONCOS),250));
-        listaDeEmpresas.add(new Empresa("Grido", crearListaDeProductos(Set.of(HELADOS)), Set.of(ALEM,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("Banderita", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS),250));
-        listaDeEmpresas.add(new Empresa("La Hamburgueseria", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("Italia", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
-        listaDeEmpresas.add(new Empresa("Mandinga", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,CONSTITUCION, BOSQUE),250));
-        listaDeEmpresas.add(new Empresa("Kiosco Da", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM,INDEPENDENCIA),250));
-        listaDeEmpresas.add(new Empresa("Lo de Mario", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, POSTRES)), Set.of(PUERTO,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("Antares", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,CONSTITUCION, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("Baum", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("Cheverry", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
-        listaDeEmpresas.add(new Empresa("Gianelli", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
-        listaDeEmpresas.add(new Empresa("El Club de la Milanesa", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(CENTRO,RUMENCO, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI)), Set.of(PUERTO,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(ALEM,RUMENCO, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS)), Set.of(ALEM,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("ITALIA", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,CONSTITUCION, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM,INDEPENDENCIA),250));
+        listaDeEmpresas.add(new Empresa("LO DE MARIO", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES)), Set.of(PUERTO,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("ANTARES", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("BAUM", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("GIANELLI", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
+        listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
     }
+
+    public Empresa MostrarEmpresaSegunQueQuiereComer (Scanner scanner){
+        MostrarTodosLosEnums();
+        System.out.println("Que desea comer?");
+
+        String comida= scanner.nextLine();
+
+        TipoDeProductos dato= TipoDeProductos.valueOf(comida.toUpperCase());
+
+        List <Empresa> listaBuscador= new ArrayList<> ();
+        listaBuscador=BuscarEmpresasConEsasComidas(dato);
+
+        mostrarEmpresasSoloNombre(listaBuscador);
+        System.out.println("Elija una empresa por nombre");
+
+        comida = scanner.nextLine();
+
+        Empresa empresa1=buscarEmpresaSegunNombre(comida,listaBuscador);
+
+        return empresa1;
+    }
+    public void MostrarTodosLosEnums(){
+        // Obtener todos los valores del enum
+        TipoDeProductos[] elementos = TipoDeProductos.values();
+
+        // Mostrar los elementos
+        for (TipoDeProductos elemento : elementos) {
+            System.out.println(elemento);
+        }
+    }
+
+
+    public List BuscarEmpresasConEsasComidas(TipoDeProductos comida){
+        List <Empresa> listaBuscador= new ArrayList<>();
+        for (Empresa empresa : listaDeEmpresas) {
+            if (empresa.getProductosEmpresa().containsKey(comida)){
+                listaBuscador.add(empresa);
+            }
+        }
+        return listaBuscador;    }
 
     public Producto buscarProductoPorID(int id){
         Producto producto = null;

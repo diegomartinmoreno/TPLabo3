@@ -3,9 +3,6 @@ package Persona;
 import java.util.Objects;
 
 public abstract class Persona {
-    public static final String CODIGO_AREA = "223";
-    public static final String VALORES_NUMERICOS_ACEPTADOS = "[0-9]+";
-    public static final String CARACTERES_VALIDOS = "[a-zA-Z]+";
     private String nombre;
     private String apellido;
     private String nroDeTelefono;
@@ -16,6 +13,9 @@ public abstract class Persona {
     private static final int LONGITUD_DNI = 8;
     private static final int LONGITUD_TELEFONO_MODERNA = 10;
     private static final int LONGITUD_TELEFONO_ANTERIOR = 9; //EN EL CASO DE PERSONAS MAYORES, DONDE SU NUMERO ES DE 9 DIGITOS.
+    public static final String CODIGO_AREA = "223";
+    public static final String VALORES_NUMERICOS_ACEPTADOS = "[0-9]+";
+    public static final String CARACTERES_VALIDOS = "[a-zA-Z]+";
 
     public Persona() {
     }
