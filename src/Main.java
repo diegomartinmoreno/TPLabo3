@@ -4,14 +4,23 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("asfdasf");
         PedidosYa pedidosYa = new PedidosYa();
         Carrito carrito = new Carrito();
         HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
+        Tarjeta tarjeta = new Tarjeta();
+
+
         pedidosYa.cargarListaDeEmpresas();
+<<<<<<< HEAD
        /// pedidosYa.mostrarEmpresas();
         Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
 
+=======
+        pedidosYa.mostrarEmpresas();
+        mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+>>>>>>> 5f3535d4e7ae20e952b67be9cc7c145328d08df2
 
         /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
@@ -28,11 +37,9 @@ public class Main {
 
     }
 
-    public static void menuPrincipal(){
-
-    }
-
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
+        pedidosYa.MostrarEmpresaSegunQueQuiereComer(scanner);
+
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
         System.out.println("(2) Eliminar producto del carrito");
@@ -41,6 +48,7 @@ public class Main {
         System.out.println("(5) Ir a pagar");
         System.out.println("(6) Ver carrito");
         System.out.println("(7) salir");
+
 
         int decision = scanner.nextInt();
 
