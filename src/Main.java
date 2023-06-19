@@ -53,7 +53,7 @@ public class Main {
     }
 
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
-        Empresa elegida = pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
+        Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner);
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
