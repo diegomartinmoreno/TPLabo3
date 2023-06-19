@@ -43,7 +43,7 @@ public class Main {
     }
 
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
-        Empresa elegida = pedidosYa.mostrarEmpresaSegunQueQuiereComer(scanner);
+        Empresa elegida = pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
@@ -95,6 +95,7 @@ public class Main {
                     System.out.println("Cupones disponibles: " + carrito.getVendedor().getListaDeCupones());
 
                     System.out.println("Ingresa un cupon de 6 caracteres: ");
+                    scanner.nextLine();
                     pedidosYa.agregarDescuento(scanner.nextLine(), carrito);
                     break;
 
@@ -104,6 +105,8 @@ public class Main {
 
                     if (scanner.next().charAt(0) == 's') {
                         System.out.println("Ingrese la nota que desea enviarle al repartidor:");
+
+                        scanner.nextLine();
                         carrito.setNota(scanner.nextLine());
                     }
 

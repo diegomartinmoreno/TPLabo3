@@ -64,11 +64,11 @@ public class Carrito {
 
 
         System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
-        tarjeta.RealizarPago(calcularMontoTotalDeLaCompra());
+
 
         historial.agregarPedido(this);
 
-        clear();
+        if(tarjeta.RealizarPago(calcularMontoTotalDeLaCompra())) clear();
     }
 
     public void mostrarProductos(){
