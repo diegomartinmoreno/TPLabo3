@@ -68,6 +68,14 @@ public class PedidosYa {
         this.administradores = administradores;
     }
 
+    public Zonas getZonaUsuarioActual() {
+        return zonaUsuarioActual;
+    }
+
+    public void setZonaUsuarioActual(Zonas zonaUsuarioActual) {
+        this.zonaUsuarioActual = zonaUsuarioActual;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// PARTE DE USUARIO
 
@@ -840,13 +848,13 @@ public class PedidosYa {
     }
 
     public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
-        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, LOS_TRONCOS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS, CARNES, ENSALADAS, PARRILLA)), Set.of(CENTRO,ALEM,RUMENCO, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI, CARNES, POSTRES, HAMBURGUESAS, EMPANADAS)), Set.of(PUERTO,INDEPENDENCIA, COLINAS,CONSTITUCION, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA, HAMBURGUESAS)), Set.of(ALEM,RUMENCO,CONSTITUCION,INDEPENDENCIA, LOS_TRONCOS, MOGOTES),250));
         listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM,RUMENCO),250));
         listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(PUERTO,CENTRO,ALEM, COLINAS, LOS_TRONCOS, MOGOTES,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS, LOS_TRONCOS,INDEPENDENCIA, MOGOTES,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS,INDEPENDENCIA, MOGOTES,RUMENCO),250));
         listaDeEmpresas.add(new Empresa("ITALIA", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
         listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO, POSTRES, HAMBURGUESAS)), Set.of(CENTRO,INDEPENDENCIA,CONSTITUCION, LOS_TRONCOS, MOGOTES, BOSQUE,RUMENCO),250));
         listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO, POSTRES)), Set.of(ALEM,INDEPENDENCIA),250));
@@ -856,8 +864,8 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, POSTRES, PARRILLA,HELADOS, EMPANADAS)), Set.of(CENTRO,ALEM,RUMENCO,INDEPENDENCIA, BOSQUE),250));
         listaDeEmpresas.add(new Empresa("GIANELLI", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
         listaDeEmpresas.add(new Empresa("KIOSCO FLOR", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(CENTRO, CONSTITUCION), 150));
-        listaDeEmpresas.add(new Empresa("KIOSCO EXPRESS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(ALEM, LOS_TRONCOS), 200));
-        listaDeEmpresas.add(new Empresa("KIOSCO FRESCOS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, HELADOS)), Set.of(PUERTO, MOGOTES), 180));
+        listaDeEmpresas.add(new Empresa("KIOSCO EXPRESS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(ALEM, LOS_TRONCOS, RUMENCO), 200));
+        listaDeEmpresas.add(new Empresa("KIOSCO FRESCOS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, HELADOS)), Set.of(PUERTO, MOGOTES, CENTRO, INDEPENDENCIA), 180));
         listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS, CARNES, POSTRES, ENSALADAS,HELADOS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,INDEPENDENCIA,CONSTITUCION, BOSQUE),250));
 
         listaDeEmpresas.add(new Empresa("LA PARRILLITA", crearListaDeProductos(Set.of(CERVEZA,CARNES, PARRILLA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, POLLO)), Set.of(CENTRO, ALEM, INDEPENDENCIA, MOGOTES, LOS_TRONCOS), 200));
@@ -967,7 +975,7 @@ public class PedidosYa {
     public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida){
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDisminuida) {
-                if (empresa.getNombre().contains(nombre)) {
+                if (empresa.getNombre().contains(nombre) && empresa.getZonas().contains(zonaUsuarioActual)) {
                     listaBuscador.add(empresa);
                 }
             }
@@ -977,7 +985,7 @@ public class PedidosYa {
     public List<Empresa> crearListaEmpresas (String nombre){
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getNombre().contains(nombre)) {
+                if (empresa.getNombre().contains(nombre)&& empresa.getZonas().contains(zonaUsuarioActual)) {
                     listaBuscador.add(empresa);
                 }
             }
@@ -988,7 +996,7 @@ public class PedidosYa {
 
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getProductosEmpresa().containsKey(comida)) {
+                if (empresa.getProductosEmpresa().containsKey(comida)&& empresa.getZonas().contains(zonaUsuarioActual)) {
                     listaBuscador.add(empresa);
                 }
             }
