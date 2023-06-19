@@ -3,6 +3,7 @@ import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
 import Exceptions.MenorDeEdadException;
 import Persona.Administrador;
 import Persona.Password;
+import Persona.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -96,7 +97,7 @@ public class PedidosYa {
             System.out.println("1) Ingrese su nombre: ");
             cadenaAux = scanner.nextLine();
             try {
-                flag = Persona.verificarEsLetra(cadenaAux);
+                flag = Usuario.verificarEsLetra(cadenaAux);
                 if (!flag)
                     System.out.println("Recuerde que su nombre son solo letras!.");
             }catch (NullPointerException e){
@@ -110,7 +111,7 @@ public class PedidosYa {
             System.out.println("2) Ingrese su apellido: ");
             cadenaAux = scanner.nextLine();
             try {
-                flag = Persona.verificarEsLetra(cadenaAux);
+                flag = Usuario.verificarEsLetra(cadenaAux);
                 if (!flag)
                     System.out.println("Recuerde que su apellido son solo letras!.");
             }catch (NullPointerException e){
@@ -123,7 +124,7 @@ public class PedidosYa {
         System.out.println("3) Ingrese su edad");
         int edad = scanner.nextInt();
         try {
-            flag = Persona.verificarEdad(edad);
+            flag = Usuario.verificarEdad(edad);
             if (!flag)
                 throw new MenorDeEdadException();
         }catch (NullPointerException e){
@@ -137,9 +138,9 @@ public class PedidosYa {
             System.out.println("4) Ingrese su DNI: ");
             cadenaAux = scanner.nextLine();
             try{
-                flag = Persona.verificarEsNumero(cadenaAux);
+                flag = Usuario.verificarEsNumero(cadenaAux);
                 if (flag) {
-                    flag = Persona.verificarLongitudDNI(cadenaAux);
+                    flag = Usuario.verificarLongitudDNI(cadenaAux);
                     if (!flag)
                         System.out.println("Error en la longitud del DNI!. Son 8 digitos.");
                 }else
@@ -155,9 +156,9 @@ public class PedidosYa {
             System.out.println("5) Ingrese su numero telefonico: ");
             cadenaAux = scanner.nextLine();
             try {
-                flag = Persona.verificarEsNumero(cadenaAux);
+                flag = Usuario.verificarEsNumero(cadenaAux);
                 if (flag) {
-                    flag = Persona.verificarCodigoDeArea(cadenaAux); //NO HAGO TRY CATCH DE ESTE METODO PQ EN TEORIA VERIFICAR COD AREA SI NO LANZO EXCEPCION, ES QUE SON TODOS DIGITOS.
+                    flag = Usuario.verificarCodigoDeArea(cadenaAux); //NO HAGO TRY CATCH DE ESTE METODO PQ EN TEORIA VERIFICAR COD AREA SI NO LANZO EXCEPCION, ES QUE SON TODOS DIGITOS.
                     if (!flag)
                         System.out.println("Error en el codigo de area del telefono!.");
                 } else
@@ -370,7 +371,7 @@ public class PedidosYa {
                 System.out.println("Ingrese su nuevo nombre para su cuenta de PedidosYa >>");
                 String nombreNuevo = scanner.nextLine();
                 try {
-                    if (!Persona.verificarEsLetra(nombreNuevo))
+                    if (!Usuario.verificarEsLetra(nombreNuevo))
                         System.out.println("Error! El nombre no son todas letras.");
                     else {
                         user.setNombre(nombreNuevo);
