@@ -26,6 +26,10 @@ public class Producto {
         return precio;
     }
 
+    public int getId() {
+        return Id;
+    }
+
     public void setCantidadPedido(int cantidadPedido) {
         this.cantidadPedido = cantidadPedido;
     }

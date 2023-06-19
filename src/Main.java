@@ -4,8 +4,7 @@ import Persona.Usuario;
 import Persona.Administrador;
 import Persona.UtilidadUserAdm;
 
-import model.Carrito;
-import model.PedidosYa;
+import model.*;
 
 import java.util.*;
 
@@ -13,6 +12,7 @@ public class Main {
     public static void main(String[] args) {
         PedidosYa pedidosYa = new PedidosYa();
         Carrito carrito = new Carrito();
+        HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
         pedidosYa.cargarListaDeEmpresas();
         pedidosYa.mostrarEmpresas();
@@ -45,7 +45,7 @@ public class Main {
 
     }
 
-    public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa){
+    public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
         System.out.println("(2) Eliminar producto del carrito");
@@ -61,7 +61,55 @@ public class Main {
             case 1:
                 pedidosYa.mostrarEmpresas();
 
-                //agregarProductoAlCarrito();
+                System.out.println("Ingrese el nombre de la empresa");
+                Empresa elegida = pedidosYa.buscarEmpresaSegunNombre(scanner.nextLine());
+                elegida.mostrarEmpresa();
+
+                System.out.println("Ingrese el id del producto que desea llevar:");
+                Producto prodAux = pedidosYa.buscarProductoPorID(scanner.nextInt());
+                carrito.agregarProductoAlCarrito(elegida, prodAux);
+                break;
+
+            case 2:
+                carrito.mostrarProductos();
+
+                System.out.println("Ingrese el numero del producto que desea eliminar");
+                carrito.eliminarProductoDelCarrito(scanner.nextInt());
+                break;
+
+            case 3:
+                carrito.mostrarProductos();
+
+                System.out.println("Ingrese el numero del producto que desea editar");
+                int pos = scanner.nextInt();
+                System.out.println("Producto elegido: " + carrito.getProductos().get(pos));
+
+                System.out.println("Ingrese la nueva cantidad del producto elegido");
+                carrito.editarCantidadDeProducto(scanner.nextInt(), pos);
+                break;
+
+            case 4:
+                System.out.println("Cupones disponibles: " + carrito.getVendedor().getListaDeCupones());
+
+                System.out.println("Ingresa un cupon de 6 caracteres: ");
+                pedidosYa.agregarDescuento(scanner.nextLine(), carrito);
+                break;
+
+            case 5:
+                System.out.println("Pagar carrito...................");
+                System.out.println("Desea enviarle una nota al repartidor? s/n");
+
+                if(scanner.next().charAt(0) == 's'){
+                    System.out.println("Ingrese la nota que desea enviarle al repartidor:");
+                    carrito.setNota(scanner.nextLine());
+                }
+
+                carrito.pagarCarrito(historialDeCompras, tarjeta);
+                break;
+
+            case 6:
+                carrito.listarCarrito();
+                break;
         }
 
     }

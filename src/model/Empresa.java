@@ -119,9 +119,27 @@ public class Empresa {
     }
 
     public Producto buscarProductoPorID(int id){
-        for (HashSet<Producto> productos : productosEmpresa.values()){
+        Producto producto = null;
 
+        for (HashSet<Producto> productos : productosEmpresa.values()){
+            try {
+                producto = buscarProductoEnHashSet(id, productos);
+            } catch (RuntimeException e){
+                System.out.println(e.getMessage());
+            }
         }
+
+        return producto;
+    }
+
+    public Producto buscarProductoEnHashSet(int id, HashSet<Producto> productos) throws RuntimeException{
+        for (Producto producto : productos){
+            if(producto.getId() == id){
+                return producto;
+            }
+        }
+
+        throw new RuntimeException("No encontro el producto.....//***");
     }
 
     @Override

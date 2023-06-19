@@ -23,14 +23,7 @@ public class Carrito {
 
 
     //1
-    public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto, String nota) throws NullPointerException{
-        if (producto==null || nota==null) throw new NullPointerException("Error! El producto o la nota no puede ser nula.//***");
 
-        this.vendedor = vendedor;
-        this.nota = nota;
-
-        return productos.add(producto);
-    }
     public boolean agregarProductoAlCarrito(Empresa vendedor, Producto producto) throws NullPointerException{
         if(producto==null) throw new NullPointerException("Error! El producto no puede ser nulo.//***");
 
@@ -41,28 +34,24 @@ public class Carrito {
 
 
     //2
-    public void eliminarProductoDelCarrito(String nombre) throws RuntimeException, NullPointerException{
-        if (nombre==null) throw new NullPointerException("Error! La cadena no puede ser nula.//***");
 
-        int posicion = buscarProductoPorNombre(nombre);
 
-        if(posicion > -1){
-            productos.remove(posicion);
+    public void eliminarProductoDelCarrito(int pos) throws RuntimeException {
+        if (pos > -1 && pos <= productos.size()) {
+            productos.remove(pos);
         } else {
-            throw new RuntimeException("El producto no se encuentra en el carrito.//***");
+            throw new RuntimeException("Numero no valido.//***");
         }
-
     }
 
-    //3
-    public void editarCantidadDeProducto(int cantidad, String nombreProducto) throws RuntimeException, NullPointerException{
-        if(nombreProducto==null) throw new NullPointerException("Error! La cadena no puede ser nula.//***");
 
-        int pos = buscarProductoPorNombre(nombreProducto);
-        if(pos > -1){
+    //3
+    public void editarCantidadDeProducto(int cantidad, int pos) throws RuntimeException, NullPointerException{
+
+        if(pos > -1 && pos <= productos.size()){
             productos.get(pos).setCantidadPedido(cantidad);
         } else {
-            throw new RuntimeException("El producto no se encuentra en el carrito");
+            throw new RuntimeException("Numero no valido.///***");
         }
 
     }
@@ -74,12 +63,30 @@ public class Carrito {
         if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
 
-
+        System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
         tarjeta.RealizarPago(calcularMontoTotalDeLaCompra());
 
         historial.agregarPedido(this);
 
         clear();
+    }
+
+    public void mostrarProductos(){
+        int i=0;
+        System.out.println("Productos del carrito: ");
+
+        for (Producto producto : productos){
+            System.out.println(i + ".///  " + producto);
+            i++;
+        }
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setNota(String nota) {
+        this.nota = nota;
     }
 
     public double calcularMontoTotalDeLaCompra(){
@@ -89,6 +96,7 @@ public class Carrito {
         }
 
         if (tieneCupon){
+            System.out.println("Usted posee un descuento del 15%!!");
             montoTotal *= PORCENTAJE_DESCUENTO;
         }
 
