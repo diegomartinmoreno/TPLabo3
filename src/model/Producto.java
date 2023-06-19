@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Producto {
@@ -38,6 +39,9 @@ public class Producto {
         return nombreProducto;
     }
 
+    public int getCantidadPedido() {
+        return cantidadPedido;
+    }
 
     @Override
     public String toString() {
@@ -49,5 +53,17 @@ public class Producto {
                 ", precio=" + precio +
                 ", cantidadPedido=" + cantidadPedido +
                 "}\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Producto producto)) return false;
+        return Id == producto.Id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Id);
     }
 }

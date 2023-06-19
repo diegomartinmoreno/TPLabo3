@@ -107,35 +107,36 @@ public class Empresa {
     }
 
     public void mostrarEmpresa(){
-        System.out.println("Empresa{" + "nombre='" + nombre + '\'');
+        System.out.println("Empresa = " + nombre + '\'');
+        System.out.println("Productos de la empresa:.... \n");
 
         mostrarProductosEmpresa();
         System.out.println("Zonas: " + zonas);
         System.out.println("Cupones: " + listaDeCupones + "\nCostoDeEnvio= " + CostoDeEnvio + "\n///////////////////////////////////////////////////////////\n");
     }
 
-    public Producto buscarProductoPorID(int id){
+    public Producto buscarProductoPorID(int id) {
         Producto producto = null;
 
         for (HashSet<Producto> productos : productosEmpresa.values()){
-            try {
-                producto = buscarProductoEnHashSet(id, productos);
-            } catch (RuntimeException e){
-                System.out.println(e.getMessage());
-            }
+            producto = buscarProductoEnHashSet(id, productos);
         }
+
+        if (producto==null) throw new RuntimeException("No encontro el producto.....//***");
 
         return producto;
     }
 
-    public Producto buscarProductoEnHashSet(int id, HashSet<Producto> productos) throws RuntimeException{
+    public Producto buscarProductoEnHashSet(int id, HashSet<Producto> productos){
+        Producto auxiliar = null;
+
         for (Producto producto : productos){
             if(producto.getId() == id){
-                return producto;
+                auxiliar = producto;
             }
         }
 
-        throw new RuntimeException("No encontro el producto.....//***");
+        return auxiliar;
     }
 
     @Override
@@ -151,4 +152,6 @@ public class Empresa {
                 ",CostoDeEnvio=" + CostoDeEnvio +
                 "}\n";
     }
+
+
 }

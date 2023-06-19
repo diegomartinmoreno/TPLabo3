@@ -1,3 +1,4 @@
+import Persona.Persona;
 import model.*;
 
 import java.util.*;
@@ -8,8 +9,17 @@ public class Main {
         Carrito carrito = new Carrito();
         HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
-        pedidosYa.cargarListaDeEmpresas();
+        Tarjeta tarjeta = new Tarjeta();
+
+
         pedidosYa.mostrarEmpresas();
+        pedidosYa.cargarListaDeEmpresas();
+
+        mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+
+       /// pedidosYa.mostrarEmpresas();
+        //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
+
 
         /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
@@ -35,72 +45,83 @@ public class Main {
     }
 
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
-        System.out.println("Que desea hacer?");
-        System.out.println("(1) Agregar producto al carrito");
-        System.out.println("(2) Eliminar producto del carrito");
-        System.out.println("(3) Editar cantidad del producto");
-        System.out.println("(4) Agregar cupon");
-        System.out.println("(5) Ir a pagar");
-        System.out.println("(6) Ver carrito");
-        System.out.println("(7) salir");
+        Empresa elegida = pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
+        do {
+            System.out.println("Que desea hacer?");
+            System.out.println("(1) Agregar producto al carrito");
+            System.out.println("(2) Eliminar producto del carrito");
+            System.out.println("(3) Editar cantidad del producto");
+            System.out.println("(4) Agregar cupon");
+            System.out.println("(5) Ir a pagar");
+            System.out.println("(6) Ver carrito");
+            System.out.println("(7) salir");
 
-        int decision = scanner.nextInt();
+            int decision = scanner.nextInt();
 
-        switch (decision){
-            case 1:
-                pedidosYa.mostrarEmpresas();
+            switch (decision) {
+                case 1:
 
-                System.out.println("Ingrese el nombre de la empresa");
-                Empresa elegida = pedidosYa.buscarEmpresaSegunNombre(scanner.nextLine());
-                elegida.mostrarEmpresa();
+                    elegida.mostrarEmpresa();
 
-                System.out.println("Ingrese el id del producto que desea llevar:");
-                Producto prodAux = pedidosYa.buscarProductoPorID(scanner.nextInt());
-                carrito.agregarProductoAlCarrito(elegida, prodAux);
-                break;
+                    System.out.println("Ingrese el id del producto que desea llevar:");
+                    Producto prodAux = elegida.buscarProductoPorID(scanner.nextInt());
+                    System.out.println("Producto elegido: " + prodAux);
 
-            case 2:
-                carrito.mostrarProductos();
 
-                System.out.println("Ingrese el numero del producto que desea eliminar");
-                carrito.eliminarProductoDelCarrito(scanner.nextInt());
-                break;
+                    System.out.println("Cuanto desea llevar del producto?");
+                    prodAux.setCantidadPedido(scanner.nextInt());
 
-            case 3:
-                carrito.mostrarProductos();
+                    carrito.agregarProductoAlCarrito(elegida, prodAux);
 
-                System.out.println("Ingrese el numero del producto que desea editar");
-                int pos = scanner.nextInt();
-                System.out.println("Producto elegido: " + carrito.getProductos().get(pos));
+                    break;
 
-                System.out.println("Ingrese la nueva cantidad del producto elegido");
-                carrito.editarCantidadDeProducto(scanner.nextInt(), pos);
-                break;
+                case 2:
+                    carrito.mostrarProductos();
 
-            case 4:
-                System.out.println("Cupones disponibles: " + carrito.getVendedor().getListaDeCupones());
+                    System.out.println("Ingrese el numero del producto que desea eliminar");
+                    carrito.eliminarProductoDelCarrito(scanner.nextInt());
+                    break;
 
-                System.out.println("Ingresa un cupon de 6 caracteres: ");
-                pedidosYa.agregarDescuento(scanner.nextLine(), carrito);
-                break;
+                case 3:
+                    carrito.mostrarProductos();
 
-            case 5:
-                System.out.println("Pagar carrito...................");
-                System.out.println("Desea enviarle una nota al repartidor? s/n");
+                    System.out.println("Ingrese el numero del producto que desea editar");
+                    int pos = scanner.nextInt();
+                    System.out.println("Producto elegido: " + carrito.getProductos().get(pos));
 
-                if(scanner.next().charAt(0) == 's'){
-                    System.out.println("Ingrese la nota que desea enviarle al repartidor:");
-                    carrito.setNota(scanner.nextLine());
-                }
+                    System.out.println("Ingrese la nueva cantidad del producto elegido");
+                    carrito.editarCantidadDeProducto(scanner.nextInt(), pos);
+                    break;
 
-                carrito.pagarCarrito(historialDeCompras, tarjeta);
-                break;
+                case 4:
+                    System.out.println("Cupones disponibles: " + carrito.getVendedor().getListaDeCupones());
 
-            case 6:
-                carrito.listarCarrito();
-                break;
-        }
+                    System.out.println("Ingresa un cupon de 6 caracteres: ");
+                    scanner.nextLine();
+                    pedidosYa.agregarDescuento(scanner.nextLine(), carrito);
+                    break;
 
+                case 5:
+                    System.out.println("Pagar carrito...................");
+                    System.out.println("Desea enviarle una nota al repartidor? s/n");
+
+                    if (scanner.next().charAt(0) == 's') {
+                        System.out.println("Ingrese la nota que desea enviarle al repartidor:");
+
+                        scanner.nextLine();
+                        carrito.setNota(scanner.nextLine());
+                    }
+
+                    carrito.pagarCarrito(historialDeCompras, tarjeta);
+                    break;
+
+                case 6:
+                    carrito.listarCarrito();
+                    break;
+            }
+
+            System.out.println("Desea continuar? s/n");
+        }while (scanner.next().charAt(0) != 'n');
     }
 
 }

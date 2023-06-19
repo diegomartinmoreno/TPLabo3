@@ -64,11 +64,11 @@ public class Carrito {
 
 
         System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
-        tarjeta.RealizarPago(calcularMontoTotalDeLaCompra());
+
 
         historial.agregarPedido(this);
 
-        clear();
+        if(tarjeta.RealizarPago(calcularMontoTotalDeLaCompra())) clear();
     }
 
     public void mostrarProductos(){
@@ -92,7 +92,7 @@ public class Carrito {
     public double calcularMontoTotalDeLaCompra(){
         double montoTotal =0;
         for (Producto producto : productos){
-            montoTotal += producto.getPrecio();
+            montoTotal = montoTotal + producto.getPrecio() * producto.getCantidadPedido();
         }
 
         if (tieneCupon){
