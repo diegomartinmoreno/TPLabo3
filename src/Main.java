@@ -11,11 +11,16 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Tarjeta tarjeta = new Tarjeta();
 
+        pedidosYa.cargarListaDeEmpresas();
+       /// pedidosYa.mostrarEmpresas();
+        //Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
+        //System.out.println(A);
+
 
         pedidosYa.mostrarEmpresas();
         pedidosYa.cargarListaDeEmpresas();
 
-        mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+        //mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
 
        /// pedidosYa.mostrarEmpresas();
         //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
