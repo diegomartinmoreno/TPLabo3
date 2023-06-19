@@ -468,6 +468,7 @@ public class PedidosYa {
         List <Empresa> listaBuscador= new ArrayList<> ();
         listaBuscador=crearListaEmpresas(dato);
 
+
         mostrarEmpresasSoloNombre(listaBuscador);
         System.out.println("Elija una empresa por nombre");
 
@@ -529,6 +530,8 @@ public class PedidosYa {
                 listaBuscador.add(empresa);
             }
         }
+
+
         return listaBuscador;
     }
 

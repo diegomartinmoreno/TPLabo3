@@ -92,7 +92,7 @@ public class Carrito {
     public double calcularMontoTotalDeLaCompra(){
         double montoTotal =0;
         for (Producto producto : productos){
-            montoTotal += producto.getPrecio();
+            montoTotal = montoTotal + producto.getPrecio() * producto.getCantidadPedido();
         }
 
         if (tieneCupon){
