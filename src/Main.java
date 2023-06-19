@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        /// la verga me excita si no tiene pelos
         PedidosYa pedidosYa = new PedidosYa();
         Carrito carrito = new Carrito();
         HistorialDeCompras historialDeCompras = new HistorialDeCompras();
