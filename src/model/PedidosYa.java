@@ -838,23 +838,66 @@ public class PedidosYa {
         }
     }
 
-    public void cargarListaDeEmpresas() { ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
-        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO, BOSQUE), 250));
-        listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(CENTRO, RUMENCO, MOGOTES), 250));
-        listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI)), Set.of(PUERTO, CONSTITUCION, MOGOTES), 250));
-        listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(ALEM, RUMENCO, LOS_TRONCOS), 250));
-        listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS)), Set.of(ALEM, RUMENCO), 250));
-        listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO, ALEM, LOS_TRONCOS), 250));
-        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO, ALEM, COLINAS, MOGOTES), 250));
-        listaDeEmpresas.add(new Empresa("ITALIA", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS), 250));
-        listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO, CONSTITUCION, BOSQUE), 250));
-        listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM, INDEPENDENCIA), 250));
-        listaDeEmpresas.add(new Empresa("LO DE MARIO", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES)), Set.of(PUERTO, RUMENCO), 250));
-        listaDeEmpresas.add(new Empresa("ANTARES", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, CONSTITUCION, MOGOTES), 250));
-        listaDeEmpresas.add(new Empresa("BAUM", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES), 250));
-        listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, RUMENCO, INDEPENDENCIA, BOSQUE), 250));
-        listaDeEmpresas.add(new Empresa("GIANELLI", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO, CONSTITUCION), 250));
-        listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO, INDEPENDENCIA, BOSQUE), 250));
+    public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
+        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(CENTRO,RUMENCO, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI)), Set.of(PUERTO,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(ALEM,RUMENCO, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS)), Set.of(ALEM,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, LOS_TRONCOS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS, CARNES, ENSALADAS, PARRILLA)), Set.of(CENTRO,ALEM,RUMENCO, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI, CARNES, POSTRES, HAMBURGUESAS, EMPANADAS)), Set.of(PUERTO,INDEPENDENCIA, COLINAS,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA, HAMBURGUESAS)), Set.of(ALEM,RUMENCO,CONSTITUCION,INDEPENDENCIA, LOS_TRONCOS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(PUERTO,CENTRO,ALEM, COLINAS, LOS_TRONCOS, MOGOTES,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS, LOS_TRONCOS,INDEPENDENCIA, MOGOTES,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("ITALIA", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
+        listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(CENTRO,CONSTITUCION, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO)), Set.of(ALEM,INDEPENDENCIA),250));
+        listaDeEmpresas.add(new Empresa("LO DE MARIO", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES)), Set.of(PUERTO,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("ANTARES", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("BAUM", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO, COLINAS, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA)), Set.of(CENTRO,RUMENCO,INDEPENDENCIA, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO, POSTRES, HAMBURGUESAS)), Set.of(CENTRO,INDEPENDENCIA,CONSTITUCION, LOS_TRONCOS, MOGOTES, BOSQUE,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO, POSTRES)), Set.of(ALEM,INDEPENDENCIA),250));
+        listaDeEmpresas.add(new Empresa("LO DE MARIO", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, CARNES,HELADOS, HAMBURGUESAS, PARRILLA)), Set.of(PUERTO,INDEPENDENCIA, LOS_TRONCOS,CONSTITUCION, COLINAS, MOGOTES,RUMENCO),250));
+        listaDeEmpresas.add(new Empresa("ANTARES", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, EMPANADAS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,CONSTITUCION, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("BAUM", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, ENSALADAS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS, COLINAS,INDEPENDENCIA, MOGOTES),250));
+        listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, POSTRES, PARRILLA,HELADOS, EMPANADAS)), Set.of(CENTRO,ALEM,RUMENCO,INDEPENDENCIA, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("GIANELLI", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
+        listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("KIOSCO FLOR", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(CENTRO, CONSTITUCION), 150));
+        listaDeEmpresas.add(new Empresa("KIOSCO EXPRESS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(ALEM, LOS_TRONCOS), 200));
+        listaDeEmpresas.add(new Empresa("KIOSCO FRESCOS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, HELADOS)), Set.of(PUERTO, MOGOTES), 180));
+        listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS, CARNES, POSTRES, ENSALADAS,HELADOS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,INDEPENDENCIA,CONSTITUCION, BOSQUE),250));
+
+        listaDeEmpresas.add(new Empresa("LA PARRILLITA", crearListaDeProductos(Set.of(CERVEZA,CARNES, PARRILLA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, POLLO)), Set.of(CENTRO, ALEM, INDEPENDENCIA, MOGOTES, LOS_TRONCOS), 200));
+        listaDeEmpresas.add(new Empresa("PIZZERIA DELFINO", crearListaDeProductos(Set.of(CERVEZA,PIZZA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, EMPANADAS)), Set.of(PUERTO,ALEM, LOS_TRONCOS, CONSTITUCION, RUMENCO), 150));
+        listaDeEmpresas.add(new Empresa("SUSHI EXPRESS", crearListaDeProductos(Set.of(SUSHI, ENSALADAS, POSTRES, BEBIDAS, EMPANADAS)), Set.of(CENTRO, PUERTO, MOGOTES, BOSQUE, CONSTITUCION), 180));
+        listaDeEmpresas.add(new Empresa("LA CANTINA MEXICANA", crearListaDeProductos(Set.of(CERVEZA,SUSHI, ENSALADAS, BEBIDAS,PIZZA, EMPANADAS, POLLO)), Set.of(CENTRO, ALEM, CONSTITUCION), 120));
+        listaDeEmpresas.add(new Empresa("PASTELERIA SWEET DELIGHTS", crearListaDeProductos(Set.of(HELADOS, POSTRES, BEBIDAS)), Set.of(PUERTO,CENTRO, MOGOTES, BOSQUE, CONSTITUCION), 100));
+    }
+
+    public Empresa buscarEmpresaConMetodoElegido (Scanner scanner){
+        Empresa buscada=null;
+        System.out.println("Bienvenido!! Elija el metodo por el que quiere buscar locales\n 1_Buscar Empresa por nombre\n 2_Buscar por comidas.\n Presione cualquier otra tecla para salir");
+        int numero= scanner.nextInt();
+        scanner.nextLine();
+        switch (numero){
+            case 1->{
+                buscada=buscarPorNombreSinSerExacto(scanner);
+            }
+            case 2->{
+                buscada=buscarEmpresaSegunQueQuiereComer(scanner);
+            }
+            case default ->{
+                System.out.println("Saliendo");
+                return null;
+            }
+        }
+        return buscada;
     }
 
     public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner) {
