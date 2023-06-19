@@ -135,7 +135,6 @@ public class Empresa {
         Producto auxiliar = null;
 
         for (Producto producto : productos){
-            System.out.println(producto);
             if(producto.getId() == id){
                 auxiliar = producto;
             }
@@ -157,4 +156,6 @@ public class Empresa {
                 ",CostoDeEnvio=" + CostoDeEnvio +
                 "}\n";
     }
+
+
 }

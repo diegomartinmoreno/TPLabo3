@@ -497,6 +497,7 @@ public class PedidosYa {
         List <Empresa> listaBuscador= new ArrayList<> ();
         listaBuscador=crearListaEmpresas(dato);
 
+
         mostrarEmpresasSoloNombre(listaBuscador);
 
         Empresa empresa1=buscarPorNombreSinSerExacto(scanner, listaBuscador);
@@ -590,6 +591,8 @@ public class PedidosYa {
                 listaBuscador.add(empresa);
             }
         }
+
+
         return listaBuscador;
     }
 
