@@ -14,7 +14,9 @@ public class Main {
 
         pedidosYa.cargarListaDeEmpresas();
        /// pedidosYa.mostrarEmpresas();
-        Empresa A= pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
+        Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
+        System.out.println(A);
+
 
         pedidosYa.mostrarEmpresas();
         mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
