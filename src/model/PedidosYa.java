@@ -457,7 +457,7 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
     }
 
-    public Empresa mostrarEmpresaSegunQueQuiereComer (Scanner scanner){
+    public Empresa buscarEmpresaSegunQueQuiereComer (Scanner scanner){
         mostrarTodosLosEnums();
         System.out.println("Que desea comer?");
 
@@ -470,11 +470,8 @@ public class PedidosYa {
 
 
         mostrarEmpresasSoloNombre(listaBuscador);
-        System.out.println("Elija una empresa por nombre");
 
-        comida = scanner.nextLine();
-
-        Empresa empresa1=buscarEmpresaSegunNombre(comida.toUpperCase(), listaBuscador);
+        Empresa empresa1=buscarPorNombreSinSerExacto(scanner, listaBuscador);
 
         return empresa1;
     }
@@ -502,6 +499,31 @@ public class PedidosYa {
         }
     }
 
+    public Empresa buscarPorNombreSinSerExacto (Scanner scanner, List <Empresa> listaDisminuida){
+        Empresa buscada= new Empresa();
+        List <Empresa> listaEmpresas= new ArrayList<>();
+        do {
+            System.out.println("Ingrese el nombre de la empresa que busca.");
+            String nombre = scanner.nextLine().toUpperCase();
+
+            listaEmpresas= crearListaEmpresas(nombre, listaDisminuida);
+
+            if (listaEmpresas.size()>1) {
+                System.out.println("Lista de empresas posibles, elija especificamente la que desea");
+                mostrarEmpresasSoloNombre(listaEmpresas);
+            }
+
+        }while (listaEmpresas.size() != 1);
+
+        System.out.println("Desea comprar en: " + listaEmpresas.get(0).getNombre() + "? s/n");
+        char confirmacion=scanner.nextLine().charAt(0);
+        if (confirmacion=='s') return listaEmpresas.get(0);
+        else {
+            System.out.println("Volviendo al menu principal");
+            return null;
+        }
+    }
+
 
     public void mostrarTodosLosEnums(){
         // Obtener todos los valores del enum
@@ -511,6 +533,16 @@ public class PedidosYa {
         for (TipoDeProductos elemento : elementos) {
             System.out.println(elemento);
         }
+    }
+
+    public List<Empresa> crearListaEmpresas (String nombre, List <Empresa> listaDisminuida){
+        List <Empresa> listaBuscador= new ArrayList<>();
+        for (Empresa empresa : listaDisminuida) {
+            if (empresa.getNombre().contains(nombre)){
+                listaBuscador.add(empresa);
+            }
+        }
+        return listaBuscador;
     }
 
     public List<Empresa> crearListaEmpresas (String nombre){
