@@ -411,7 +411,6 @@ public class PedidosYa {
         for(Empresa auxiliar : listaBuscador){
 
             if(auxiliar.getNombre().equals(empresa)){
-                System.out.println("entra");
                 buscada=auxiliar;
             }
         }
@@ -472,7 +471,7 @@ public class PedidosYa {
 
         comida = scanner.nextLine();
 
-        Empresa empresa1=buscarEmpresaSegunNombre(comida,listaBuscador);
+        Empresa empresa1=buscarEmpresaSegunNombre(comida.toUpperCase(), listaBuscador);
 
         return empresa1;
     }
@@ -496,15 +495,6 @@ public class PedidosYa {
         }
         return listaBuscador;    }
 
-    public Producto buscarProductoPorID(int id){
-        Producto producto = null;
-
-        for(Empresa empresa : listaDeEmpresas){
-            producto = empresa.buscarProductoPorID(id);
-        }
-
-        return producto;
-    }
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos(Set<TipoDeProductos> tipoDeProductos){  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
         LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosTotal = new LinkedHashMap<>();

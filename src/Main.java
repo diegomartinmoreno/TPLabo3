@@ -1,10 +1,10 @@
+import Persona.Persona;
 import model.*;
 
 import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("asfdasf");
         PedidosYa pedidosYa = new PedidosYa();
         Carrito carrito = new Carrito();
         HistorialDeCompras historialDeCompras = new HistorialDeCompras();
@@ -32,7 +32,7 @@ public class Main {
     }
 
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
-        pedidosYa.MostrarEmpresaSegunQueQuiereComer(scanner);
+        Empresa elegida = pedidosYa.MostrarEmpresaSegunQueQuiereComer(scanner);
 
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
@@ -43,19 +43,15 @@ public class Main {
         System.out.println("(6) Ver carrito");
         System.out.println("(7) salir");
 
-
         int decision = scanner.nextInt();
 
         switch (decision){
             case 1:
-                pedidosYa.mostrarEmpresas();
 
-                System.out.println("Ingrese el nombre de la empresa");
-                Empresa elegida = pedidosYa.buscarEmpresaSegunNombre(scanner.nextLine());
                 elegida.mostrarEmpresa();
 
                 System.out.println("Ingrese el id del producto que desea llevar:");
-                Producto prodAux = pedidosYa.buscarProductoPorID(scanner.nextInt());
+                Producto prodAux = elegida.buscarProductoPorID(scanner.nextInt());
                 carrito.agregarProductoAlCarrito(elegida, prodAux);
                 break;
 
