@@ -22,15 +22,6 @@ public class Main {
         ///Muestra la empresa elejida con mostrarEmpresa()
         ///mostrarMenuDeCarrito()
 
-
-
-
-
-
-
-
-
-
         scanner.close();
 
     }

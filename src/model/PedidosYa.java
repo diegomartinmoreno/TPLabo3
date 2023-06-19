@@ -21,10 +21,9 @@ public class PedidosYa {
     public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
 
     /*
-        En esta clase decidimos manejarlo por separado a los usuarios y administradores ya que interactuan en ambitos distintos,
+        En este lugar decidimos manejarlo por separado a los usuarios y administradores ya que interactuan en ambitos distintos,
         el admin tiene acceso a todo y el user a lo que pueda ver del programa y no vimos conveniente tener que instanciar los metodos
         para verificar que sea una u otra instancia.
-
     */
 
     public PedidosYa() {
