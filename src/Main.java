@@ -9,7 +9,9 @@ public class Main {
         HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
         pedidosYa.cargarListaDeEmpresas();
-        pedidosYa.mostrarEmpresas();
+       /// pedidosYa.mostrarEmpresas();
+        Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
+
 
         /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
