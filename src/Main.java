@@ -14,7 +14,7 @@ public class Main {
 
         pedidosYa.cargarListaDeEmpresas();
        /// pedidosYa.mostrarEmpresas();
-        Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
+        Empresa A= pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
 
         pedidosYa.mostrarEmpresas();
         mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
@@ -36,7 +36,7 @@ public class Main {
     }
 
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
-        Empresa elegida = pedidosYa.MostrarEmpresaSegunQueQuiereComer(scanner);
+        Empresa elegida = pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
 
         System.out.println("Que desea hacer?");
         System.out.println("(1) Agregar producto al carrito");
