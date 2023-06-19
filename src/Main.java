@@ -17,10 +17,13 @@ public class Main {
         System.out.println(A);
 
 
-        pedidosYa.mostrarEmpresas();
-        pedidosYa.cargarListaDeEmpresas();
 
-        //mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+        pedidosYa.cargarListaDeEmpresas();
+        pedidosYa.mostrarEmpresas();
+
+        clearConsole();
+
+        mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
 
        /// pedidosYa.mostrarEmpresas();
         //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
@@ -50,7 +53,7 @@ public class Main {
     }
 
     public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
-        Empresa elegida = pedidosYa.buscarEmpresaSegunQueQuiereComer(scanner);
+        Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner);
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
@@ -129,4 +132,11 @@ public class Main {
         }while (scanner.next().charAt(0) != 'n');
     }
 
+    public static void clearConsole() {
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
 }
