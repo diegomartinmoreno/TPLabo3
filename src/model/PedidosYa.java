@@ -5,6 +5,8 @@ import Persona.Administrador;
 import Persona.Password;
 import Persona.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.source.tree.NewArrayTree;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -455,8 +457,8 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS)), Set.of(CENTRO,INDEPENDENCIA, BOSQUE),250));
     }
 
-    public Empresa MostrarEmpresaSegunQueQuiereComer (Scanner scanner){
-        MostrarTodosLosEnums();
+    public Empresa mostrarEmpresaSegunQueQuiereComer (Scanner scanner){
+        mostrarTodosLosEnums();
         System.out.println("Que desea comer?");
 
         String comida= scanner.nextLine();
@@ -464,7 +466,7 @@ public class PedidosYa {
         TipoDeProductos dato= TipoDeProductos.valueOf(comida.toUpperCase());
 
         List <Empresa> listaBuscador= new ArrayList<> ();
-        listaBuscador=BuscarEmpresasConEsasComidas(dato);
+        listaBuscador=crearListaEmpresas(dato);
 
         mostrarEmpresasSoloNombre(listaBuscador);
         System.out.println("Elija una empresa por nombre");
@@ -475,7 +477,32 @@ public class PedidosYa {
 
         return empresa1;
     }
-    public void MostrarTodosLosEnums(){
+
+    public Empresa buscarPorNombreSinSerExacto (Scanner scanner){
+        Empresa buscada= new Empresa();
+        List <Empresa> listaEmpresas= new ArrayList<>();
+        do {
+            System.out.println("Ingrese el nombre de la empresa que busca.");
+            String nombre = scanner.nextLine().toUpperCase();
+
+            listaEmpresas= crearListaEmpresas(nombre);
+
+            System.out.println("Lista de empresas posibles, elija especificamente la que desea");
+            mostrarEmpresasSoloNombre(listaEmpresas);
+
+        }while (listaEmpresas.size() != 1);
+
+        System.out.println("Desea comprar en: " + listaEmpresas.get(0).getNombre() + "? s/n");
+        char confirmacion=scanner.nextLine().charAt(0);
+        if (confirmacion=='s') return listaEmpresas.get(0);
+        else {
+            System.out.println("Volviendo al menu principal");
+            return null;
+        }
+    }
+
+
+    public void mostrarTodosLosEnums(){
         // Obtener todos los valores del enum
         TipoDeProductos[] elementos = TipoDeProductos.values();
 
@@ -485,15 +512,27 @@ public class PedidosYa {
         }
     }
 
+    public List<Empresa> crearListaEmpresas (String nombre){
+        List <Empresa> listaBuscador= new ArrayList<>();
+        for (Empresa empresa : listaDeEmpresas) {
+            if (empresa.getNombre().contains(nombre)){
+                listaBuscador.add(empresa);
+            }
+        }
+        return listaBuscador;
+    }
 
-    public List BuscarEmpresasConEsasComidas(TipoDeProductos comida){
+    public List crearListaEmpresas(TipoDeProductos comida){
         List <Empresa> listaBuscador= new ArrayList<>();
         for (Empresa empresa : listaDeEmpresas) {
             if (empresa.getProductosEmpresa().containsKey(comida)){
                 listaBuscador.add(empresa);
             }
         }
-        return listaBuscador;    }
+        return listaBuscador;
+    }
+
+
 
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos(Set<TipoDeProductos> tipoDeProductos){  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA

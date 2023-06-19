@@ -13,8 +13,14 @@ public class Main {
 
 
         pedidosYa.cargarListaDeEmpresas();
+<<<<<<< HEAD
+       /// pedidosYa.mostrarEmpresas();
+        Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
+
+=======
         pedidosYa.mostrarEmpresas();
         mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+>>>>>>> 5f3535d4e7ae20e952b67be9cc7c145328d08df2
 
         /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
