@@ -106,7 +106,7 @@ public class Carrito {
     //6
     public void listarCarrito(){
         System.out.println("PRODUCTOS:");
-        System.out.println(productos);
+        System.out.println(productos.getProductos());
         System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
         System.out.println("Nota: " + nota);
         System.out.println("Fecha del Pedido: " + fechaPedido + "\n");
