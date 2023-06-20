@@ -99,6 +99,8 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         this.zonaActual = zonaActual;
     }
 
+
+
     @Override
     public boolean login (String contrasenia) {
         return this.contrasenia.validate(contrasenia);

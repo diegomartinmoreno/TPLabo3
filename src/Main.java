@@ -43,19 +43,19 @@ public class Main {
                     switch (caso) {
                         case 1 -> {
                             administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
-
-                            System.out.println("ELEGIR TU ZONA ACTUAL: ");
-                            System.out.println(Arrays.toString(Zonas.values()));
-
-                            Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
-
-                            administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
                         }
                         case 2 -> {
-                            return pedidosYa.registroDeCuentaDeAdmin(scanner);
+                            administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
                         }
                         default -> throw new CasoInexistenteException();
                     }
+
+                    System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                    System.out.println(Arrays.toString(Zonas.values()));
+
+                    Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
+
+                    administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
                 }
                 case 2 -> {
                     System.out.println("(1) Iniciar Sesion >>");
@@ -64,40 +64,44 @@ public class Main {
                     switch (casoUser) {
                         case 1 -> {
                             usuarioRetornar = pedidosYa.iniciarSesionComoUsuario(scanner);
-
-                            if(usuarioRetornar.getZonas().isEmpty()){
-                                System.out.println("ELEGIR TU ZONA ACTUAL: ");
-                                System.out.println(Arrays.toString(Zonas.values()));
-
-                                Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
-
-                                Set<Usuario> usuariosSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                                Usuario user = pedidosYa.buscarUserPorDNI(usuarioRetornar.getDni(), usuariosSet);
-
-                                if(user!=null){
-                                    user.agregarUnaZona(elegida);////se agrega a las zonas del usuario
-                                    pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuariosSet);
-                                } else{
-                                    throw new RuntimeException("El usuario no existe....//*/**. ERROR..... fatal.....");
-                                }
-
-                                usuarioRetornar.setZonaActual(elegida);////se agrega a la zona elegida
-
-                            } else {
-                                System.out.println("Zonas: " + usuarioRetornar.getZonas());
-
-                                System.out.println("ELEGIR UNA ZONA: ");
-                                usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
-                            }
-
-
                             //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU. ////////////////////////////////////////////////
                         }
                         case 2 -> {
-                            return pedidosYa.registroDeCuentaDeUsuario(scanner);
+                            usuarioRetornar = pedidosYa.registroDeCuentaDeUsuario(scanner);
                         }
                         default -> throw new CasoInexistenteException();
                     }
+
+
+                    if(usuarioRetornar.getZonas().isEmpty()){
+                        System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                        System.out.println(Arrays.toString(Zonas.values()));
+
+                        scanner.nextLine();
+                        String zonaElegida = scanner.nextLine();
+                        Zonas elegida = Zonas.valueOf(zonaElegida.toUpperCase());
+
+                        Set<Usuario> usuariosSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                        Usuario user = pedidosYa.buscarUserPorDNI(usuarioRetornar.getDni(), usuariosSet);
+
+                        if(user!=null){
+                            user.agregarUnaZona(elegida);////se agrega a las zonas del usuario
+                            pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuariosSet);
+                        } else{
+                            throw new RuntimeException("El usuario no existe....//*/**. ERROR..... fatal.....");
+                        }
+
+                        usuarioRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+
+                    } else {
+                        System.out.println("Zonas: " + usuarioRetornar.getZonas());
+
+                        System.out.println("ELEGIR UNA ZONA: ");
+                        usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
+                    }
+
+                    ////////////////////////////////////////////////////////////////////
+
                 }
                 default -> throw new CasoInexistenteException();
             }
@@ -231,11 +235,17 @@ public class Main {
                                     System.out.println("Tus zonas: \n" + usuario.getZonas());
                                     System.out.println("Ingrese el nombre de la zona a eliminar");
                                     usuario.eliminarUnaZona(Zonas.valueOf(scanner.nextLine()));
+                                    break;
                                 }
 
                                 case 3 -> {
-
+                                    System.out.println("Tus zonas:" + usuario.getZonas());
+                                    System.out.println("Ingrese el nombre de tu nueva zona actual:");
+                                    usuario.setZonaActual(Zonas.valueOf(scanner.nextLine()));
+                                    break;
                                 }
+
+                                case 4 -> System.out.println("Tus zonas: " + usuario.getZonas());
                             }
 
                             System.out.println("Desea continuar? s/n");

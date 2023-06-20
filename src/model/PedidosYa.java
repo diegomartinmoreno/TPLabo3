@@ -105,6 +105,7 @@ public class PedidosYa {
 
         do {
             System.out.println("1) Ingrese su nombre: ");
+            scanner.nextLine();
             cadenaAux = scanner.nextLine();
             try {
                 flag = Usuario.verificarEsLetra(cadenaAux);

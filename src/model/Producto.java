@@ -54,6 +54,34 @@ public class Producto {
         System.out.println("'" + descripcion + "'");
     }
 
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
+    }
+
     @Override
     public String toString() {
         return "Producto{" +
