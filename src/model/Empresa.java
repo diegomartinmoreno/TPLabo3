@@ -196,6 +196,14 @@ public class Empresa {
         this.zonas = zonas;
     }
 
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
+    public void setPuntuacion(int puntuacion) {
+        this.puntuacion = puntuacion;
+    }
+
     @Override
     public String toString() {
         return "Empresa{" +

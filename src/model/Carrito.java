@@ -163,4 +163,28 @@ public class Carrito {
     public void setDestino(Zonas destino) {
         this.destino = destino;
     }
+
+    public void setProductos(ColeccionGenerica<Producto> productos) {
+        this.productos = productos;
+    }
+
+    public void setVendedor(Empresa vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setFechaPedido(LocalDate fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
+    public boolean isTieneCupon() {
+        return tieneCupon;
+    }
+
+    public double getMontoTotal() {
+        return montoTotal;
+    }
 }

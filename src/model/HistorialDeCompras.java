@@ -23,4 +23,13 @@ public class HistorialDeCompras {
     public void limpiarHistorialDeCompras (){
         pedidos.clear();
     }
+
+    public List<Carrito> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Carrito> pedidos) {
+        this.pedidos = pedidos;
+    }
+
 }
