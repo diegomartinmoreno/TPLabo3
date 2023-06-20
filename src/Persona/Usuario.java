@@ -62,7 +62,7 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     @Override
     public String toString() {
         return super.toString()
-                + "Zonas disponibles: " + zonas +
+                + "Zonas disponibles: " + zonas + contrasenia +
                 "\n------------------------\n";
     }
 

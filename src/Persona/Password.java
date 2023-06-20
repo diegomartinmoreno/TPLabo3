@@ -19,6 +19,9 @@ public class Password {
     public void setPassword(String password) {
         this.password = password;
     }
+    public String getPassword() {
+        return password;
+    }
 
     private boolean verificarContraseniaSegura(String contrasenia) {
         if (contrasenia.length() < LONGITUD_MINIMA) return false;
@@ -49,10 +52,5 @@ public class Password {
         return password.equals(contrasenia);
     }
 
-    @Override
-    public String toString() {
-        return "Password{" +
-                "password=" + password +
-                '}';
-    }
+
 }

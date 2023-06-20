@@ -277,10 +277,10 @@ public class PedidosYa {
     public boolean modificarContraseniaDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su contrasenia? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
-
             System.out.println("Ingrese su DNI para cambiar su contrasenia >>");
             String dni = scanner.nextLine();
             Usuario user = null;
@@ -610,7 +610,7 @@ public class PedidosYa {
         return adminAretornar;
     }
 
-    public Administrador iniciarSesionComoAdmin(Scanner scanner) {
+    public Administrador iniciarSesionComoAdmin (Scanner scanner) {
         String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
         Administrador administrador = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
         int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
@@ -650,6 +650,7 @@ public class PedidosYa {
     public boolean modificarContraseniaDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su contrasenia? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
@@ -671,6 +672,8 @@ public class PedidosYa {
                     Password password = new Password(contraseniaNueva);
                     administrador.setPassword(password);
                     exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores); //aca se modifica la contrasenia de ese admin en el archivo.
+                    this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
+                    System.out.println(administradores);
                     return true;
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error con la contrasenia! Ingrese una nueva.");

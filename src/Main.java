@@ -1,4 +1,5 @@
 import Persona.Persona;
+import Persona.Administrador;
 import model.*;
 
 import java.util.*;
@@ -10,6 +11,11 @@ public class Main {
         HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
         Tarjeta tarjeta = new Tarjeta();
+
+        pedidosYa.registroDeCuentaDeAdmin(scanner);
+
+        ///Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
+        //pedidosYa.modificarContraseniaDeAdministrador(scanner);
 
 
         /*
