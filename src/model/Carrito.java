@@ -13,6 +13,7 @@ public class Carrito {
     private LocalDate fechaPedido;
     private static final double PORCENTAJE_DESCUENTO = 0.85;
     private boolean tieneCupon=false;
+    private double montoTotal=0;
 
     public Carrito() {
         productos = new ColeccionGenerica<>();
@@ -63,7 +64,7 @@ public class Carrito {
         if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
 
-        System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
+        System.out.println("Monto total: " + montoTotal);
 
 
         historial.agregarPedido(this);
@@ -87,6 +88,10 @@ public class Carrito {
 
     public void setNota(String nota) {
         this.nota = nota;
+    }
+
+    public void setMontoTotal(double montoTotal) {
+        this.montoTotal = montoTotal;
     }
 
     public double calcularMontoTotalDeLaCompra(){
