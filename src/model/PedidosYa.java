@@ -686,6 +686,7 @@ public class PedidosYa {
     public boolean modificarEmailDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -716,6 +717,7 @@ public class PedidosYa {
     public boolean modificarNroTelefonoDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -755,6 +757,7 @@ public class PedidosYa {
     public boolean modificarNombreYapellidoDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             Administrador administrador = null;
@@ -795,6 +798,7 @@ public class PedidosYa {
     public boolean cambiarTarjetaDeAdministrador(Scanner scanner) {
         System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -815,11 +819,13 @@ public class PedidosYa {
         return false;
     }
 
-    private boolean eliminarEmpresa(Empresa eliminar){
+    private boolean eliminarEmpresa(Empresa eliminar) throws NullPointerException{
+        if (eliminar == null) throw new NullPointerException();
         return listaDeEmpresas.remove(eliminar);
     }
 
-    private boolean agregarEmpresa(Empresa empresa){
+    private boolean agregarEmpresa(Empresa empresa) throws NullPointerException {
+        if (empresa == null) throw new NullPointerException();
         return listaDeEmpresas.add(empresa);
     }
 

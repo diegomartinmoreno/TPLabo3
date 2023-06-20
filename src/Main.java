@@ -17,11 +17,9 @@ public class Main {
         Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
         pedidosYa.modificarContraseniaDeAdministrador(scanner);
 
-        //hola commo va
-
         /*
         pedidosYa.cargarListaDeEmpresas();
-       /// pedidosYa.mostrarEmpresas();
+        /// pedidosYa.mostrarEmpresas();
         Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
         System.out.println(A);
 
@@ -32,7 +30,7 @@ public class Main {
 
         mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
 
-       /// pedidosYa.mostrarEmpresas();
+        /// pedidosYa.mostrarEmpresas();
         //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
         */
 
