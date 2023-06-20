@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Carrito {
-    private List<Producto> productos;
+    private ColeccionGenerica<Producto> productos;
     private Empresa vendedor;
 	private String nota;
     private LocalDate fechaPedido;
@@ -15,7 +15,7 @@ public class Carrito {
     private boolean tieneCupon=false;
 
     public Carrito() {
-        productos = new ArrayList<>();
+        productos = new ColeccionGenerica<>();
         fechaPedido = LocalDate.now();
     }
 
@@ -37,7 +37,7 @@ public class Carrito {
 
 
     public void eliminarProductoDelCarrito(int pos) throws RuntimeException {
-        if (pos > -1 && pos <= productos.size()) {
+        if (pos > -1 && pos <= productos.getProductos().size()) {
             productos.remove(pos);
         } else {
             throw new RuntimeException("Numero no valido.//***");
@@ -48,7 +48,7 @@ public class Carrito {
     //3
     public void editarCantidadDeProducto(int cantidad, int pos) throws RuntimeException, NullPointerException{
 
-        if(pos > -1 && pos <= productos.size()){
+        if(pos > -1 && pos <= productos.getProductos().size()){
             productos.get(pos).setCantidadPedido(cantidad);
         } else {
             throw new RuntimeException("Numero no valido.///***");
@@ -75,14 +75,14 @@ public class Carrito {
         int i=0;
         System.out.println("Productos del carrito: ");
 
-        for (Producto producto : productos){
+        for (Producto producto : productos.getProductos()){
             System.out.println(i + ".///  " + producto);
             i++;
         }
     }
 
     public List<Producto> getProductos() {
-        return productos;
+        return productos.getProductos();
     }
 
     public void setNota(String nota) {
@@ -91,7 +91,7 @@ public class Carrito {
 
     public double calcularMontoTotalDeLaCompra(){
         double montoTotal =0;
-        for (Producto producto : productos){
+        for (Producto producto : productos.getProductos()){
             montoTotal = montoTotal + producto.getPrecio() * producto.getCantidadPedido();
         }
 
@@ -116,9 +116,9 @@ public class Carrito {
         if(nombre==null) throw new NullPointerException("Error! La cadena no puede ser nula.//***");
 
         int aux=-1;
-        for (Producto prod : productos){
+        for (Producto prod : productos.getProductos()){
             if (nombre.equals(prod.getNombreProducto())){
-                aux=productos.indexOf(prod);
+                aux=productos.getProductos().indexOf(prod);
             }
         }
 
@@ -130,7 +130,7 @@ public class Carrito {
     }
 
     public void clear(){
-        productos.clear();
+        productos.getProductos().clear();
         nota="";
         vendedor=null;
     }

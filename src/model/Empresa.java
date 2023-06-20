@@ -139,6 +139,15 @@ public class Empresa {
         return auxiliar;
     }
 
+
+    public Set<Zonas> getZonas() {
+        return zonas;
+    }
+
+    public void setZonas(Set<Zonas> zonas) {
+        this.zonas = zonas;
+    }
+
     @Override
     public String toString() {
         return "Empresa{" +
