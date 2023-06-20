@@ -41,9 +41,6 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         this.password = password;
         System.out.println(this.password.toString());
     }
-    public Password getPassword() {
-        return password;
-    }
 
     @Override
     public void agregarDinero(double dinero) {
