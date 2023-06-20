@@ -48,7 +48,6 @@ public class Main {
         ///mostrarMenuDeCarrito()
 
         scanner.close();
-
     }
 
     public Persona menuDeSeleccionDeModoDeAcceso (Scanner scanner, PedidosYa pedidosYa) throws CasoInexistenteException{
