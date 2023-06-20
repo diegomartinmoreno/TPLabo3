@@ -940,7 +940,6 @@ public class PedidosYa {
         listaDeEmpresas.add(new Empresa("PASTELERIA SWEET DELIGHTS", crearListaDeProductos(Set.of(HELADOS, POSTRES, BEBIDAS)), Set.of(PUERTO,CENTRO, MOGOTES, BOSQUE, CONSTITUCION), 100, 3));
     }
 
-
     public Empresa buscarEmpresaConMetodoElegido (Scanner scanner, Zonas zonaActual){
         Empresa buscada=null;
         System.out.println("Bienvenido!! Elija el metodo por el que quiere buscar locales\n 1_Buscar Empresa por nombre\n 2_Buscar por comidas.\n Presione cualquier otra tecla para salir");
@@ -1248,6 +1247,32 @@ public class PedidosYa {
             if (!carrito.getVendedor().validarCupon(cupon)) throw new RuntimeException("Error! Cupon no valido.//***");
 
             carrito.setTieneCupon(true);
+    }
+
+    public void exportarEmpresasToJSON(String path, Set<Administrador> administradores) {
+        File file = new File("Archivo");
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            mapper.writeValue(file, listaDeEmpresas);
+        } catch (IOException e) {
+            System.out.println("Error en la escritura del archivo.");
+        }
+    }
+
+    public Set<Administrador> extraerEmpresasFromJSON(String path) {
+        File file = new File("archivo");
+        ObjectMapper mapper = new ObjectMapper();
+        Set<Administrador> adminsHashSet = new HashSet<>();
+
+        try {
+            Empresa [] empresas = mapper.readValue (file, Empresa[].class);
+            listaDeEmpresas.addAll(Arrays.asList(empresas));
+        } catch (IOException e) {
+            System.out.println("Error en la lectura del archivo.");
+            System.out.println(e.getMessage());
+        }
+        return adminsHashSet;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
