@@ -1261,10 +1261,10 @@ public class PedidosYa {
         }
     }
 
-    public Set<Administrador> extraerEmpresasFromJSON(String path) {
+    public List<Empresa> extraerEmpresasFromJSON(String path) {
         File file = new File("archivo");
         ObjectMapper mapper = new ObjectMapper();
-        Set<Administrador> adminsHashSet = new HashSet<>();
+        List<Empresa> listaEmpresas = new LinkedList<>();
 
         try {
             Empresa [] empresas = mapper.readValue (file, Empresa[].class);
@@ -1273,7 +1273,7 @@ public class PedidosYa {
             System.out.println("Error en la lectura del archivo.");
             System.out.println(e.getMessage());
         }
-        return adminsHashSet;
+        return listaEmpresas;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
