@@ -29,8 +29,7 @@ public class Tarjeta {
 	}
 	
 
-	public Tarjeta(String numeroTarjeta, String titular, String fechaDeVencimiento, String codigoDeSeguridad,
-			double saldo, boolean activa) {
+	public Tarjeta(String numeroTarjeta, String titular, String fechaDeVencimiento, String codigoDeSeguridad, double saldo, boolean activa) {
 		super();
 		this.numeroTarjeta = numeroTarjeta;
 		this.titular = titular;

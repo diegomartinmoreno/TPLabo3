@@ -39,6 +39,10 @@ public class Administrador extends Persona implements UtilidadUserAdm {
 
     public void setPassword(Password password) {
         this.password = password;
+        System.out.println(this.password.toString());
+    }
+    public Password getPassword() {
+        return password;
     }
 
     @Override

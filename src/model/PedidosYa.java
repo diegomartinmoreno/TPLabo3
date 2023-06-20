@@ -243,11 +243,12 @@ public class PedidosYa {
             try {
                 usuario = getUsuarioByEmail(email);
                 login = usuario.login(contrasenia);
-                if (!login) i++;
-                if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
+
+            if (!login) i++;
+            if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
 
         } while (!login);
 
@@ -451,16 +452,16 @@ public class PedidosYa {
     public Set<Administrador> extraerAdministradoresFromJSON(String path) {
         File file = new File(path);
         ObjectMapper mapper = new ObjectMapper();
-        Set<Administrador> usuarioHashSet = new HashSet<>();
+        Set<Administrador> adminsHashSet = new HashSet<>();
 
         try {
             Administrador[] usuariosArray = mapper.readValue(file, Administrador[].class);
-            usuarioHashSet.addAll(Arrays.asList(usuariosArray));
+            adminsHashSet.addAll(Arrays.asList(usuariosArray));
         } catch (IOException e) {
             System.out.println("Error en la lectura del archivo.");
             System.out.println(e.getMessage());
         }
-        return usuarioHashSet;
+        return adminsHashSet;
     }
 
     public Administrador registroDeCuentaDeAdmin(Scanner scanner) throws MenorDeEdadException {
@@ -557,12 +558,15 @@ public class PedidosYa {
             System.out.println("7) Finalmente ingrese su clave de administrador (debera recordarla y saberla solo usted): ");
             contrasenia = scanner.nextLine();
             try {
+                System.out.println("CONTRASENIA STRING: " + contrasenia);
                 Password password = new Password(contrasenia);
                 administrador.setPassword(password);
                 flag = true;
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
                 flag = false;
+            }catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
             }
         } while (!flag);
 
@@ -587,19 +591,20 @@ public class PedidosYa {
     }
 
     private Administrador getAdministradorByEmail(String email) {
-        this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
-        for (Administrador admin : this.administradores) {
+        Set<Administrador> administradors = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
+        Administrador adminAretornar = null;
+        for (Administrador admin : administradors) {
             if (admin.getEmail().equals(email)) {
-                return admin;
+                adminAretornar = admin;
             }
         }
-        throw new RuntimeException("Usuario no existe");
+        if (adminAretornar == null) throw new RuntimeException("Usuario no existe");
+        return adminAretornar;
     }
 
     public Administrador iniciarSesionComoAdmin(Scanner scanner) {
         String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
         Administrador administrador = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
-
         int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
@@ -613,11 +618,12 @@ public class PedidosYa {
             try {
                 administrador = getAdministradorByEmail(email);
                 login = administrador.login(contrasenia);
-                if (!login) i++;
-                if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
             } catch (RuntimeException e) {
                 System.out.println(e.getMessage());
             }
+
+            if (!login) i++;
+            if (i == CANTIDAD_INTENTOS_INICIO_SESION) throw new IntentosMaximosDeInicioSesionAlcanzadoException();
         } while (!login);
 
         return administrador;

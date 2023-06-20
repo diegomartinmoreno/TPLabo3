@@ -6,7 +6,6 @@ import model.HistorialDeCompras;
 import model.PedidosYa;
 import model.Tarjeta;
 import model.Zonas;
-
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -45,9 +44,6 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     public void setContrasenia(Password contrasenia) {
         this.contrasenia = contrasenia;
     }
-    public Password getContrasenia() {
-        return contrasenia;
-    } //A PESAR DE QUE LA CONTRASENIA ES PRIVADA, SE TUVO QUE HACER UN GET PARA METODOS DONDE ERA NECESARIA, PERO PARA CONTROLAR ESTO, SE LO LLAMA DENTRO DE UN METODO PRIVADO.
 
     public Tarjeta getTarjeta() {
         return tarjeta;

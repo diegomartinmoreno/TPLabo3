@@ -1,15 +1,26 @@
 package Persona;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Password {
     private static final int LONGITUD_MINIMA = 7;
     private static final int CANTIDAD_MINIMA_DE_CARACTERES = 5;
     private static final int CANTIDAD_MINIMA_DE_NUMEROS = 2;
-    private int password;
+    private String password;
 
+    public Password() {
+    }
     public Password(String password) {
         if (password == null) throw new IllegalArgumentException("La contraseña no puede ser nula");
         if (!verificarContraseniaSegura(password)) throw new IllegalArgumentException("La contraseña no es segura");
-        this.password = password.hashCode();
+        this.password = password;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     private boolean verificarContraseniaSegura(String contrasenia) {
@@ -38,6 +49,13 @@ public class Password {
     }
 
     public boolean validate(String contrasenia) {
-        return password == contrasenia.hashCode();
+        return password.equals(contrasenia);
+    }
+
+    @Override
+    public String toString() {
+        return "Password{" +
+                "password=" + password +
+                '}';
     }
 }

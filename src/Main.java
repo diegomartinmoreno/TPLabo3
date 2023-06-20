@@ -1,4 +1,5 @@
 import Persona.Persona;
+import Persona.Administrador;
 import model.*;
 
 import java.util.*;
@@ -11,15 +12,18 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Tarjeta tarjeta = new Tarjeta();
 
-        pedidosYa.cargarListaDeEmpresas();
-       /// pedidosYa.mostrarEmpresas();
-        //Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
-        //System.out.println(A);
+        Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
+        System.out.println(administrador);
 
+        /*
+        pedidosYa.cargarListaDeEmpresas();
+        pedidosYa.mostrarEmpresas();
+        Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
+        System.out.println(A);
 
         pedidosYa.mostrarEmpresas();
         pedidosYa.cargarListaDeEmpresas();
-
+        */
         //mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
 
        /// pedidosYa.mostrarEmpresas();
