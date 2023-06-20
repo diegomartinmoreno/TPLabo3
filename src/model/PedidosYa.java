@@ -1051,13 +1051,7 @@ public class PedidosYa {
     }
 
     public List<Empresa> crearListaEmpresas (String nombre, Zonas zonaActual){
-            List<Empresa> listaBuscador = new ArrayList<>();
-            for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getNombre().contains(nombre)&& empresa.getZonas().contains(zonaActual)) {
-                    listaBuscador.add(empresa);
-                }
-            }
-            return listaBuscador;
+          return crearListaEmpresas(nombre,listaDeEmpresas,zonaActual);
     }
 
     public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){
