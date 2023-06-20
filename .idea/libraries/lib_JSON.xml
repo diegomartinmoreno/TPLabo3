@@ -1,10 +1,11 @@
 <component name="libraryTable">
   <library name="lib JSON">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/lib JSON" />
+      <root url="jar://$PROJECT_DIR$/lib JSON/jackson-databind-2.15.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib JSON/jackson-annotations-2.15.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib JSON/jackson-core-2.15.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="file://$PROJECT_DIR$/lib JSON" recursive="false" />
   </library>
 </component>
