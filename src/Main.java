@@ -53,9 +53,8 @@ public class Main {
         System.out.println("(1) Administrador.");
         System.out.println("(2) Usuario.");
 
-        int opcion = scanner.nextInt();
-
         try {
+            int opcion = scanner.nextInt();
             switch (opcion) {
                 case 1 -> {
                     System.out.println("(1) Iniciar Sesion >>");
@@ -98,14 +97,16 @@ public class Main {
         int opcion=0; char control = 's'; boolean flag = false;
         do {
             System.out.println("Bienvenido a PedidosYa! Que desea hacer? >>");
-            System.out.println("(1) Ver perfil >> ");
-            System.out.println("(2) Ver Historial de compras >>");
+            System.out.println("(1) Ver perfil >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+            System.out.println("(2) Ver Historial de compras >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
             System.out.println("(3) Comprar >>");
-            System.out.println("(4) Modificar perfil >>");
-            System.out.println("(5) Salir >>");
-            opcion = scanner.nextInt();
+            System.out.println("(4) Modificar perfil >>"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(5) Limpiar historial de compras."); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(6) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(7) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
 
             try {
+                opcion = scanner.nextInt();
                 switch (opcion) {
                     case 1 -> {
                         System.out.println("<< PERFIL >>");
@@ -115,14 +116,16 @@ public class Main {
                         System.out.println("<< HISTORIAL DE COMPRAS >>");
                         usuario.getHistorialDeCompras().listarHistorial();
                     }
+
                     case 3 -> menuDeCarrito(scanner, pedidosYa, usuario.getCarrito(), usuario.getHistorialDeCompras(), usuario.getTarjeta());
 
                     case 4 -> {
-                        System.out.println(" (1) Modificar contrasenia >>");
-                        System.out.println(" (2) Modificar nombre y apellido >>");
-                        System.out.println(" (3) Modificar numero de telefono >>");
-                        System.out.println(" (4) Modificar email >>");
-                        System.out.println(" (5) Cambiar tarjeta actual >>");
+                        System.out.println("Que desea modificar de su perfil? ");
+                        System.out.println(" (1) Modificar contrasenia >>"); //SE ACTUALIZA EN ARCHIVO
+                        System.out.println(" (2) Modificar nombre y apellido >>"); //SE ACTUALIZA EN ARCHIVO
+                        System.out.println(" (3) Modificar numero de telefono >>"); //SE ACTUALIZA EN ARCHIVO
+                        System.out.println(" (4) Modificar email >>"); //SE ACTUALIZA EN ARCHIVO
+                        System.out.println(" (5) Cambiar tarjeta actual >>"); //SE ACTUALIZA EN ARCHIVO
                         System.out.println("Si no desea ninguna presione 0.");
 
                         int eleccion = scanner.nextInt();
@@ -145,31 +148,236 @@ public class Main {
                             }
                             case 4-> {
                                 flag = pedidosYa.modificarEmailDeUsuario(scanner);
-                                if (flag) System.out.println("\nLa modificacion de email se realizo con exito.");
-                                else System.out.println("La modificacion de email no se realizo exitosamente.");
+                                if (flag) System.out.println("\nLa modificacion del email se realizo con exito.");
+                                else System.out.println("La modificacion del email no se realizo exitosamente.");
                             }
                             case 5-> {
-                                flag = pedidosYa.cambiarTarjetaDeUsuario(scanner);
-                                if (flag) System.out.println("\nLa modificacion de tarjeta se realizo con exito.");
-                                else System.out.println("La modificacion de tarjeta no se realizo exitosamente.");
+                                if (usuario.getTarjeta().isActiva()) {
+                                    flag = pedidosYa.cambiarTarjetaDeUsuario(scanner);
+                                    if (flag) System.out.println("\nLa modificacion de tarjeta se realizo con exito.");
+                                    else System.out.println("La modificacion de tarjeta no se realizo exitosamente.");
+                                }else{
+                                    System.out.println("Su tarjeta no esta activa, deberia cargar una.");
+                                }
                             }
                             default -> System.out.println("Volviendo al menu principal...");
                         }
                     }
-                    case 5 -> control = 'n';
+
+                    case 5 -> {
+                        System.out.println("Esta seguro que desea limpiar el historial de compras?  (s/n):");
+                        char decision = scanner.next().charAt(0);
+
+                        if (decision == 's'){
+                            Set <Usuario> usuarios = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                            Usuario aux = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
+                            if (aux!=null) {
+                                aux.getHistorialDeCompras().limpiarHistorialDeCompras();
+                                pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarios);
+                            }else System.out.println("No se ha podido limpiar el historial de busqueda.");
+                        }
+                    }
+
+                    case 6 -> {
+                        if (usuario.getTarjeta().isActiva()) System.out.println("Su tarjeta se encuentra cargada, si desea modificarla vaya al menu 3 para modificar su perfil");
+                        else{
+                            flag = usuario.getTarjeta().cargarTarjeta(scanner);
+                            if (flag){
+                                System.out.println("Tarjeta cargada correctamente!");
+                                Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                                Usuario user = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
+                                if (user != null) {
+                                    user.setTarjeta(usuario.getTarjeta());
+                                }
+                                pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_ADMINISTRADORES, usuarioSet);
+                                //PRIMERO LO QUE TENGO QUE HACER ES OBTENER EL SET DE USUARIOS DEL ARCHIVO, MODIFICAR LA TARJETA DEL QUE TENGA EL MISMO DNI, Y LUEGO ESO VOLVER  A MODIFICARLO EN EL ARCHIVO.
+                            }
+                            else System.out.println("Tarjeta cargada incorrectamente!");
+                        }
+                    }
+
+                    case 7 -> control = 'n';
 
                     default -> throw new CasoInexistenteException();
                 }
             } catch (InputMismatchException e) {
                 System.out.println("LO INGRESADO NO FUE UN NUMERO. VOLVIENDO AL MENU PRINCIPAL...");
             }
-
         }while (control == 's');
-
-
     }
 
-    public static void menuPrincipalAdmin(){
+    public static void menuPrincipalAdmin(Scanner scanner, Administrador administrador, PedidosYa pedidosYa) throws CasoInexistenteException{
+        int opcion=0; char control = 's'; boolean flag = false;
+
+        System.out.println("Bienvenido a PedidosYa administrador! Que desea hacer? >>");
+        System.out.println("(1) Ver perfil de administrador >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+        System.out.println("(2) Ver Historial de compras >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+        System.out.println("(3) Limpiar historial de compras"); //SE ACTUALIZA EN ARCHIVO
+        System.out.println("(4) Comprar >>");
+        System.out.println("(5) Modificar perfil de administrador >>"); //SE ACTUALIZA EN ARCHIVO
+        System.out.println("(6) Modificar empresas pertenecientes al programa >>");
+        System.out.println("(7) Modificar productos >>"); //SE ACTUALIZA EN ARCHIVO
+        System.out.println("(8) Eliminar un usuario >>"); //SE ACTUALIZA EN ARCHIVO
+        System.out.println("(9) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
+        System.out.println("(10) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+        do {
+            try {
+                opcion = scanner.nextInt();
+
+                switch (opcion) {
+                    case 1 -> {
+                        System.out.println("<< PERFIL >>");
+                        System.out.println(administrador.toString());
+                    }
+
+                    case 2 -> {
+                        System.out.println("<< HISTORIAL DE COMPRAS >>");
+                        administrador.getHistorialDeCompras().listarHistorial();
+                    }
+
+                    case 3 -> {
+                        System.out.println("Esta seguro que desea limpiar el historial de compras?  (s/n):");
+                        char decision = scanner.next().charAt(0);
+
+                        if (decision == 's') {
+                            Set<Administrador> administradores = pedidosYa.extraerAdministradoresFromJSON(PedidosYa.ARCHIVO_ADMINISTRADORES);
+                            Administrador aux = pedidosYa.buscarAdministradorPorDNI(administrador.getDni(), administradores);
+                            if (aux != null) {
+                                aux.getHistorialDeCompras().limpiarHistorialDeCompras();
+                                pedidosYa.exportarAdministradoresToJSON(PedidosYa.ARCHIVO_ADMINISTRADORES, administradores);
+                            } else System.out.println("No se ha podido limpiar el historial de busqueda.");
+                        }
+                    }
+
+                    case 4 -> menuDeCarrito(scanner, pedidosYa, administrador.getCarrito(), administrador.getHistorialDeCompras(), administrador.getTarjeta());
+
+                    case 5 -> {
+                        try {
+                            System.out.println("Que desea modificar de su perfil? ");
+                            System.out.println(" (1) Modificar contrasenia de administrador >>"); //SE ACTUALIZA EN ARCHIVO
+                            System.out.println(" (2) Modificar nombre y apellido >>"); //SE ACTUALIZA EN ARCHIVO
+                            System.out.println(" (3) Modificar numero de telefono >>"); //SE ACTUALIZA EN ARCHIVO
+                            System.out.println(" (4) Modificar email >>"); //SE ACTUALIZA EN ARCHIVO
+                            System.out.println(" (5) Cambiar tarjeta actual >>"); //SE ACTUALIZA EN ARCHIVO
+                            System.out.println("Si no desea ninguna presione 0.");
+
+                            int eleccion = scanner.nextInt();
+
+                            switch (eleccion) {
+                                case 1 -> {
+                                    flag = pedidosYa.modificarContraseniaDeAdministrador(scanner);
+                                    if (flag)
+                                        System.out.println("\nLa modificacion de contrasenia se realizo con exito.");
+                                    else
+                                        System.out.println("La modificacion de contrasenia no se realizo exitosamente.");
+                                }
+                                case 2 -> {
+                                    flag = pedidosYa.modificarNombreYapellidoDeAdministrador(scanner);
+                                    if (flag)
+                                        System.out.println("\nLa modificacion de nombre y apellido se realizo con exito.");
+                                    else
+                                        System.out.println("La modificacion de nombre y apellido no se realizo exitosamente.");
+                                }
+                                case 3 -> {
+                                    flag = pedidosYa.modificarNroTelefonoDeUsuario(scanner);
+                                    if (flag)
+                                        System.out.println("\nLa modificacion del numero telefonico se realizo con exito.");
+                                    else
+                                        System.out.println("La modificacion del numero telefonico no se realizo exitosamente.");
+                                }
+                                case 4 -> {
+                                    flag = pedidosYa.modificarEmailDeAdministrador(scanner);
+                                    if (flag) System.out.println("\nLa modificacion del email se realizo con exito.");
+                                    else System.out.println("La modificacion del email no se realizo exitosamente.");
+                                }
+                                case 5 -> {
+                                    flag = pedidosYa.cambiarTarjetaDeAdministrador(scanner);
+                                    if (flag)
+                                        System.out.println("\nLa modificacion de la tarjeta se realizo con exito.");
+                                    else
+                                        System.out.println("La modificacion de la tarjeta no se realizo exitosamente.");
+                                }
+                                default -> throw new CasoInexistenteException();
+                            }
+                        } catch (CasoInexistenteException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+
+                    case 6 -> {
+                        System.out.println("Que desea hacer? ");
+                        System.out.println("(1) Agregar una empresa >>");
+                        System.out.println("(2) Eliminar una empresa >>");
+
+                        int opcionConEmpresas = scanner.nextInt();
+
+                        if (opcionConEmpresas == 1) {
+                            //METODO DE AGREGAR UNA EMPRESA CARGANDO POR TECLADO.
+                            pedidosYa.agregarEmpresa(null); //LE PASAMOS ALGO POR PARAMETRO.
+                        } else if (opcionConEmpresas == 2) {
+                            //METODO DE BUSCAR UNA EMPRESA POR ALGUN CAMPO, POR EJ NOMBRE Y LA ELIMINAMOS.
+                            pedidosYa.eliminarEmpresa(null); //LE PASAMOS ALGO POR PARAMETRO.
+                        } else {
+                            System.out.println("No ha seleccionado ningun caso. Regresando al menu principal.");
+                        }
+                    }
+
+                    case 7 -> {
+                        System.out.println("Que desea hacer? ");
+                        System.out.println("(1) Agregar un producto a una empresa >>");
+                        System.out.println("(2) Eliminar un producto >>");
+
+                        int opcionConProductos = scanner.nextInt();
+                        if (opcionConProductos == 1) {
+                            //LLAMAMOS METODO DE AGREGAR PRODUCTO Y DEMAS.
+                        } else if (opcionConProductos == 2) {
+                            //BUSCAMOS EL PRODUCTO POR ALGUN CAMPO.
+                            pedidosYa.eliminarProductos(null, null); //PASAMOS ALGO POR PARAMETRO EN BASE A LO INGRESADO.
+                        } else {
+                            System.out.println("No ha seleccionado ningun caso. Regresando al menu principal.");
+                        }
+                    }
+
+                    case 8 -> {
+                        System.out.println("Ingrese el DNI del usuario que desea eliminar (Si ingreso por equivocacion presione cero): ");
+                        String dni = scanner.nextLine();
+                        if (dni.equals("0")) {
+                            try {
+                                flag = pedidosYa.eliminarUnUsuarioComoAdmin(dni);
+                                if (flag) System.out.println("La eliminacion se ha realizado con exito.");
+                                else System.out.println("La eliminacion no se ha realizado con exito.");
+                            } catch (NullPointerException e) {
+                                System.out.println(e.getMessage());
+                            }
+                        }
+                    }
+
+                    case 9 -> {
+                        if (administrador.getTarjeta().isActiva()) System.out.println("Su tarjeta se encuentra cargada, si desea modificarla vaya al menu 3 para modificar su perfil");
+                        else{
+                            flag = administrador.getTarjeta().cargarTarjeta(scanner);
+                            if (flag){
+                                System.out.println("Tarjeta cargada correctamente!");
+                                Set<Administrador> administradorSet = pedidosYa.extraerAdministradoresFromJSON(PedidosYa.ARCHIVO_ADMINISTRADORES);
+                                Administrador adm = pedidosYa.buscarAdministradorPorDNI(administrador.getDni(), administradorSet);
+                                if (adm != null) {
+                                    adm.setTarjeta(administrador.getTarjeta());
+                                }
+                                pedidosYa.exportarAdministradoresToJSON(PedidosYa.ARCHIVO_ADMINISTRADORES, administradorSet);
+                                //PRIMERO LO QUE TENGO QUE HACER ES OBTENER EL SET DE ADMINISTRADORES DEL ARCHIVO, MODIFICAR LA TARJETA DEL QUE TENGA EL MISMO DNI, Y LUEGO ESO VOLVER  A MODIFICARLO EN EL ARCHIVO.
+                            }
+                            else System.out.println("Tarjeta cargada incorrectamente!");
+                        }
+                    }
+
+                    case 10 -> control='n';
+
+                    default -> throw new CasoInexistenteException();
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("LO INGRESADO NO FUE UN NUMERO. REGRESANDO AL MENU PRINCIPAL...");
+            }
+        }while (control == 's');
 
     }
 
@@ -208,9 +416,6 @@ public class Main {
                     } catch (RuntimeException e){
                         System.out.println(e.getMessage());
                     }
-
-
-
                     break;
 
                 case 2:

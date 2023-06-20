@@ -819,17 +819,17 @@ public class PedidosYa {
         return false;
     }
 
-    private boolean eliminarEmpresa(Empresa eliminar) throws NullPointerException{
+    public boolean eliminarEmpresa(Empresa eliminar) throws NullPointerException{
         if (eliminar == null) throw new NullPointerException();
         return listaDeEmpresas.remove(eliminar);
     }
 
-    private boolean agregarEmpresa(Empresa empresa) throws NullPointerException {
+    public boolean agregarEmpresa(Empresa empresa) throws NullPointerException {
         if (empresa == null) throw new NullPointerException();
         return listaDeEmpresas.add(empresa);
     }
 
-    private boolean agregarProductos(Set<TipoDeProductos> tipoDeProductos, Empresa empresa){
+    public boolean agregarProductos(Set<TipoDeProductos> tipoDeProductos, Empresa empresa){
         if(buscarEmpresaSegunNombre(empresa.getNombre())==null) throw new RuntimeException("La empresa no existe..//***");
         if(tipoDeProductos==null) throw new RuntimeException("Producto vacio..//***");
 
@@ -838,11 +838,23 @@ public class PedidosYa {
         return true;
     }
 
-    private boolean eliminarProductos(TipoDeProductos tipoDeProductos, Empresa empresa){
+    public boolean eliminarProductos(TipoDeProductos tipoDeProductos, Empresa empresa){
         if(tipoDeProductos==null || empresa == null) throw new RuntimeException("Parametros invalidos..//***");
 
         listaDeEmpresas.get(buscarEmpresaRetornaPosicion(empresa)).getProductosEmpresa().remove(tipoDeProductos);
         return true;
+    }
+
+    public boolean eliminarUnUsuarioComoAdmin (String dni) throws NullPointerException{
+        if (dni == null)throw new NullPointerException ();
+        try {
+            this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
+            boolean flag = this.usuarios.remove(buscarUserPorDNI(dni, this.usuarios));
+            if (flag) exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios); //si no se elimino correctamente, no deberia modificar el archivo.
+        }catch (NullPointerException e){
+            System.out.println("No se encontro ninguna persona con ese dni.");
+        }
+        return false;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -19,4 +19,8 @@ public class HistorialDeCompras {
     public boolean agregarPedido(Carrito carrito){
         return pedidos.add(carrito);
     }
+
+    public void limpiarHistorialDeCompras (){
+        pedidos.clear();
+    }
 }
