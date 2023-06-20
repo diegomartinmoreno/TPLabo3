@@ -40,7 +40,6 @@ public class Administrador extends Persona implements UtilidadUserAdm {
     public void setPassword(Password password) {
         this.password = password;
     }
-
     public Password getPassword() {
         return password;
     }

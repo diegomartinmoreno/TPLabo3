@@ -51,6 +51,4 @@ public class Password {
     public boolean validate(String contrasenia) {
         return password.equals(contrasenia);
     }
-
-
 }

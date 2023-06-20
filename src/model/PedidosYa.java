@@ -672,8 +672,6 @@ public class PedidosYa {
                     Password password = new Password(contraseniaNueva);
                     administrador.setPassword(password);
                     exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores); //aca se modifica la contrasenia de ese admin en el archivo.
-                    this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
-                    System.out.println(administradores);
                     return true;
                 } catch (IllegalArgumentException e) {
                     System.out.println("Error con la contrasenia! Ingrese una nueva.");

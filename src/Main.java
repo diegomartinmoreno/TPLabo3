@@ -3,7 +3,7 @@ import Persona.Administrador;
 import model.*;
 
 import java.util.*;
-/// comentario de prueba
+
 public class Main {
     public static void main(String[] args) {
         PedidosYa pedidosYa = new PedidosYa();
@@ -12,10 +12,10 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Tarjeta tarjeta = new Tarjeta();
 
-        pedidosYa.registroDeCuentaDeAdmin(scanner);
+        //pedidosYa.registroDeCuentaDeAdmin(scanner);
 
-        ///Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
-        //pedidosYa.modificarContraseniaDeAdministrador(scanner);
+        Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
+        pedidosYa.modificarContraseniaDeAdministrador(scanner);
 
 
         /*
