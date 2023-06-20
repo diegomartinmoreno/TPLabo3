@@ -1,11 +1,10 @@
 package Persona;
 
+import Exceptions.CasoInexistenteException;
 import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
 import Exceptions.MenorDeEdadException;
-import model.HistorialDeCompras;
-import model.PedidosYa;
-import model.Tarjeta;
-import model.Zonas;
+import model.*;
+
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -14,6 +13,7 @@ import java.util.Set;
 public class Usuario extends Persona implements UtilidadUserAdm{
     private Set<String> zonas;
     private Tarjeta tarjeta;
+    private Carrito carrito;
     private HistorialDeCompras historialDeCompras;
     private Password contrasenia; // La contrasenia debe tener un minimo de 7 caracteres, donde al menos hayan 2 numeros y 5 letras.
     private Zonas zonaActual; //este atributo se vera modificado cada vez que se inicie el programa y el user elija su posicion actual. En caso
@@ -23,6 +23,7 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         super();
         zonas = new HashSet<>();
         tarjeta = new Tarjeta();
+        carrito=new Carrito();
     }
     public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas, Password contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
@@ -44,6 +45,9 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     public void setContrasenia(Password contrasenia) {
         this.contrasenia = contrasenia;
     }
+    public Password getContrasenia() {
+        return contrasenia;
+    }
 
     public Tarjeta getTarjeta() {
         return tarjeta;
@@ -57,6 +61,20 @@ public class Usuario extends Persona implements UtilidadUserAdm{
     }
     public void setHistorialDeCompras(HistorialDeCompras historialDeCompras) {
         this.historialDeCompras = historialDeCompras;
+    }
+
+    public Carrito getCarrito() {
+        return carrito;
+    }
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
+    }
+
+    public Zonas getZonaActual() {
+        return zonaActual;
+    }
+    public void setZonaActual(Zonas zonaActual) {
+        this.zonaActual = zonaActual;
     }
 
     @Override
