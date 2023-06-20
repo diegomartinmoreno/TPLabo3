@@ -1,4 +1,6 @@
+import Exceptions.CasoInexistenteException;
 import Persona.Persona;
+import Persona.Usuario;
 import Persona.Administrador;
 import model.*;
 
@@ -14,8 +16,8 @@ public class Main {
 
         //pedidosYa.registroDeCuentaDeAdmin(scanner);
 
-        /*Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
-        pedidosYa.modificarContraseniaDeAdministrador(scanner);*/
+        Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
+        pedidosYa.modificarContraseniaDeAdministrador(scanner);
 
         //hola commo va
 
@@ -23,6 +25,7 @@ public class Main {
         pedidosYa.cargarListaDeEmpresas();
         pedidosYa.mostrarEmpresas();
 
+        clearConsole();
 
         //clearConsole();
 
@@ -30,7 +33,6 @@ public class Main {
 
        /// pedidosYa.mostrarEmpresas();
         //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
-
 
         /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
@@ -47,7 +49,124 @@ public class Main {
 
     }
 
-    public static void menuPrincipalUsuario(){
+    public Persona menuDeSeleccionDeModoDeAcceso (Scanner scanner, PedidosYa pedidosYa) throws CasoInexistenteException{
+        System.out.println("En que modo va a querer acceder?");
+        System.out.println("(1) Administrador.");
+        System.out.println("(2) Usuario.");
+
+        int opcion = scanner.nextInt();
+
+        try {
+            switch (opcion) {
+                case 1 -> {
+                    System.out.println("(1) Iniciar Sesion >>");
+                    System.out.println("(2) Registrarse >>");
+                    int caso = scanner.nextInt();
+                    switch (caso) {
+                        case 1 -> {
+                            return pedidosYa.iniciarSesionComoAdmin(scanner);
+                        }
+                        case 2 -> {
+                            return pedidosYa.registroDeCuentaDeAdmin(scanner);
+                        }
+                        default -> throw new CasoInexistenteException();
+                    }
+                }
+                case 2 -> {
+                    System.out.println("(1) Iniciar Sesion >>");
+                    System.out.println("(2) Registrarse >>");
+                    int casoUser = scanner.nextInt();
+                    switch (casoUser) {
+                        case 1 -> {
+                            return pedidosYa.iniciarSesionComoUsuario(scanner);
+                            //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU.
+                        }
+                        case 2 -> {
+                            return pedidosYa.registroDeCuentaDeUsuario(scanner);
+                        }
+                        default -> throw new CasoInexistenteException();
+                    }
+                }
+                default -> throw new CasoInexistenteException();
+            }
+        }catch (InputMismatchException e){
+            System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
+        }
+        return null;
+    }
+
+    public static void menuPrincipalUsuario(Scanner scanner, Usuario usuario, PedidosYa pedidosYa){
+        int opcion=0; char control = 's'; boolean flag = false;
+        do {
+            System.out.println("Bienvenido a PedidosYa! Que desea hacer? >>");
+            System.out.println("(1) Ver perfil >> ");
+            System.out.println("(2) Ver Historial de compras >>");
+            System.out.println("(3) Comprar >>");
+            System.out.println("(4) Modificar perfil >>");
+            System.out.println("(5) Salir >>");
+            opcion = scanner.nextInt();
+
+            try {
+                switch (opcion) {
+                    case 1 -> {
+                        System.out.println("<< PERFIL >>");
+                        System.out.println(usuario.toString());
+                    }
+                    case 2 -> {
+                        System.out.println("<< HISTORIAL DE COMPRAS >>");
+                        usuario.getHistorialDeCompras().listarHistorial();
+                    }
+                    case 3 -> menuDeCarrito(scanner, pedidosYa, usuario.getCarrito(), usuario.getHistorialDeCompras(), usuario.getTarjeta());
+
+                    case 4 -> {
+                        System.out.println(" (1) Modificar contrasenia >>");
+                        System.out.println(" (2) Modificar nombre y apellido >>");
+                        System.out.println(" (3) Modificar numero de telefono >>");
+                        System.out.println(" (4) Modificar email >>");
+                        System.out.println(" (5) Cambiar tarjeta actual >>");
+                        System.out.println("Si no desea ninguna presione 0.");
+
+                        int eleccion = scanner.nextInt();
+
+                        switch (eleccion){
+                            case 1 -> {
+                                flag = pedidosYa.modificarContraseniaDeUsuario(scanner);
+                                if (flag) System.out.println("\nLa modificacion de contrasenia se realizo con exito.");
+                                else System.out.println("La modificacion de contrasenia no se realizo exitosamente.");
+                            }
+                            case 2 ->{
+                                flag = pedidosYa.modificarNombreYapellidoDeUsuario(scanner);
+                                if (flag) System.out.println("\nLa modificacion de nombre y apellido se realizo con exito.");
+                                else System.out.println("La modificacion de nombre y apellido no se realizo exitosamente.");
+                            }
+                            case 3 ->{
+                                flag = pedidosYa.modificarNroTelefonoDeUsuario(scanner);
+                                if (flag) System.out.println("\nLa modificacion de numero telefonico se realizo con exito.");
+                                else System.out.println("La modificacion de numero telefonico no se realizo exitosamente.");
+                            }
+                            case 4-> {
+                                flag = pedidosYa.modificarEmailDeUsuario(scanner);
+                                if (flag) System.out.println("\nLa modificacion de email se realizo con exito.");
+                                else System.out.println("La modificacion de email no se realizo exitosamente.");
+                            }
+                            case 5-> {
+                                flag = pedidosYa.cambiarTarjetaDeUsuario(scanner);
+                                if (flag) System.out.println("\nLa modificacion de tarjeta se realizo con exito.");
+                                else System.out.println("La modificacion de tarjeta no se realizo exitosamente.");
+                            }
+                            default -> System.out.println("Volviendo al menu principal...");
+                        }
+                    }
+                    case 5 -> control = 'n';
+
+                    default -> throw new CasoInexistenteException();
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("LO INGRESADO NO FUE UN NUMERO. VOLVIENDO AL MENU PRINCIPAL...");
+            }
+
+        }while (control == 's');
+
 
     }
 
