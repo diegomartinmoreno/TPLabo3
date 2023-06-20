@@ -14,27 +14,23 @@ public class Main {
 
         //pedidosYa.registroDeCuentaDeAdmin(scanner);
 
-        Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
-        pedidosYa.modificarContraseniaDeAdministrador(scanner);
+        /*Administrador administrador = pedidosYa.iniciarSesionComoAdmin(scanner);
+        pedidosYa.modificarContraseniaDeAdministrador(scanner);*/
 
         //hola commo va
 
-        /*
-        pedidosYa.cargarListaDeEmpresas();
-       /// pedidosYa.mostrarEmpresas();
-        Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
-        System.out.println(A);
-
+        pedidosYa.setZonaUsuarioActual(Zonas.ALEM);
         pedidosYa.cargarListaDeEmpresas();
         pedidosYa.mostrarEmpresas();
 
-        clearConsole();
 
-        mostrarMenuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
+        //clearConsole();
+
+        menuDeCarrito(scanner, pedidosYa, carrito, historialDeCompras, tarjeta);
 
        /// pedidosYa.mostrarEmpresas();
         //Empresa A= pedidosYa.buscarPorNombreSinSerExacto(scanner);
-        */
+
 
         /*Usuario usuario = pedidosYa.registroDeCuenta(scanner);
         System.out.println(usuario);
@@ -59,7 +55,7 @@ public class Main {
 
     }
 
-    public static void mostrarMenuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){
+    public static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Carrito carrito, HistorialDeCompras historialDeCompras, Tarjeta tarjeta){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner);
         do {
             System.out.println("Que desea hacer?");
@@ -75,18 +71,27 @@ public class Main {
 
             switch (decision) {
                 case 1:
-
-                    elegida.mostrarEmpresa();
+                    Producto prodAux = new Producto();
+                    elegida.mostrarParaComprar();
 
                     System.out.println("Ingrese el id del producto que desea llevar:");
-                    Producto prodAux = elegida.buscarProductoPorID(scanner.nextInt());
-                    System.out.println("Producto elegido: " + prodAux);
+                    int idProducto = scanner.nextInt();
+
+                    try {
+                        prodAux = elegida.buscarProductoPorID(idProducto);
+                        System.out.println("Producto elegido: ");
+                        prodAux.productoElegido();
 
 
-                    System.out.println("Cuanto desea llevar del producto?");
-                    prodAux.setCantidadPedido(scanner.nextInt());
+                        System.out.println("Cuanto desea llevar del producto?");
+                        prodAux.setCantidadPedido(scanner.nextInt());
 
-                    carrito.agregarProductoAlCarrito(elegida, prodAux);
+                        carrito.agregarProductoAlCarrito(elegida, prodAux);
+                    } catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                    }
+
+
 
                     break;
 
@@ -128,7 +133,6 @@ public class Main {
                     }
 
                     carrito.pagarCarrito(historialDeCompras, tarjeta);
-                    break;
 
                 case 6:
                     carrito.listarCarrito();
