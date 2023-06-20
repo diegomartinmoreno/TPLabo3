@@ -567,7 +567,6 @@ public class PedidosYa {
             System.out.println("7) Finalmente ingrese su clave de administrador (debera recordarla y saberla solo usted): ");
             contrasenia = scanner.nextLine();
             try {
-                System.out.println("CONTRASENIA STRING: " + contrasenia);
                 Password password = new Password(contrasenia);
                 administrador.setPassword(password);
                 flag = true;
