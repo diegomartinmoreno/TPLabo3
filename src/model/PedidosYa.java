@@ -800,11 +800,46 @@ public class PedidosYa {
         return false;
     }
 
+    private boolean eliminarEmpresa(Empresa eliminar){
+        return listaDeEmpresas.remove(eliminar);
+    }
+
+    private boolean agregarEmpresa(Empresa empresa){
+        return listaDeEmpresas.add(empresa);
+    }
+
+    private boolean agregarProductos(Set<TipoDeProductos> tipoDeProductos, Empresa empresa){
+        if(buscarEmpresaSegunNombre(empresa.getNombre())==null) throw new RuntimeException("La empresa no existe..//***");
+        if(tipoDeProductos==null) throw new RuntimeException("Producto vacio..//***");
+
+
+        listaDeEmpresas.get(buscarEmpresaRetornaPosicion(empresa)).setProductosEmpresa(crearListaDeProductos(tipoDeProductos));
+        return true;
+    }
+
+    private boolean eliminarProductos(TipoDeProductos tipoDeProductos, Empresa empresa){
+        if(tipoDeProductos==null || empresa == null) throw new RuntimeException("Parametros invalidos..//***");
+
+        listaDeEmpresas.get(buscarEmpresaRetornaPosicion(empresa)).getProductosEmpresa().remove(tipoDeProductos);
+        return true;
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// FINALIZA PARTE DE ADMIN
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// PARTE DE EMPRESA
+
+    public int buscarEmpresaRetornaPosicion(Empresa empresa){
+        int i=0;
+        for(Empresa aux : listaDeEmpresas){
+            if (empresa.equals(aux)){
+                return i;
+            }
+            i++;
+        }
+        throw new RuntimeException("No se encontro la empresa..//***");
+    }
 
     public Empresa buscarEmpresaSegunNombre(String empresa, List<Empresa> listaBuscador) throws NullPointerException {
         if (empresa == null) throw new NullPointerException("Error! La empresa no puede ser nula.//*");
