@@ -27,8 +27,6 @@ public class PedidosYa {
     private List<Empresa> listaDeEmpresas;
     private Set<Usuario> usuarios;
     private Set<Administrador> administradores;
-    private Zonas zonaUsuarioActual;
-
     public static final String ARCHIVO_USUARIOS = "Users.json";
     public static final String ARCHIVO_ADMINISTRADORES = "Administradores.json";
     public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
@@ -66,14 +64,6 @@ public class PedidosYa {
 
     public void setAdministradores(Set<Administrador> administradores) {
         this.administradores = administradores;
-    }
-
-    public Zonas getZonaUsuarioActual() {
-        return zonaUsuarioActual;
-    }
-
-    public void setZonaUsuarioActual(Zonas zonaUsuarioActual) {
-        this.zonaUsuarioActual = zonaUsuarioActual;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -900,16 +890,16 @@ public class PedidosYa {
         }
     }
 
-    public void filtrarMostrarEmpresaSegunZona(){
+    public void filtrarMostrarEmpresaSegunZona(Zonas zonaActual){
         for(Empresa empresa : listaDeEmpresas){
-            mostrarEmpresaSiCoincideConLaZonaActual(empresa);
+            mostrarEmpresaSiCoincideConLaZonaActual(empresa, zonaActual);
         }
 
     }
 
-    private void mostrarEmpresaSiCoincideConLaZonaActual(Empresa empresa) {
+    private void mostrarEmpresaSiCoincideConLaZonaActual(Empresa empresa, Zonas zonaActual) {
         for (Zonas zona : empresa.getZonas()){
-            if (zona.equals(zonaUsuarioActual)){
+            if (zona.equals(zonaActual)){
                 System.out.println(empresa.getNombre() + " - Zonas: " + empresa.getZonas());
             }
         }
@@ -951,7 +941,7 @@ public class PedidosYa {
     }
 
 
-    public Empresa buscarEmpresaConMetodoElegido (Scanner scanner){
+    public Empresa buscarEmpresaConMetodoElegido (Scanner scanner, Zonas zonaActual){
         Empresa buscada=null;
         System.out.println("Bienvenido!! Elija el metodo por el que quiere buscar locales\n 1_Buscar Empresa por nombre\n 2_Buscar por comidas.\n Presione cualquier otra tecla para salir");
         int numero= scanner.nextInt();
@@ -959,11 +949,11 @@ public class PedidosYa {
         switch (numero){
             case 1->{
                 System.out.println("Empresas disponibles: ");
-                filtrarMostrarEmpresaSegunZona();
-                buscada=buscarPorNombreSinSerExacto(scanner);
+                filtrarMostrarEmpresaSegunZona(zonaActual);
+                buscada=buscarPorNombreSinSerExacto(scanner, zonaActual);
             }
             case 2->{
-                buscada=buscarEmpresaSegunQueQuiereComer(scanner);
+                buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
             }
             case default ->{
                 System.out.println("Saliendo");
@@ -973,7 +963,7 @@ public class PedidosYa {
         return buscada;
     }
 
-    public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner) {
+    public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner, Zonas zonaActual) {
         mostrarTodosLosEnums();
         System.out.println("Que desea comer?");
 
@@ -982,23 +972,23 @@ public class PedidosYa {
         TipoDeProductos dato = TipoDeProductos.valueOf(comida.toUpperCase());
 
         List<Empresa> listaBuscador = new ArrayList<>();
-        listaBuscador = crearListaEmpresas(dato);
+        listaBuscador = crearListaEmpresas(dato, zonaActual);
 
         mostrarEmpresasSoloNombre(listaBuscador);
 
-        Empresa empresa1 = buscarPorNombreSinSerExacto(scanner, listaBuscador);
+        Empresa empresa1 = buscarPorNombreSinSerExacto(scanner, listaBuscador, zonaActual);
 
         return empresa1;
     }
 
-    public Empresa buscarPorNombreSinSerExacto(Scanner scanner) {
+    public Empresa buscarPorNombreSinSerExacto(Scanner scanner, Zonas zonaActual) {
         Empresa buscada = new Empresa();
         List<Empresa> listaEmpresas = new ArrayList<>();
         do {
             System.out.println("Ingrese el nombre de la empresa que busca.");
             String nombre = scanner.nextLine().toUpperCase();
 
-            listaEmpresas = crearListaEmpresas(nombre);
+            listaEmpresas = crearListaEmpresas(nombre, zonaActual);
 
             System.out.println("Lista de empresas posibles, elija especificamente la que desea");
             mostrarEmpresasSoloNombre(listaEmpresas);
@@ -1014,14 +1004,14 @@ public class PedidosYa {
         }
     }
 
-    public Empresa buscarPorNombreSinSerExacto(Scanner scanner, List<Empresa> listaDisminuida) {
+    public Empresa buscarPorNombreSinSerExacto(Scanner scanner, List<Empresa> listaDisminuida, Zonas zonaActual) {
         Empresa buscada = new Empresa();
         List<Empresa> listaEmpresas = new ArrayList<>();
         do {
             System.out.println("Ingrese el nombre de la empresa que busca.");
             String nombre = scanner.nextLine().toUpperCase();
 
-            listaEmpresas = crearListaEmpresas(nombre, listaDisminuida);
+            listaEmpresas = crearListaEmpresas(nombre, listaDisminuida, zonaActual);
 
             if (listaEmpresas.size() > 1) {
                 System.out.println("Lista de empresas posibles, elija especificamente la que desea");
@@ -1049,31 +1039,31 @@ public class PedidosYa {
         }
     }
 
-    public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida){
+    public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida, Zonas zonaActual){
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDisminuida) {
-                if (empresa.getNombre().contains(nombre) && empresa.getZonas().contains(zonaUsuarioActual)) {
+                if (empresa.getNombre().contains(nombre) && empresa.getZonas().contains(zonaActual)) {
                     listaBuscador.add(empresa);
                 }
             }
             return listaBuscador;
     }
 
-    public List<Empresa> crearListaEmpresas (String nombre){
+    public List<Empresa> crearListaEmpresas (String nombre, Zonas zonaActual){
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getNombre().contains(nombre)&& empresa.getZonas().contains(zonaUsuarioActual)) {
+                if (empresa.getNombre().contains(nombre)&& empresa.getZonas().contains(zonaActual)) {
                     listaBuscador.add(empresa);
                 }
             }
             return listaBuscador;
     }
 
-    public List crearListaEmpresas (TipoDeProductos comida){
+    public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){
 
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getProductosEmpresa().containsKey(comida) && empresa.getZonas().contains(zonaUsuarioActual)) {
+                if (empresa.getProductosEmpresa().containsKey(comida) && empresa.getZonas().contains(zonaActual)) {
                     listaBuscador.add(empresa);
                 }
             }

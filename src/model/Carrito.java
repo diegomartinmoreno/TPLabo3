@@ -13,7 +13,11 @@ public class Carrito {
     private LocalDate fechaPedido;
     private static final double PORCENTAJE_DESCUENTO = 0.85;
     private boolean tieneCupon=false;
+
+    ///////////////////////////////////
     private double montoTotal=0;
+    private Zonas destino=null;
+    /////////////////////////////////// campos esenciales para el historial
 
     public Carrito() {
         productos = new ColeccionGenerica<>();
@@ -152,4 +156,11 @@ public class Carrito {
         this.tieneCupon = tieneCupon;
     }
 
+    public Zonas getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Zonas destino) {
+        this.destino = destino;
+    }
 }

@@ -11,12 +11,12 @@ import java.util.Set;
 
 
 public class Usuario extends Persona implements UtilidadUserAdm{
-    private Set<String> zonas;
+    private Set<Zonas> zonas;
     private Tarjeta tarjeta;
     private Carrito carrito;
     private HistorialDeCompras historialDeCompras;
     private Password contrasenia; // La contrasenia debe tener un minimo de 7 caracteres, donde al menos hayan 2 numeros y 5 letras.
-    private Zonas zonaActual; //este atributo se vera modificado cada vez que se inicie el programa y el user elija su posicion actual. En caso
+    private Zonas zonaActual=null; //este atributo se vera modificado cada vez que se inicie el programa y el user elija su posicion actual. En caso
     //de ser nueva, se agregara al arraylist de zonas.
 
     public Usuario() {
@@ -25,20 +25,20 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         tarjeta = new Tarjeta();
         carrito=new Carrito();
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas, Password contrasenia) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<Zonas> zonas, Password contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         this.zonas = zonas;
         this.contrasenia = contrasenia;
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<String> zonas) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<Zonas> zonas) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         this.zonas = zonas;
     }
 
-    public Set<String> getZonas() {
+    public Set<Zonas> getZonas() {
         return zonas;
     }
-    public void setZonas(Set<String> zonas) {
+    public void setZonas(Set<Zonas> zonas) {
         this.zonas = zonas;
     }
 
@@ -84,9 +84,14 @@ public class Usuario extends Persona implements UtilidadUserAdm{
                 "\n------------------------\n";
     }
 
-    public boolean agregarUnaZona (String zonaNueva) throws NullPointerException{
-        if (zonaNueva == null) throw new NullPointerException("Error! La nueva zona es nula.");
+    public boolean agregarUnaZona (Zonas zonaNueva) throws NullPointerException{
+        if (zonaNueva == null) throw new NullPointerException("Error! La nueva zona es nula..//***");
         return zonas.add(zonaNueva);
+    }
+
+    public boolean eliminarUnaZona(Zonas zona){
+        if(zona == null) throw new NullPointerException("Error! La zona no puede ser nula..//***");
+        return zonas.remove(zona);
     }
 
     public void establecerZonaActual (Zonas zonaActual) throws NullPointerException {

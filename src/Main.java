@@ -31,6 +31,7 @@ public class Main {
         System.out.println("(1) Administrador.");
         System.out.println("(2) Usuario.");
         Usuario usuarioRetornar = null;
+        Administrador administradorRetornar = null;
 
         try {
             int opcion = scanner.nextInt();
@@ -41,7 +42,14 @@ public class Main {
                     int caso = scanner.nextInt();
                     switch (caso) {
                         case 1 -> {
-                            return pedidosYa.iniciarSesionComoAdmin(scanner);
+                            administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
+
+                            System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                            System.out.println(Arrays.toString(Zonas.values()));
+
+                            Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
+
+                            administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
                         }
                         case 2 -> {
                             return pedidosYa.registroDeCuentaDeAdmin(scanner);
@@ -56,7 +64,33 @@ public class Main {
                     switch (casoUser) {
                         case 1 -> {
                             usuarioRetornar = pedidosYa.iniciarSesionComoUsuario(scanner);
-                            System.out.println("ELEGIR UNA ZONA: ");
+
+                            if(usuarioRetornar.getZonas().isEmpty()){
+                                System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                                System.out.println(Arrays.toString(Zonas.values()));
+
+                                Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
+
+                                Set<Usuario> usuariosSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                                Usuario user = pedidosYa.buscarUserPorDNI(usuarioRetornar.getDni(), usuariosSet);
+
+                                if(user!=null){
+                                    user.agregarUnaZona(elegida);////se agrega a las zonas del usuario
+                                    pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuariosSet);
+                                } else{
+                                    throw new RuntimeException("El usuario no existe....//*/**. ERROR..... fatal.....");
+                                }
+
+                                usuarioRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+
+                            } else {
+                                System.out.println("Zonas: " + usuarioRetornar.getZonas());
+
+                                System.out.println("ELEGIR UNA ZONA: ");
+                                usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
+                            }
+
+
                             //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU. ////////////////////////////////////////////////
                         }
                         case 2 -> {
@@ -83,7 +117,7 @@ public class Main {
             System.out.println("(4) Modificar perfil >>"); //SE ACTUALIZA EN ARCHIVO
             System.out.println("(5) Limpiar historial de compras."); //SE ACTUALIZA EN ARCHIVO
             System.out.println("(6) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
-            System.out.println("(7) Zonas");
+            System.out.println("(7) Tus zonas"); ///AGREGAR, ELIMINAR, VER ZONAS y ELEGIR  ZONA ACTUAL
             System.out.println("(8) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
 
             try {
@@ -176,8 +210,39 @@ public class Main {
                             else System.out.println("Tarjeta cargada incorrectamente!");
                         }
                     }
+                    case 7 -> {
+                        do {
+                            System.out.println("TUS ZONAS:"); //cambiarenmenuadministradorzonaactual
+                            System.out.println("(1) Agregar zona");
+                            System.out.println("(2) Eliminar zona");
+                            System.out.println("(3) Cambiar zona actual");
+                            System.out.println("(4) Ver tus zonas");
+                            System.out.println("(5) Salir");
 
-                    case 7 -> control = 'n';
+                            switch (scanner.nextInt()) {
+                                case 1 -> {
+                                    System.out.println("Zonas disponibles: \n " + Arrays.toString(Zonas.values()));
+                                    System.out.println("Ingresa una zona");
+                                    usuario.agregarUnaZona(Zonas.valueOf(scanner.nextLine()));
+                                    break;
+                                }
+
+                                case 2 -> {
+                                    System.out.println("Tus zonas: \n" + usuario.getZonas());
+                                    System.out.println("Ingrese el nombre de la zona a eliminar");
+                                    usuario.eliminarUnaZona(Zonas.valueOf(scanner.nextLine()));
+                                }
+
+                                case 3 -> {
+
+                                }
+                            }
+
+                            System.out.println("Desea continuar? s/n");
+                    }while (scanner.next().charAt(0) != 'n');
+                    }
+
+                    case 8 -> control = 'n';
 
                     default -> throw new CasoInexistenteException();
                 }
@@ -370,7 +435,7 @@ public class Main {
     }
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Usuario usuario){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
-        Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner);
+        Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, usuario.getZonaActual());
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
@@ -445,11 +510,17 @@ public class Main {
 
 
                     usuario.getCarrito().setMontoTotal(usuario.getCarrito().calcularMontoTotalDeLaCompra());
+                    usuario.getCarrito().setDestino(usuario.getZonaActual());
 
+                    Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                    Usuario user = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
 
-
-                    usuario.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta());
-
+                    if(user != null){
+                        user.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta());
+                        pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);                       ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
+                    } else {
+                        throw new RuntimeException("Usuario no existe....///*** ERROR... fatal.....");
+                    }
 
                 case 6:
                     usuario.getCarrito().listarCarrito();
@@ -461,7 +532,7 @@ public class Main {
     }
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Administrador administrador){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
-        Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner);
+        Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, administrador.getZonaActual());
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");

@@ -3,6 +3,7 @@ package Persona;
 import model.Carrito;
 import model.HistorialDeCompras;
 import model.Tarjeta;
+import model.Zonas;
 
 import java.util.UUID;
 
@@ -12,6 +13,7 @@ public class Administrador extends Persona implements UtilidadUserAdm {
     private Carrito carrito;
     private Password password;
     private Tarjeta tarjeta;
+    private Zonas zonaActual=null;
 
     public Administrador() {
         super();
@@ -27,6 +29,14 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         idAdmin = UUID.randomUUID();
         this.password = password;
+    }
+
+    public void setZonaActual(Zonas zonaActual) {
+        this.zonaActual = zonaActual;
+    }
+
+    public Zonas getZonaActual() {
+        return zonaActual;
     }
 
     public UUID getIdAdmin() {
