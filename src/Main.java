@@ -13,8 +13,8 @@ public class Main {
 
         pedidosYa.cargarListaDeEmpresas();
        /// pedidosYa.mostrarEmpresas();
-        //Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
-        //System.out.println(A);
+        Empresa A= pedidosYa.buscarEmpresaConMetodoElegido(scanner);
+        System.out.println(A);
 
 
 
