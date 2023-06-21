@@ -44,6 +44,7 @@ public class Tarjeta {
 		System.out.println("Inicio de carga de nueva tarjeta.");
 		do {
 			System.out.println("Ingrese nombre del titular:");
+			lectura.nextLine();
 			flag=!this.cargarNombreTitular(lectura.nextLine());
 		}while (flag);
 		////

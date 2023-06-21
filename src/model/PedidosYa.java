@@ -709,12 +709,12 @@ public class PedidosYa {
     public boolean modificarNroTelefonoDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
-        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
             System.out.println("Ingrese su dni para el cambio de numero de telefono >>");
+            scanner.nextLine();
             String dni = scanner.nextLine();
             Administrador administrador = null;
 
@@ -843,6 +843,7 @@ public class PedidosYa {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
             boolean flag = this.usuarios.remove(buscarUserPorDNI(dni, this.usuarios));
             if (flag) exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios); //si no se elimino correctamente, no deberia modificar el archivo.
+            return flag;
         }catch (NullPointerException e){
             System.out.println("No se encontro ninguna persona con ese dni.");
         }
@@ -1304,6 +1305,7 @@ public class PedidosYa {
         Empresa A= new Empresa();
         char control = 's';
         System.out.println("Cargue el nombre de la empresa");
+        scanner.nextLine();
         A.setNombre(scanner.nextLine());
 
         System.out.println("Ingrese las zonas que trabaja la empresa. Una a la vez");
@@ -1327,7 +1329,7 @@ public class PedidosYa {
 
             crearListaDeProductos(Set.of(producto));
 
-            System.out.println("Desea ingresar otra zona? s/n");
+            System.out.println("Desea ingresar otro tipo de producto? s/n");
             control= scanner.nextLine().charAt(0);
         }while (control == 's');
         A.setProductosEmpresa(productos);
@@ -1351,23 +1353,26 @@ public class PedidosYa {
 
     public Empresa retornarUnaEmpresa(Scanner scanner) {
         Empresa buscada = new Empresa();
-        List<Empresa> listaEmpresas = new ArrayList<>();
-        do {
-            System.out.println("Ingrese el nombre de la empresa que busca.");
-            String nombre = scanner.nextLine().toUpperCase();
 
-            listaEmpresas = crearListaEmpresas(nombre, listaEmpresas);
+        System.out.println("Lista de empresas posibles, elija especificamente la que desea");
+        mostrarEmpresasSoloNombre(listaDeEmpresas);
 
-            System.out.println("Lista de empresas posibles, elija especificamente la que desea");
-            mostrarEmpresasSoloNombre(listaEmpresas);
+        System.out.println("Ingrese el nombre de la empresa que busca.");
+        scanner.nextLine();
+        String nombre = scanner.nextLine().toUpperCase();
 
-        } while (listaEmpresas.size() != 1);
+        buscada = buscarEmpresaSegunNombre(nombre);
 
-        System.out.println("Esta seguro que desea elegir: " + listaEmpresas.get(0).getNombre() + "? s/n");
-        char confirmacion = scanner.nextLine().charAt(0);
-        if (confirmacion == 's') return listaEmpresas.get(0);
-        else {
-            System.out.println("Volviendo al menu principal");
+        if (buscada!=null){
+            System.out.println("Esta seguro que desea elegir: " + buscada.getNombre() + "? s/n");
+            char confirmacion = scanner.nextLine().charAt(0);
+            if (confirmacion == 's') return buscada;
+            else {
+                System.out.println("Volviendo al menu principal");
+                return null;
+            }
+        } else {
+            System.out.println("La empresa no fue encontrada... error..... fatal.....");
             return null;
         }
     }

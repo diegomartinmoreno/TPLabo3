@@ -10,9 +10,10 @@ public class Carrito {
     private ColeccionGenerica<Producto> productos;
     private Empresa vendedor;
 	private String nota;
-    private LocalDate fechaPedido;
+    private String fechaPedido;
     private static final double PORCENTAJE_DESCUENTO = 0.85;
     private boolean tieneCupon=false;
+    private Repartidor repartidor;
 
     ///////////////////////////////////
     private double montoTotal=0;
@@ -21,7 +22,7 @@ public class Carrito {
 
     public Carrito() {
         productos = new ColeccionGenerica<>();
-        fechaPedido = LocalDate.now();
+        fechaPedido = LocalDate.now().toString();
     }
 
     
@@ -67,13 +68,22 @@ public class Carrito {
     public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta) throws NullPointerException{
         if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
+        repartidor = generarRepartidorAleatorio();
+        repartidor.llevarPedido();
 
         System.out.println("Monto total: " + montoTotal);
 
 
+        System.out.println("Datos del encargado de llevar el pedido: ");
+        repartidor.mostrarRepartidor();
+
         historial.agregarPedido(this);
 
         if(tarjeta.RealizarPago(calcularMontoTotalDeLaCompra())) clear();
+    }
+
+    public Repartidor generarRepartidorAleatorio(){
+        return new Repartidor("Leo", "Messi", "2235212344", 17, "liomessi@gmail.com", "45621234");
     }
 
     public void mostrarProductos(){
@@ -144,7 +154,7 @@ public class Carrito {
         vendedor=null;
     }
 
-    public LocalDate getFechaPedido() {
+    public String getFechaPedido() {
         return fechaPedido;
     }
 
@@ -176,7 +186,7 @@ public class Carrito {
         return nota;
     }
 
-    public void setFechaPedido(LocalDate fechaPedido) {
+    public void setFechaPedido(String fechaPedido) {
         this.fechaPedido = fechaPedido;
     }
 
@@ -186,5 +196,13 @@ public class Carrito {
 
     public double getMontoTotal() {
         return montoTotal;
+    }
+
+    public Repartidor getRepartidor() {
+        return repartidor;
+    }
+
+    public void setRepartidor(Repartidor repartidor) {
+        this.repartidor = repartidor;
     }
 }

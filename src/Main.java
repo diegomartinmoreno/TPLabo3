@@ -9,16 +9,16 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         PedidosYa pedidosYa = new PedidosYa();
+
         pedidosYa.cargarListaDeEmpresas();
-        Carrito carrito = new Carrito();
-        HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
-        Tarjeta tarjeta = new Tarjeta();
+
 
         Persona persona = menuDeSeleccionDeModoDeAcceso(scanner, pedidosYa);
 
         if (persona instanceof Administrador){
             menuPrincipalAdmin(scanner, (Administrador) persona, pedidosYa);
+            //(Scanner scanner, Administrador administrador, PedidosYa pedidosYa)
         } else{
             menuPrincipalUsuario(scanner, (Usuario) persona, pedidosYa);
         }
@@ -40,6 +40,7 @@ public class Main {
                     System.out.println("(1) Iniciar Sesion >>");
                     System.out.println("(2) Registrarse >>");
                     int caso = scanner.nextInt();
+                    scanner.nextLine();
                     switch (caso) {
                         case 1 -> {
                             administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
@@ -56,6 +57,7 @@ public class Main {
                     Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
 
                     administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                    return administradorRetornar;
                 }
                 case 2 -> {
                     System.out.println("(1) Iniciar Sesion >>");
@@ -101,14 +103,15 @@ public class Main {
                     }
 
                     ////////////////////////////////////////////////////////////////////
-
+                    return usuarioRetornar;
                 }
                 default -> throw new CasoInexistenteException();
             }
         }catch (InputMismatchException e){
             System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
         }
-        return usuarioRetornar;
+
+        return null;
     }
 
     public static void menuPrincipalUsuario(Scanner scanner, Usuario usuario, PedidosYa pedidosYa){
@@ -264,19 +267,19 @@ public class Main {
 
     public static void menuPrincipalAdmin(Scanner scanner, Administrador administrador, PedidosYa pedidosYa) throws CasoInexistenteException{
         int opcion=0; char control = 's'; boolean flag = false;
-
-        System.out.println("Bienvenido a PedidosYa administrador! Que desea hacer? >>");
-        System.out.println("(1) Ver perfil de administrador >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
-        System.out.println("(2) Ver Historial de compras >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
-        System.out.println("(3) Limpiar historial de compras"); //SE ACTUALIZA EN ARCHIVO
-        System.out.println("(4) Comprar >>");
-        System.out.println("(5) Modificar perfil de administrador >>"); //SE ACTUALIZA EN ARCHIVO
-        System.out.println("(6) Modificar empresas pertenecientes al programa >>");
-        System.out.println("(7) Modificar productos >>"); //SE ACTUALIZA EN ARCHIVO
-        System.out.println("(8) Eliminar un usuario >>"); //SE ACTUALIZA EN ARCHIVO
-        System.out.println("(9) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
-        System.out.println("(10) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
         do {
+            System.out.println("Bienvenido a PedidosYa administrador! Que desea hacer? >>");
+            System.out.println("(1) Ver perfil de administrador >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+            System.out.println("(2) Ver Historial de compras >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+            System.out.println("(3) Limpiar historial de compras"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(4) Comprar >>");
+            System.out.println("(5) Modificar perfil de administrador >>"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(6) Modificar empresas pertenecientes al programa >>");
+            System.out.println("(7) Modificar productos >>"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(8) Eliminar un usuario >>"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(9) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(10) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+
             try {
                 opcion = scanner.nextInt();
 
@@ -355,12 +358,16 @@ public class Main {
                                 }
                                 default -> throw new CasoInexistenteException();
                             }
+
+                            administrador=pedidosYa.buscarAdministradorPorDNI(administrador.getDni(), pedidosYa.getAdministradores());
                         } catch (CasoInexistenteException e) {
                             System.out.println(e.getMessage());
                         }
                     }
 
                     case 6 -> {
+                        System.out.println("ESTAS SON LAS EMPRESAS DISPONIBLES:");
+
                         System.out.println("Que desea hacer? ");
                         System.out.println("(1) Agregar una empresa >>");
                         System.out.println("(2) Eliminar una empresa >>");
@@ -379,6 +386,9 @@ public class Main {
                             System.out.println("No ha seleccionado ningun caso. Regresando al menu principal.");
                         }
 
+                        System.out.println("ASI HAN QUEDADO LAS EMPRESAS LUEGO DE LA MODIFICACION");
+                        pedidosYa.mostrarEmpresasSoloNombre(pedidosYa.getListaDeEmpresas());
+
                     }
 
                     case 7 -> {
@@ -390,22 +400,26 @@ public class Main {
                         if (opcionConProductos == 1) {
                             //LLAMAMOS METODO DE AGREGAR PRODUCTO Y DEMAS.
                             Empresa A=pedidosYa.retornarUnaEmpresa(scanner);
+                            System.out.println("Tipos de producto disponibles: " + Arrays.toString(TipoDeProductos.values()));
                             System.out.println("Ingrese el tipo de producto que desea cargar");
                             String tipo= scanner.nextLine();
-                            TipoDeProductos producto= TipoDeProductos.valueOf(tipo);
+                            TipoDeProductos producto= TipoDeProductos.valueOf(tipo.toUpperCase());
 
-                            pedidosYa.cargarUnTipoProducto(A,producto);
+                            Empresa aux = pedidosYa.cargarUnTipoProducto(A,producto);
+                            System.out.println("La empresa " + aux.getNombre() + " ahora posee los siguientes productos: \n" + aux.getProductosEmpresa());
                             pedidosYa.exportarEmpresasToJSON(PedidosYa.ARCHIVO_EMPRESAS);
 
                         } else if (opcionConProductos == 2) {
                             //BUSCAMOS EL PRODUCTO POR ALGUN CAMPO.
 
                             Empresa empresa=pedidosYa.retornarUnaEmpresa(scanner);
+                            System.out.println("Productos de la empresa " + empresa.getNombre() + "= " + empresa.getProductosEmpresa());
                             System.out.println("Ingrese el tipo de producto que desea eliminar");
                             String tipo= scanner.nextLine();
-                            TipoDeProductos producto= TipoDeProductos.valueOf(tipo);
+                            TipoDeProductos producto= TipoDeProductos.valueOf(tipo.toUpperCase());
 
                             pedidosYa.eliminarProductos(producto, empresa); //PASAMOS POR PARAMETRO EL TIPO DE PRODUCTO QUE DESEA ELIMINAR Y EN QUE EMPRESA
+                            System.out.println("La empresa " + empresa.getNombre() + " ahora posee los siguientes productos: \n" + empresa.getProductosEmpresa());
                             pedidosYa.exportarEmpresasToJSON(PedidosYa.ARCHIVO_EMPRESAS);
                         } else {
                             System.out.println("No ha seleccionado ningun caso. Regresando al menu principal.");
@@ -414,8 +428,9 @@ public class Main {
 
                     case 8 -> {
                         System.out.println("Ingrese el DNI del usuario que desea eliminar (Si ingreso por equivocacion presione cero): ");
+                        scanner.nextLine();
                         String dni = scanner.nextLine();
-                        if (dni.equals("0")) {
+                        if (!dni.equals("0")) {
                             try {
                                 flag = pedidosYa.eliminarUnUsuarioComoAdmin(dni);
                                 if (flag) System.out.println("La eliminacion se ha realizado con exito.");

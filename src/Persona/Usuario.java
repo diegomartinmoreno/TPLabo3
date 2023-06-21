@@ -3,6 +3,7 @@ package Persona;
 import Exceptions.CasoInexistenteException;
 import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
 import Exceptions.MenorDeEdadException;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.*;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.Set;
 public class Usuario extends Persona implements UtilidadUserAdm{
     private Set<Zonas> zonas;
     private Tarjeta tarjeta;
+    @JsonIgnore
     private Carrito carrito;
     private HistorialDeCompras historialDeCompras;
     private Password contrasenia; // La contrasenia debe tener un minimo de 7 caracteres, donde al menos hayan 2 numeros y 5 letras.
@@ -24,6 +26,7 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         zonas = new HashSet<>();
         tarjeta = new Tarjeta();
         carrito=new Carrito();
+        historialDeCompras = new HistorialDeCompras();
     }
     public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<Zonas> zonas, Password contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);

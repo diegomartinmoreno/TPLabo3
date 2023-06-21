@@ -1,5 +1,6 @@
 package Persona;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.Carrito;
 import model.HistorialDeCompras;
 import model.Tarjeta;
@@ -10,6 +11,7 @@ import java.util.UUID;
 public class Administrador extends Persona implements UtilidadUserAdm {
     private UUID idAdmin;
     private HistorialDeCompras historialDeCompras;
+    @JsonIgnore
     private Carrito carrito;
     private Password password;
     private Tarjeta tarjeta;
@@ -20,6 +22,7 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         idAdmin = UUID.randomUUID();
         tarjeta = new Tarjeta();
         carrito = new Carrito();
+        historialDeCompras=new HistorialDeCompras();
     }
     public Administrador(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
