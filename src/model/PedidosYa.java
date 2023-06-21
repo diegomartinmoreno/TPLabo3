@@ -1229,6 +1229,77 @@ public class PedidosYa {
             carrito.setTieneCupon(true);
     }
 
+
+     /*
+    /// CALCULO DE DISTANCIA ENTRE STRING PARA BUSQUEDA DE EMPRESAS POR APROXIMACION.
+
+    static int calcular_Distancia_Laveshtein(String str1, String str2) {
+        if (str1.isEmpty())
+        {
+            return str2.length();
+        }
+
+        if (str2.isEmpty())
+        {
+            return str1.length();
+        }
+        int replace = calcular_Distancia_Laveshtein(
+                str1.substring(1), str2.substring(1))
+                + numeroReemplazados(str1.charAt(0),str2.charAt(0));
+        int insert = calcular_Distancia_Laveshtein(
+                str1, str2.substring(1))+ 1;
+        int delete = calcular_Distancia_Laveshtein(
+                str1.substring(1), str2)+ 1;
+        return minimo_editado(replace, insert, delete);
+    }
+
+    static int numeroReemplazados(char c1, char c2) {
+        return c1 == c2 ? 0 : 1;
+    }
+
+    static int minimo_editado(int... nums) {
+        return Arrays.stream(nums).min().orElse(
+                Integer.MAX_VALUE);
+    }
+
+    public List<Empresa> buscarEmpresasPorAproximacion(List<Empresa> listaEmpresas, String input){
+        List<Empresa> Coincidencias= new ArrayList<>();
+        if (!listaEmpresas.isEmpty()){
+            Map <Integer, Empresa> MapCoincidencias= new HashMap<>();
+            int distanciaLaveshtein;
+            for (int i=0; i<listaEmpresas.size(); i++){
+                distanciaLaveshtein=calcular_Distancia_Laveshtein(input, listaEmpresas.get(i).getNombre());
+                if (distanciaLaveshtein<8){ /// solo muestra coincidencias razonablemente cercanas.
+                    MapCoincidencias.put(distanciaLaveshtein, listaEmpresas.get(i));
+                }
+
+                // Ordenar el mapa por distancias de menor a mayor.
+                Map<Integer, Empresa> MapCoincidenciasOrdenado = new LinkedHashMap<>();
+
+                MapCoincidencias.entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEachOrdered(entry ->
+                                MapCoincidenciasOrdenado.put(entry.getKey(), entry.getValue()));
+
+                // Crear nueva lista de empresas con coincidencias para retorno del metodo.
+                Coincidencias=MapCoincidenciasOrdenado.values();
+
+            }
+
+
+        }else{
+            System.out.println("La lista de empresas donde intenta buscar se encuentra vacia.");
+        }
+        if(!Coincidencias.isEmpty()){
+            return Coincidencias;
+        }else{
+            return null;
+        }
+
+    }
+    */
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// FINALIZA PARTE DE EMPRESA
 }
