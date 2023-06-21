@@ -296,19 +296,25 @@ public class Tarjeta {
 	}
 	
 	public boolean VerificarSaldoSuficiente(double monto){
-		return this.saldo >= monto;
+		if (this.saldo<monto){
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
-		if (this.VerificarVencimiento() && saldo < monto) {
-			this.saldo -= monto;
-			return true;
-		}else {
-			System.out.println("La tarjeta esta vencida.");
+		if (VerificarVencimiento()) {
 			this.BloquearTarjeta();
 			return false;
 		}
+		if (this.saldo<monto){
+			System.out.println("El saldo de la tarjeta es insuficiente para realizar la compra.");
+			return false;
+		}
+		this.saldo -= monto;
+		return true;
 	}
+
 /*
 	public static void main (String[] Args) {
 		Tarjeta tar= new Tarjeta();
