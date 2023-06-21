@@ -12,6 +12,9 @@ public class Empresa {
     private int puntuacion;
 
     public Empresa() {
+        listaDeCupones = new ArrayList<>();
+        zonas = new HashSet<>();
+
 
         generarCupones();
         setPuntuacion(0);

@@ -946,7 +946,7 @@ public class PedidosYa {
         Empresa buscada=null;
         System.out.println("Bienvenido!! Elija el metodo por el que quiere buscar locales\n 1_Buscar Empresa por nombre\n 2_Buscar por comidas.\n Presione cualquier otra tecla para salir");
         int numero= scanner.nextInt();
-        scanner.nextLine();
+
         switch (numero){
             case 1->{
                 System.out.println("Empresas disponibles: ");
