@@ -57,7 +57,7 @@ public class Tarjeta {
 			flag=true;
 			System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
 			this.fechaDeVencimiento=lectura.nextLine();
-			if (this.VerificarVencimiento()) {
+			if (!EstaVencida()) {
 				flag=false;
 			}
 		}while (flag);
@@ -103,7 +103,7 @@ public class Tarjeta {
 				flag=true;
 				System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
 				this.fechaDeVencimiento=lectura.nextLine();
-				if (this.VerificarVencimiento()) {
+				if (!EstaVencida()) {
 					flag=false;
 				}
 			}while (flag);
@@ -183,7 +183,8 @@ public class Tarjeta {
 		}
 	}
 	
-	public boolean VerificarVencimiento() {
+	public boolean EstaVencida() {
+		
 		LocalDate ahora=LocalDate.now();
 		
 		//Convierto String almacenado a LocalDate para comparar las fechas.
@@ -195,15 +196,15 @@ public class Tarjeta {
 				    .toFormatter();
 			LDfechaDeVencimiento=LocalDate.parse(this.fechaDeVencimiento, fmt);
 			if (LDfechaDeVencimiento.isAfter(ahora)) {
-				return true;
+				return false;
 			}else {
 				System.out.println("La fecha de expiracion de la tarjeta ya esta vencida.");
-				return false;
+				return true;
 			}
 		} catch(Exception e){
 			System.out.println("La fecha ingresada es invalida.");
 		}
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -303,7 +304,7 @@ public class Tarjeta {
 	}
 	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
-		if (VerificarVencimiento()) {
+		if (!EstaVencida()) {
 			this.BloquearTarjeta();
 			return false;
 		}
