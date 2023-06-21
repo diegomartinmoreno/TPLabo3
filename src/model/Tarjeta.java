@@ -184,7 +184,6 @@ public class Tarjeta {
 	}
 	
 	public boolean VerificarVencimiento() {
-		
 		LocalDate ahora=LocalDate.now();
 		
 		//Convierto String almacenado a LocalDate para comparar las fechas.

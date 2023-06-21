@@ -493,6 +493,7 @@ public class Main {
 
             int decision = scanner.nextInt();
 
+            Carrito carritoUsuario = usuario.getCarrito();
             switch (decision) {
                 case 1:
                     Producto prodAux = new Producto();
@@ -510,36 +511,36 @@ public class Main {
                         System.out.println("Cuanto desea llevar del producto?");
                         prodAux.setCantidadPedido(scanner.nextInt());
 
-                        usuario.getCarrito().agregarProductoAlCarrito(elegida, prodAux);
+                        carritoUsuario.agregarProductoAlCarrito(elegida, prodAux);
                     } catch (RuntimeException e){
                         System.out.println(e.getMessage());
                     }
                     break;
 
                 case 2:
-                    usuario.getCarrito().mostrarProductos();
+                    carritoUsuario.mostrarProductos();
 
                     System.out.println("Ingrese el numero del producto que desea eliminar");
-                    usuario.getCarrito().eliminarProductoDelCarrito(scanner.nextInt());
+                    carritoUsuario.eliminarProductoDelCarrito(scanner.nextInt());
                     break;
 
                 case 3:
-                    usuario.getCarrito().mostrarProductos();
+                    carritoUsuario.mostrarProductos();
 
                     System.out.println("Ingrese el numero del producto que desea editar");
                     int pos = scanner.nextInt();
-                    System.out.println("Producto elegido: " + usuario.getCarrito().getProductos().get(pos));
+                    System.out.println("Producto elegido: " + carritoUsuario.getProductos().get(pos));
 
                     System.out.println("Ingrese la nueva cantidad del producto elegido");
-                    usuario.getCarrito().editarCantidadDeProducto(scanner.nextInt(), pos);
+                    carritoUsuario.editarCantidadDeProducto(scanner.nextInt(), pos);
                     break;
 
                 case 4:
-                    System.out.println("Cupones disponibles: " +  usuario.getCarrito().getVendedor().getListaDeCupones());
+                    System.out.println("Cupones disponibles: " +  carritoUsuario.getVendedor().getListaDeCupones());
 
                     System.out.println("Ingresa un cupon de 6 caracteres: ");
                     scanner.nextLine();
-                    pedidosYa.agregarDescuento(scanner.nextLine(),  usuario.getCarrito());
+                    pedidosYa.agregarDescuento(scanner.nextLine(), carritoUsuario);
                     break;
 
                 case 5:
@@ -550,12 +551,13 @@ public class Main {
                         System.out.println("Ingrese la nota que desea enviarle al repartidor:");
 
                         scanner.nextLine();
-                        usuario.getCarrito().setNota(scanner.nextLine());
+                        carritoUsuario.setNota(scanner.nextLine());
                     }
 
+                    
 
-                    usuario.getCarrito().setMontoTotal(usuario.getCarrito().calcularMontoTotalDeLaCompra());
-                    usuario.getCarrito().setDestino(usuario.getZonaActual());
+                    carritoUsuario.setMontoTotal(carritoUsuario.calcularMontoTotalDeLaCompra());
+                    carritoUsuario.setDestino(usuario.getZonaActual());
 
                     Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
                     Usuario user = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
@@ -570,7 +572,7 @@ public class Main {
                     user.getCarrito().listarCarrito();
                     break;
                 case 6:
-                    usuario.getCarrito().listarCarrito();
+                    carritoUsuario.listarCarrito();
                     break;
             }
 
@@ -593,6 +595,7 @@ public class Main {
 
             int decision = scanner.nextInt();
 
+            Carrito carritoAdministrador = administrador.getCarrito();
             switch (decision) {
                 case 1:
                     Producto prodAux = new Producto();
@@ -610,36 +613,36 @@ public class Main {
                         System.out.println("Cuanto desea llevar del producto?");
                         prodAux.setCantidadPedido(scanner.nextInt());
 
-                        administrador.getCarrito().agregarProductoAlCarrito(elegida, prodAux);
+                        carritoAdministrador.agregarProductoAlCarrito(elegida, prodAux);
                     } catch (RuntimeException e){
                         System.out.println(e.getMessage());
                     }
                     break;
 
                 case 2:
-                    administrador.getCarrito().mostrarProductos();
+                    carritoAdministrador.mostrarProductos();
 
                     System.out.println("Ingrese el numero del producto que desea eliminar");
-                    administrador.getCarrito().eliminarProductoDelCarrito(scanner.nextInt());
+                    carritoAdministrador.eliminarProductoDelCarrito(scanner.nextInt());
                     break;
 
                 case 3:
-                    administrador.getCarrito().mostrarProductos();
+                    carritoAdministrador.mostrarProductos();
 
                     System.out.println("Ingrese el numero del producto que desea editar");
                     int pos = scanner.nextInt();
-                    System.out.println("Producto elegido: " + administrador.getCarrito().getProductos().get(pos));
+                    System.out.println("Producto elegido: " + carritoAdministrador.getProductos().get(pos));
 
                     System.out.println("Ingrese la nueva cantidad del producto elegido");
-                    administrador.getCarrito().editarCantidadDeProducto(scanner.nextInt(), pos);
+                    carritoAdministrador.editarCantidadDeProducto(scanner.nextInt(), pos);
                     break;
 
                 case 4:
-                    System.out.println("Cupones disponibles: " + administrador.getCarrito().getVendedor().getListaDeCupones());
+                    System.out.println("Cupones disponibles: " + carritoAdministrador.getVendedor().getListaDeCupones());
 
                     System.out.println("Ingresa un cupon de 6 caracteres: ");
                     scanner.nextLine();
-                    pedidosYa.agregarDescuento(scanner.nextLine(), administrador.getCarrito());
+                    pedidosYa.agregarDescuento(scanner.nextLine(), carritoAdministrador);
                     break;
 
                 case 5:
@@ -650,18 +653,18 @@ public class Main {
                         System.out.println("Ingrese la nota que desea enviarle al repartidor:");
                         scanner.nextLine();
                         String nota = scanner.nextLine();
-                        administrador.getCarrito().setNota(nota);
+                        carritoAdministrador.setNota(nota);
                     }
 
-                    administrador.getCarrito().setMontoTotal(administrador.getCarrito().calcularMontoTotalDeLaCompra());
-                    administrador.getCarrito().setDestino(administrador.getZonaActual());
+                    carritoAdministrador.setMontoTotal(carritoAdministrador.calcularMontoTotalDeLaCompra());
+                    carritoAdministrador.setDestino(administrador.getZonaActual());
 
-                    administrador.getCarrito().pagarCarrito(administrador.getHistorialDeCompras(), administrador.getTarjeta());
-                    administrador.getCarrito().listarCarrito();
+                    carritoAdministrador.pagarCarrito(administrador.getHistorialDeCompras(), administrador.getTarjeta());
+                    carritoAdministrador.listarCarrito();
                     break;
 
                 case 6:
-                    administrador.getCarrito().listarCarrito();
+                    carritoAdministrador.listarCarrito();
                     break;
             }
 
