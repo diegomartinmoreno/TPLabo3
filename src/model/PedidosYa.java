@@ -195,6 +195,9 @@ public class PedidosYa {
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
                 flag = false;
+            }catch(IllegalArgumentException ex){
+                System.out.println("La contraseña debe ser mas segura");
+                flag= false;
             }
         } while (!flag);
 
@@ -237,6 +240,7 @@ public class PedidosYa {
         boolean login = false;
         do {
             System.out.println("1) Ingrese el email: ");
+            scanner.nextLine();
             email = scanner.nextLine();
             System.out.println("2) Ingrese su contrasenia: ");
             contrasenia = scanner.nextLine();
@@ -1380,6 +1384,27 @@ public class PedidosYa {
             System.out.println("La empresa no fue encontrada... error..... fatal.....");
             return null;
         }
+    }
+
+    public Zonas elegirZona (Scanner scanner){
+        Zonas elegida=null;
+        boolean flag=false;
+
+        do {
+            try {
+                System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                System.out.println(Arrays.toString(Zonas.values()));
+
+                //scanner.nextLine();
+                String zonaElegida = scanner.nextLine();
+                elegida = Zonas.valueOf(zonaElegida.toUpperCase());
+                flag=true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Zona inexistente, ingrese el nombre exacto de la zona");
+                flag=false;
+            }
+        }while (!flag);
+    return elegida;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// FINALIZA PARTE DE EMPRESA
