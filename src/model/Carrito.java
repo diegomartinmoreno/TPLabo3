@@ -10,13 +10,19 @@ public class Carrito {
     private ColeccionGenerica<Producto> productos;
     private Empresa vendedor;
 	private String nota;
-    private LocalDate fechaPedido;
+    private String fechaPedido;
     private static final double PORCENTAJE_DESCUENTO = 0.85;
     private boolean tieneCupon=false;
+    private Repartidor repartidor;
+
+    ///////////////////////////////////
+    private double montoTotal=0;
+    private Zonas destino=null;
+    /////////////////////////////////// campos esenciales para el historial
 
     public Carrito() {
         productos = new ColeccionGenerica<>();
-        fechaPedido = LocalDate.now();
+        fechaPedido = LocalDate.now().toString();
     }
 
     
@@ -62,13 +68,26 @@ public class Carrito {
     public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta) throws NullPointerException{
         if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
+        repartidor = generarRepartidorAleatorio();
+        repartidor.llevarPedido();
 
-        System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
+        montoTotal += vendedor.getCostoDeEnvio();
 
+
+
+        System.out.printf("Encargado de llevar el pedido: ");
+        repartidor.mostrarRepartidor();
+        System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
 
         historial.agregarPedido(this);
 
-        if(tarjeta.RealizarPago(calcularMontoTotalDeLaCompra())) clear();
+        System.out.println("SALDOOOOOOOOOO " + tarjeta.getSaldo());
+
+        if(tarjeta.RealizarPago(montoTotal)) clear();
+    }
+
+    public Repartidor generarRepartidorAleatorio(){
+        return new Repartidor("Leo", "Messi", "2235212344", 17, "liomessi@gmail.com", "45621234");
     }
 
     public void mostrarProductos(){
@@ -89,10 +108,14 @@ public class Carrito {
         this.nota = nota;
     }
 
+    public void setMontoTotal(double montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
     public double calcularMontoTotalDeLaCompra(){
         double montoTotal =0;
         for (Producto producto : productos.getProductos()){
-            montoTotal = montoTotal + producto.getPrecio() * producto.getCantidadPedido();
+            montoTotal = montoTotal + (producto.getPrecio() * producto.getCantidadPedido());
         }
 
         if (tieneCupon){
@@ -106,7 +129,7 @@ public class Carrito {
     //6
     public void listarCarrito(){
         System.out.println("PRODUCTOS:");
-        System.out.println(productos);
+        System.out.println(productos.getProductos());
         System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
         System.out.println("Nota: " + nota);
         System.out.println("Fecha del Pedido: " + fechaPedido + "\n");
@@ -135,7 +158,7 @@ public class Carrito {
         vendedor=null;
     }
 
-    public LocalDate getFechaPedido() {
+    public String getFechaPedido() {
         return fechaPedido;
     }
 
@@ -147,4 +170,43 @@ public class Carrito {
         this.tieneCupon = tieneCupon;
     }
 
+    public Zonas getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Zonas destino) {
+        this.destino = destino;
+    }
+
+    public void setProductos(ColeccionGenerica<Producto> productos) {
+        this.productos = productos;
+    }
+
+    public void setVendedor(Empresa vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public String getNota() {
+        return nota;
+    }
+
+    public void setFechaPedido(String fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
+    public boolean isTieneCupon() {
+        return tieneCupon;
+    }
+
+    public double getMontoTotal() {
+        return montoTotal;
+    }
+
+    public Repartidor getRepartidor() {
+        return repartidor;
+    }
+
+    public void setRepartidor(Repartidor repartidor) {
+        this.repartidor = repartidor;
+    }
 }

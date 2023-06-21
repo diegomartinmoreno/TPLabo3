@@ -19,4 +19,17 @@ public class HistorialDeCompras {
     public boolean agregarPedido(Carrito carrito){
         return pedidos.add(carrito);
     }
+
+    public void limpiarHistorialDeCompras (){
+        pedidos.clear();
+    }
+
+    public List<Carrito> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(List<Carrito> pedidos) {
+        this.pedidos = pedidos;
+    }
+
 }

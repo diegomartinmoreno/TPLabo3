@@ -1,18 +1,19 @@
 package model;
+import Persona.Persona;
+
 import java.util.Scanner;
 
-public class Repartidor {
-
-	private Carrito pedidoAtrasladar;
+public class Repartidor extends Persona {
 	final double gananciaPorPedido = 500;
-	private double TotalCobradoPorRepartidor;
-	private double montoACobrar;
-	private String nombreRepartidor;
+	private double TotalCobradoPorRepartidor=0;
 	
 	public Repartidor() {
-		super();
 	}
-	
+
+	public Repartidor(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni) {
+		super(nombre, apellido, nroDeTelefono, edad, email, dni);
+	}
+
 	public boolean cargarRepartidor(Carrito pedidoATrasladar, Scanner scan) {
 		boolean flag=true;
 		do {
@@ -20,53 +21,49 @@ public class Repartidor {
 			String lectura;
 			lectura=scan.nextLine();
 			if (!Tarjeta.verificaEsNumero(lectura)) {
-				this.nombreRepartidor=lectura;
 				flag=true;
 			}
 		}while (flag);
-		
-		this.pedidoAtrasladar=pedidoATrasladar;
-		
-		this.montoACobrar= this.calcularMontoACobrar();
+
 		
 		this.TotalCobradoPorRepartidor=0;
 		
 		return flag;
 	}
-	
-	public Carrito getPedidoAtrasladar() {
-		return pedidoAtrasladar;
+
+	public double getGananciaPorPedido() {
+		return gananciaPorPedido;
 	}
-	
-	public void setPedidoAtrasladar(Carrito pedidoAtrasladar) {
-		this.pedidoAtrasladar = pedidoAtrasladar;
-		this.montoACobrar = this.calcularMontoACobrar();
+
+	public void cobrarLoDelDia(){
+		System.out.println("El repartidor " + getNombre() + " se lleva una ganancia de $" + getTotalCobradoPorRepartidor());
 	}
-	
+
+	public void setTotalCobradoPorRepartidor(double totalCobradoPorRepartidor) {
+		TotalCobradoPorRepartidor = totalCobradoPorRepartidor;
+	}
+
+
 	public double getTotalCobradoPorRepartidor() {
 		return TotalCobradoPorRepartidor;
 	}
-	
-	public double getMontoACobrar() {
-		return this.calcularMontoACobrar();
-	}
-	
-	public String getNombreRepartidor() {
-		return nombreRepartidor;
-	}
-	public void setNombreRepartidor(String nombreRepartidor) {
-		this.nombreRepartidor = nombreRepartidor;
-	}
 
-	public double calcularMontoACobrar() {
-		return this.pedidoAtrasladar.calcularMontoTotalDeLaCompra()+this.gananciaPorPedido;
-	}
-	
 	public void llevarPedido(){
 		this.TotalCobradoPorRepartidor+=this.gananciaPorPedido;
 	}
-	
-	
+
+	public void mostrarRepartidor(){
+		System.out.println(getNombre() + " " + getApellido());
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() +
+				"Repartidor{" +
+				"gananciaPorPedido=" + gananciaPorPedido +
+				", TotalCobradoPorRepartidor=" + TotalCobradoPorRepartidor +
+				'}';
+	}
 }
 	
 	

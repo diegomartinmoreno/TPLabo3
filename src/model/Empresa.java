@@ -7,18 +7,27 @@ public class Empresa {
     private LinkedHashMap <TipoDeProductos, HashSet<Producto>> productosEmpresa; ///AAAAA
     private Set<Zonas> zonas; /// AAAAAA
     private List <String> listaDeCupones;
-    private  double CostoDeEnvio;
+    private double costoDeEnvio;
+
+    private int puntuacion;
 
     public Empresa() {
+        listaDeCupones = new ArrayList<>();
+        zonas = new HashSet<>();
+
+
+        generarCupones();
+        setPuntuacion(0);
     }
 
-    public Empresa(String nombre, LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa, Set<Zonas> zonas, double costoDeEnvio) {
+    public Empresa(String nombre, LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa, Set<Zonas> zonas, double costoDeEnvio, int puntuacion) {
         listaDeCupones = new ArrayList<>();
 
         this.nombre = nombre;
         this.productosEmpresa = productosEmpresa;
         this.zonas = zonas;
-        CostoDeEnvio = costoDeEnvio;
+        this.costoDeEnvio = costoDeEnvio;
+        this.puntuacion = puntuacion;
         generarCupones();
     }
 
@@ -43,7 +52,7 @@ public class Empresa {
         return listaDeCupones.remove(cupon);
     }
 
-    private void generarCupones(){
+    public void generarCupones(){
        for(int i=0;i<6;i++){
            listaDeCupones.add(generarCuponAleatorio(6));
        }
@@ -73,11 +82,11 @@ public class Empresa {
     }
 
     public double getCostoDeEnvio() {
-        return CostoDeEnvio;
+        return costoDeEnvio;
     }
 
     public void setCostoDeEnvio(double costoDeEnvio) {
-        CostoDeEnvio = costoDeEnvio;
+        this.costoDeEnvio = costoDeEnvio;
     }
 
     public LinkedHashMap<TipoDeProductos, HashSet<Producto>> getProductosEmpresa() {
@@ -112,7 +121,25 @@ public class Empresa {
 
         mostrarProductosEmpresa();
         System.out.println("Zonas: " + zonas);
-        System.out.println("Cupones: " + listaDeCupones + "\nCostoDeEnvio= " + CostoDeEnvio + "\n///////////////////////////////////////////////////////////\n");
+        System.out.println("Cupones: " + listaDeCupones + "\nCostoDeEnvio= " + costoDeEnvio + "\n///////////////////////////////////////////////////////////\n");
+    }
+
+    public void mostrarParaComprar(){
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("<<<< " + getNombre() + " >>>>  -- RATING: ");
+        mostrarRating();
+        System.out.println("\n                            Costo de envio: $" + costoDeEnvio);
+        System.out.println("                                                                             ZONAS: " + getZonas());
+        mostrarMap();
+        System.out.println("\n\n" + listaDeCupones); ////////////NO MOSTRAR
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------");
+
+    }
+
+    private void mostrarRating(){
+        for(int i=0;i<puntuacion;i++){
+            System.out.printf("⭐");
+        }
     }
 
     public Producto buscarProductoPorID(int id) {
@@ -120,7 +147,10 @@ public class Empresa {
 
         for (HashSet<Producto> productos : productosEmpresa.values()){
             producto = buscarProductoEnHashSet(id, productos);
+            if (producto!=null) break;
         }
+
+
 
         if (producto==null) throw new RuntimeException("No encontro el producto.....//***");
 
@@ -128,17 +158,41 @@ public class Empresa {
     }
 
     public Producto buscarProductoEnHashSet(int id, HashSet<Producto> productos){
-        Producto auxiliar = null;
 
         for (Producto producto : productos){
+
             if(producto.getId() == id){
-                auxiliar = producto;
+                return producto;
             }
         }
 
-        return auxiliar;
+        return null;
     }
 
+
+    private void mostrarMap() {
+        // Obtener la longitud máxima de las claves para alinear correctamente las columnas
+        int maxKeyLength = 0;
+        for (TipoDeProductos key : productosEmpresa.keySet()) {
+            maxKeyLength = Math.max(maxKeyLength, key.name().length());
+        }
+
+        // Imprimir la tabla
+        for (Map.Entry<TipoDeProductos, HashSet<Producto>> entry : productosEmpresa.entrySet()) {
+            TipoDeProductos key = entry.getKey();
+            HashSet<Producto> values = entry.getValue();
+
+            // Imprimir la clave alineada a la izquierda
+            System.out.print(key + "\n");
+
+            for (Producto value : values) {
+                System.out.print("\t\t");
+                value.mostrarProducto();
+            }
+
+            System.out.println(); // Nueva línea después de cada fila
+        }
+    }
 
     public Set<Zonas> getZonas() {
         return zonas;
@@ -147,6 +201,16 @@ public class Empresa {
     public void setZonas(Set<Zonas> zonas) {
         this.zonas = zonas;
     }
+
+    public int getPuntuacion() {
+        return puntuacion;
+    }
+
+    public void setPuntuacion(int puntuacion) {
+        this.puntuacion = puntuacion;
+    }
+
+
 
     @Override
     public String toString() {
@@ -158,7 +222,7 @@ public class Empresa {
 
 
                 ", listaDeCupones=" + listaDeCupones + "\n" +
-                ",CostoDeEnvio=" + CostoDeEnvio +
+                ",CostoDeEnvio=" + costoDeEnvio +
                 "}\n";
     }
 

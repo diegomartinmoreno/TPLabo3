@@ -1,9 +1,10 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ColeccionGenerica<T> {
+public class ColeccionGenerica<T> implements Serializable {
     private List<T> productos;
 
     public ColeccionGenerica() {
@@ -46,4 +47,5 @@ public class ColeccionGenerica<T> {
     public void setProductos(List<T> productos) {
         this.productos = productos;
     }
+
 }

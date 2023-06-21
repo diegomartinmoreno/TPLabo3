@@ -12,6 +12,8 @@ public class Producto {
     private double precio;
     private int cantidadPedido=0;
 
+    public Producto() {
+    }
 
     public Producto(String nombreProducto, String tipo, String descripcion, double precio) {
         ContadorID++;
@@ -41,6 +43,43 @@ public class Producto {
 
     public int getCantidadPedido() {
         return cantidadPedido;
+    }
+
+
+    public void mostrarProducto(){
+        System.out.println(Id + ". - " + nombreProducto + " $" + precio);
+    }
+    public void productoElegido(){
+        System.out.println(nombreProducto + " - $" + precio + " - '" + tipo + "'");
+        System.out.println("'" + descripcion + "'");
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
     @Override

@@ -27,9 +27,8 @@ public class PedidosYa {
     private List<Empresa> listaDeEmpresas;
     private Set<Usuario> usuarios;
     private Set<Administrador> administradores;
-    private Zonas zonaUsuarioActual;
-
     public static final String ARCHIVO_USUARIOS = "Users.json";
+    public static final String ARCHIVO_EMPRESAS = "Empresas.json";
     public static final String ARCHIVO_ADMINISTRADORES = "Administradores.json";
     public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
 
@@ -66,14 +65,6 @@ public class PedidosYa {
 
     public void setAdministradores(Set<Administrador> administradores) {
         this.administradores = administradores;
-    }
-
-    public Zonas getZonaUsuarioActual() {
-        return zonaUsuarioActual;
-    }
-
-    public void setZonaUsuarioActual(Zonas zonaUsuarioActual) {
-        this.zonaUsuarioActual = zonaUsuarioActual;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +106,7 @@ public class PedidosYa {
 
         do {
             System.out.println("1) Ingrese su nombre: ");
+            scanner.nextLine();
             cadenaAux = scanner.nextLine();
             try {
                 flag = Usuario.verificarEsLetra(cadenaAux);
@@ -277,10 +269,10 @@ public class PedidosYa {
     public boolean modificarContraseniaDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su contrasenia? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
-
             System.out.println("Ingrese su DNI para cambiar su contrasenia >>");
             String dni = scanner.nextLine();
             Usuario user = null;
@@ -592,7 +584,10 @@ public class PedidosYa {
             System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
         }
 
-        this.administradores.add(administrador);
+        if(!this.administradores.add(administrador)){
+            throw new RuntimeException("No agrego el administrador, ya existe...///***...error.....fatal......");
+        }
+
         exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
 
         return administrador;
@@ -610,7 +605,7 @@ public class PedidosYa {
         return adminAretornar;
     }
 
-    public Administrador iniciarSesionComoAdmin(Scanner scanner) {
+    public Administrador iniciarSesionComoAdmin (Scanner scanner) {
         String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
         Administrador administrador = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
         int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
@@ -650,6 +645,7 @@ public class PedidosYa {
     public boolean modificarContraseniaDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su contrasenia? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO DADO QUE ES NECESARIO PARA VERIFICAR SI LA NUEVA CONTRASENIA QUE QUIERE AGREGAR LA PERSONA NO EXISTA.
@@ -685,6 +681,7 @@ public class PedidosYa {
     public boolean modificarEmailDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -720,6 +717,7 @@ public class PedidosYa {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
             System.out.println("Ingrese su dni para el cambio de numero de telefono >>");
+            scanner.nextLine();
             String dni = scanner.nextLine();
             Administrador administrador = null;
 
@@ -754,6 +752,7 @@ public class PedidosYa {
     public boolean modificarNombreYapellidoDeAdministrador(Scanner scanner) {
         System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             Administrador administrador = null;
@@ -794,6 +793,7 @@ public class PedidosYa {
     public boolean cambiarTarjetaDeAdministrador(Scanner scanner) {
         System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -814,15 +814,17 @@ public class PedidosYa {
         return false;
     }
 
-    private boolean eliminarEmpresa(Empresa eliminar){
+    public boolean eliminarEmpresa(Empresa eliminar) throws NullPointerException{
+        if (eliminar == null) throw new NullPointerException();
         return listaDeEmpresas.remove(eliminar);
     }
 
-    private boolean agregarEmpresa(Empresa empresa){
+    public boolean agregarEmpresa(Empresa empresa) throws NullPointerException {
+        if (empresa == null) throw new NullPointerException();
         return listaDeEmpresas.add(empresa);
     }
 
-    private boolean agregarProductos(Set<TipoDeProductos> tipoDeProductos, Empresa empresa){
+    public boolean agregarProductos(Set<TipoDeProductos> tipoDeProductos, Empresa empresa){
         if(buscarEmpresaSegunNombre(empresa.getNombre())==null) throw new RuntimeException("La empresa no existe..//***");
         if(tipoDeProductos==null) throw new RuntimeException("Producto vacio..//***");
 
@@ -831,11 +833,24 @@ public class PedidosYa {
         return true;
     }
 
-    private boolean eliminarProductos(TipoDeProductos tipoDeProductos, Empresa empresa){
+    public boolean eliminarProductos(TipoDeProductos tipoDeProductos, Empresa empresa){
         if(tipoDeProductos==null || empresa == null) throw new RuntimeException("Parametros invalidos..//***");
 
         listaDeEmpresas.get(buscarEmpresaRetornaPosicion(empresa)).getProductosEmpresa().remove(tipoDeProductos);
         return true;
+    }
+
+    public boolean eliminarUnUsuarioComoAdmin (String dni) throws NullPointerException{
+        if (dni == null)throw new NullPointerException ();
+        try {
+            this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
+            boolean flag = this.usuarios.remove(buscarUserPorDNI(dni, this.usuarios));
+            if (flag) exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios); //si no se elimino correctamente, no deberia modificar el archivo.
+            return flag;
+        }catch (NullPointerException e){
+            System.out.println("No se encontro ninguna persona con ese dni.");
+        }
+        return false;
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -881,52 +896,71 @@ public class PedidosYa {
         }
     }
 
+    public void filtrarMostrarEmpresaSegunZona(Zonas zonaActual){
+        for(Empresa empresa : listaDeEmpresas){
+            mostrarEmpresaSiCoincideConLaZonaActual(empresa, zonaActual);
+        }
+
+    }
+
+    private void mostrarEmpresaSiCoincideConLaZonaActual(Empresa empresa, Zonas zonaActual) {
+        for (Zonas zona : empresa.getZonas()){
+            if (zona.equals(zonaActual)){
+                System.out.println(empresa.getNombre() + " - Zonas: " + empresa.getZonas());
+            }
+        }
+    }
+
     public void mostrarEmpresas() {
         for (Empresa empresa : listaDeEmpresas) {
+            System.out.println("Muestro las empresas");
             empresa.mostrarEmpresa();
         }
     }
 
     public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
-        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS, CARNES, ENSALADAS, PARRILLA)), Set.of(CENTRO,ALEM,RUMENCO, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI, CARNES, POSTRES, HAMBURGUESAS, EMPANADAS)), Set.of(PUERTO,INDEPENDENCIA, COLINAS,CONSTITUCION, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA, HAMBURGUESAS)), Set.of(ALEM,RUMENCO,CONSTITUCION,INDEPENDENCIA, LOS_TRONCOS, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(PUERTO,CENTRO,ALEM, COLINAS, LOS_TRONCOS, MOGOTES,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS,INDEPENDENCIA, MOGOTES,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("ITALIA", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250));
-        listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO, POSTRES, HAMBURGUESAS)), Set.of(CENTRO,INDEPENDENCIA,CONSTITUCION, LOS_TRONCOS, MOGOTES, BOSQUE,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO, POSTRES)), Set.of(ALEM,INDEPENDENCIA),250));
-        listaDeEmpresas.add(new Empresa("LO DE MARIO", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, CARNES,HELADOS, HAMBURGUESAS, PARRILLA)), Set.of(PUERTO,INDEPENDENCIA, LOS_TRONCOS,CONSTITUCION, COLINAS, MOGOTES,RUMENCO),250));
-        listaDeEmpresas.add(new Empresa("ANTARES", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, EMPANADAS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,CONSTITUCION, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("BAUM", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, ENSALADAS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS, COLINAS,INDEPENDENCIA, MOGOTES),250));
-        listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, POSTRES, PARRILLA,HELADOS, EMPANADAS)), Set.of(CENTRO,ALEM,RUMENCO,INDEPENDENCIA, BOSQUE),250));
-        listaDeEmpresas.add(new Empresa("GIANELLI", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250));
-        listaDeEmpresas.add(new Empresa("KIOSCO FLOR", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(CENTRO, CONSTITUCION), 150));
-        listaDeEmpresas.add(new Empresa("KIOSCO EXPRESS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(ALEM, LOS_TRONCOS, RUMENCO), 200));
-        listaDeEmpresas.add(new Empresa("KIOSCO FRESCOS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, HELADOS)), Set.of(PUERTO, MOGOTES, CENTRO, INDEPENDENCIA), 180));
-        listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS, CARNES, POSTRES, ENSALADAS,HELADOS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,INDEPENDENCIA,CONSTITUCION, BOSQUE),250));
+        listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, MOGOTES),250, 4));
+        listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS, CARNES, ENSALADAS, PARRILLA)), Set.of(CENTRO,ALEM,RUMENCO, MOGOTES),250, 5));
+        listaDeEmpresas.add(new Empresa("KONICHIWA", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, PASTAS, SUSHI, CARNES, POSTRES, HAMBURGUESAS, EMPANADAS)), Set.of(PUERTO,INDEPENDENCIA, COLINAS,CONSTITUCION, MOGOTES),250, 3));
+        listaDeEmpresas.add(new Empresa("DEDIEZ", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA, HAMBURGUESAS)), Set.of(ALEM,RUMENCO,CONSTITUCION,INDEPENDENCIA, LOS_TRONCOS, MOGOTES),250, 5));
+        listaDeEmpresas.add(new Empresa("GRIDO", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM,RUMENCO),250, 2));
+        listaDeEmpresas.add(new Empresa("BANDERITA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO)), Set.of(PUERTO,CENTRO,ALEM, COLINAS, LOS_TRONCOS, MOGOTES,RUMENCO),250, 4));
+        listaDeEmpresas.add(new Empresa("LA HAMBURGUESERIA", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS)), Set.of(PUERTO,ALEM, COLINAS,INDEPENDENCIA, MOGOTES,RUMENCO),250, 4));
+        listaDeEmpresas.add(new Empresa("ITALIA", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(ALEM, CENTRO, LOS_TRONCOS),250, 5));
+        listaDeEmpresas.add(new Empresa("MANDINGA", crearListaDeProductos(Set.of(BEBIDAS, CARNES, EMPANADAS, ENSALADAS, PAPAS, PARRILLA, POLLO, POSTRES, HAMBURGUESAS)), Set.of(CENTRO,INDEPENDENCIA,CONSTITUCION, LOS_TRONCOS, MOGOTES, BOSQUE,RUMENCO),250, 1));
+        listaDeEmpresas.add(new Empresa("KIOSCO DA", crearListaDeProductos(Set.of(KIOSCO, POSTRES)), Set.of(ALEM,INDEPENDENCIA),250, 5));
+        listaDeEmpresas.add(new Empresa("LO DE MARIO", crearListaDeProductos(Set.of(BEBIDAS, ENSALADAS, MILANESAS, PAPAS, PASTAS, POSTRES, CARNES,HELADOS, HAMBURGUESAS, PARRILLA)), Set.of(PUERTO,INDEPENDENCIA, LOS_TRONCOS,CONSTITUCION, COLINAS, MOGOTES,RUMENCO),250, 5));
+        listaDeEmpresas.add(new Empresa("ANTARES", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, EMPANADAS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,CONSTITUCION, MOGOTES),250, 4));
+        listaDeEmpresas.add(new Empresa("BAUM", crearListaDeProductos(Set.of(CERVEZA, EMPANADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, ENSALADAS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS, COLINAS,INDEPENDENCIA, MOGOTES),250, 4));
+        listaDeEmpresas.add(new Empresa("CHEVERRY", crearListaDeProductos(Set.of(CERVEZA, ENSALADAS, HAMBURGUESAS, PAPAS, PIZZA, CARNES, POSTRES, PARRILLA,HELADOS, EMPANADAS)), Set.of(CENTRO,ALEM,RUMENCO,INDEPENDENCIA, BOSQUE),250, 1));
+        listaDeEmpresas.add(new Empresa("GIANELLI", crearListaDeProductos(Set.of(HELADOS, POSTRES)), Set.of(PUERTO,CONSTITUCION),250, 1));
+        listaDeEmpresas.add(new Empresa("KIOSCO FLOR", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(CENTRO, CONSTITUCION), 150, 3));
+        listaDeEmpresas.add(new Empresa("KIOSCO EXPRESS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, POSTRES)), Set.of(ALEM, LOS_TRONCOS, RUMENCO), 200, 5));
+        listaDeEmpresas.add(new Empresa("KIOSCO FRESCOS", crearListaDeProductos(Set.of(KIOSCO, BEBIDAS, HELADOS)), Set.of(PUERTO, MOGOTES, CENTRO, INDEPENDENCIA), 180, 4));
+        listaDeEmpresas.add(new Empresa("EL CLUB DE LA MILANESA", crearListaDeProductos(Set.of(BEBIDAS, MILANESAS, PAPAS, CARNES, POSTRES, ENSALADAS,HELADOS, POLLO)), Set.of(CENTRO,ALEM, LOS_TRONCOS,INDEPENDENCIA,CONSTITUCION, BOSQUE),250, 5));
 
-        listaDeEmpresas.add(new Empresa("LA PARRILLITA", crearListaDeProductos(Set.of(CERVEZA,CARNES, PARRILLA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, POLLO)), Set.of(CENTRO, ALEM, INDEPENDENCIA, MOGOTES, LOS_TRONCOS), 200));
-        listaDeEmpresas.add(new Empresa("PIZZERIA DELFINO", crearListaDeProductos(Set.of(CERVEZA,PIZZA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, EMPANADAS)), Set.of(PUERTO,ALEM, LOS_TRONCOS, CONSTITUCION, RUMENCO), 150));
-        listaDeEmpresas.add(new Empresa("SUSHI EXPRESS", crearListaDeProductos(Set.of(SUSHI, ENSALADAS, POSTRES, BEBIDAS, EMPANADAS)), Set.of(CENTRO, PUERTO, MOGOTES, BOSQUE, CONSTITUCION), 180));
-        listaDeEmpresas.add(new Empresa("LA CANTINA MEXICANA", crearListaDeProductos(Set.of(CERVEZA,SUSHI, ENSALADAS, BEBIDAS,PIZZA, EMPANADAS, POLLO)), Set.of(CENTRO, ALEM, CONSTITUCION), 120));
-        listaDeEmpresas.add(new Empresa("PASTELERIA SWEET DELIGHTS", crearListaDeProductos(Set.of(HELADOS, POSTRES, BEBIDAS)), Set.of(PUERTO,CENTRO, MOGOTES, BOSQUE, CONSTITUCION), 100));
+        listaDeEmpresas.add(new Empresa("LA PARRILLITA", crearListaDeProductos(Set.of(CERVEZA,CARNES, PARRILLA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, POLLO)), Set.of(CENTRO, ALEM, INDEPENDENCIA, MOGOTES, LOS_TRONCOS), 200, 4));
+        listaDeEmpresas.add(new Empresa("PIZZERIA DELFINO", crearListaDeProductos(Set.of(CERVEZA,PIZZA, ENSALADAS, PAPAS, POSTRES, BEBIDAS, EMPANADAS)), Set.of(PUERTO,ALEM, LOS_TRONCOS, CONSTITUCION, RUMENCO), 150, 4));
+        listaDeEmpresas.add(new Empresa("SUSHI EXPRESS", crearListaDeProductos(Set.of(SUSHI, ENSALADAS, POSTRES, BEBIDAS, EMPANADAS)), Set.of(CENTRO, PUERTO, MOGOTES, BOSQUE, CONSTITUCION), 180, 5));
+        listaDeEmpresas.add(new Empresa("LA CANTINA MEXICANA", crearListaDeProductos(Set.of(CERVEZA,SUSHI, ENSALADAS, BEBIDAS,PIZZA, EMPANADAS, POLLO)), Set.of(CENTRO, ALEM, CONSTITUCION), 120, 4));
+        listaDeEmpresas.add(new Empresa("PASTELERIA SWEET DELIGHTS", crearListaDeProductos(Set.of(HELADOS, POSTRES, BEBIDAS)), Set.of(PUERTO,CENTRO, MOGOTES, BOSQUE, CONSTITUCION), 100, 3));
     }
 
-
-    public Empresa buscarEmpresaConMetodoElegido (Scanner scanner){
+    public Empresa buscarEmpresaConMetodoElegido (Scanner scanner, Zonas zonaActual){
         Empresa buscada=null;
         System.out.println("Bienvenido!! Elija el metodo por el que quiere buscar locales\n 1_Buscar Empresa por nombre\n 2_Buscar por comidas.\n Presione cualquier otra tecla para salir");
         int numero= scanner.nextInt();
-        scanner.nextLine();
+
         switch (numero){
             case 1->{
-                buscada=buscarPorNombreSinSerExacto(scanner);
+                do{
+                    System.out.println("Empresas disponibles: ");
+                    filtrarMostrarEmpresaSegunZona(zonaActual);
+                    buscada=buscarPorNombreSinSerExacto(scanner, zonaActual);
+                } while (buscada==null);
             }
             case 2->{
-                buscada=buscarEmpresaSegunQueQuiereComer(scanner);
+                buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
             }
             case default ->{
                 System.out.println("Saliendo");
@@ -936,36 +970,36 @@ public class PedidosYa {
         return buscada;
     }
 
-    public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner) {
-        mostrarTodosLosEnums();
+    public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner, Zonas zonaActual) {
+        mostrarTodosLosTiposDeProducto();
         System.out.println("Que desea comer?");
 
+        scanner.nextLine();
         String comida = scanner.nextLine();
 
         TipoDeProductos dato = TipoDeProductos.valueOf(comida.toUpperCase());
 
         List<Empresa> listaBuscador = new ArrayList<>();
-        listaBuscador = crearListaEmpresas(dato);
+        listaBuscador = crearListaEmpresas(dato, zonaActual);
 
         mostrarEmpresasSoloNombre(listaBuscador);
 
-        Empresa empresa1 = buscarPorNombreSinSerExacto(scanner, listaBuscador);
+        Empresa empresa1 = buscarPorNombreSinSerExacto(scanner, listaBuscador, zonaActual);
 
         return empresa1;
     }
 
-    public Empresa buscarPorNombreSinSerExacto(Scanner scanner) {
+    public Empresa buscarPorNombreSinSerExacto(Scanner scanner, Zonas zonaActual) {
         Empresa buscada = new Empresa();
         List<Empresa> listaEmpresas = new ArrayList<>();
+        String nombre=null;
+        scanner.nextLine();
+
         do {
             System.out.println("Ingrese el nombre de la empresa que busca.");
-            String nombre = scanner.nextLine().toUpperCase();
+            nombre = scanner.nextLine().toUpperCase();
 
-            listaEmpresas = crearListaEmpresas(nombre);
-
-            System.out.println("Lista de empresas posibles, elija especificamente la que desea");
-            mostrarEmpresasSoloNombre(listaEmpresas);
-
+            listaEmpresas = crearListaEmpresas(nombre, zonaActual);
         } while (listaEmpresas.size() != 1);
 
         System.out.println("Desea comprar en: " + listaEmpresas.get(0).getNombre() + "? s/n");
@@ -977,14 +1011,14 @@ public class PedidosYa {
         }
     }
 
-    public Empresa buscarPorNombreSinSerExacto(Scanner scanner, List<Empresa> listaDisminuida) {
+    public Empresa buscarPorNombreSinSerExacto(Scanner scanner, List<Empresa> listaDisminuida, Zonas zonaActual) {
         Empresa buscada = new Empresa();
         List<Empresa> listaEmpresas = new ArrayList<>();
         do {
             System.out.println("Ingrese el nombre de la empresa que busca.");
             String nombre = scanner.nextLine().toUpperCase();
 
-            listaEmpresas = crearListaEmpresas(nombre, listaDisminuida);
+            listaEmpresas = crearListaEmpresas(nombre, listaDisminuida, zonaActual);
 
             if (listaEmpresas.size() > 1) {
                 System.out.println("Lista de empresas posibles, elija especificamente la que desea");
@@ -1002,7 +1036,7 @@ public class PedidosYa {
         }
     }
 
-    public void mostrarTodosLosEnums() {
+    public void mostrarTodosLosTiposDeProducto() {
         // Obtener todos los valores del enum
         TipoDeProductos[] elementos = TipoDeProductos.values();
 
@@ -1012,36 +1046,53 @@ public class PedidosYa {
         }
     }
 
-    public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida){
+///Segun el tipo de comida permite buscar por nombre con una lista filtrada
+    public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida, Zonas zonaActual){
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDisminuida) {
-                if (empresa.getNombre().contains(nombre) && empresa.getZonas().contains(zonaUsuarioActual)) {
+                if (empresa.getNombre().contains(nombre) && empresa.getZonas().contains(zonaActual)) {
                     listaBuscador.add(empresa);
                 }
             }
             return listaBuscador;
     }
+    ///Crea una lista para el admin
+    public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida){
+        List<Empresa> listaBuscador = new ArrayList<>();
+        for (Empresa empresa : listaDisminuida) {
+            if (empresa.getNombre().contains(nombre)) {
+                listaBuscador.add(empresa);
+            }
+        }
+        return listaBuscador;
+    }
 
-    public List<Empresa> crearListaEmpresas (String nombre){
+    ///Permite buscar por nombre entre todas las opciones en la zona
+    public List<Empresa> crearListaEmpresas (String nombre, Zonas zonaActual){
+          return crearListaEmpresas(nombre,listaDeEmpresas,zonaActual);
+    }
+
+    public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){ /// Crea una lista segun el tipo de comida
+
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getNombre().contains(nombre)&& empresa.getZonas().contains(zonaUsuarioActual)) {
+                if (empresa.getProductosEmpresa().containsKey(comida) && empresa.getZonas().contains(zonaActual)) {
                     listaBuscador.add(empresa);
                 }
             }
             return listaBuscador;
     }
 
-    public List crearListaEmpresas (TipoDeProductos comida){
-
-            List<Empresa> listaBuscador = new ArrayList<>();
-            for (Empresa empresa : listaDeEmpresas) {
-                if (empresa.getProductosEmpresa().containsKey(comida)&& empresa.getZonas().contains(zonaUsuarioActual)) {
-                    listaBuscador.add(empresa);
-                }
-            }
-            return listaBuscador;
+    public Empresa cargarUnTipoProducto (Empresa A, TipoDeProductos tipo){
+        A.getProductosEmpresa().put(tipo,crearHashSetSegunTipoDeProducto(tipo));
+        return A;
     }
+
+    public Empresa EliminarUnTipoProducto (Empresa A, TipoDeProductos tipo){
+        A.getProductosEmpresa().remove(tipo);
+        return A;
+    }
+
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos (Set < TipoDeProductos > tipoDeProductos)
     {  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
@@ -1229,77 +1280,107 @@ public class PedidosYa {
             carrito.setTieneCupon(true);
     }
 
+    public void exportarEmpresasToJSON(String path) {
+        File file = new File(ARCHIVO_EMPRESAS);
+        ObjectMapper mapper = new ObjectMapper();
 
-     /*
-    /// CALCULO DE DISTANCIA ENTRE STRING PARA BUSQUEDA DE EMPRESAS POR APROXIMACION.
-
-    static int calcular_Distancia_Laveshtein(String str1, String str2) {
-        if (str1.isEmpty())
-        {
-            return str2.length();
+        try {
+            mapper.writeValue(file, listaDeEmpresas);
+        } catch (IOException e) {
+            System.out.println("Error en la escritura del archivo.");
         }
+    }
 
-        if (str2.isEmpty())
-        {
-            return str1.length();
+    public List<Empresa> extraerEmpresasFromJSON(String path) {
+        File file = new File(ARCHIVO_EMPRESAS);
+        ObjectMapper mapper = new ObjectMapper();
+        List<Empresa> listaEmpresas = new LinkedList<>();
+
+        try {
+            Empresa [] empresas = mapper.readValue (file, Empresa[].class);
+            listaDeEmpresas.addAll(Arrays.asList(empresas));
+        } catch (IOException e) {
+            System.out.println("Error en la lectura del archivo.");
+            System.out.println(e.getMessage());
         }
-        int replace = calcular_Distancia_Laveshtein(
-                str1.substring(1), str2.substring(1))
-                + numeroReemplazados(str1.charAt(0),str2.charAt(0));
-        int insert = calcular_Distancia_Laveshtein(
-                str1, str2.substring(1))+ 1;
-        int delete = calcular_Distancia_Laveshtein(
-                str1.substring(1), str2)+ 1;
-        return minimo_editado(replace, insert, delete);
+        return listaEmpresas;
     }
 
-    static int numeroReemplazados(char c1, char c2) {
-        return c1 == c2 ? 0 : 1;
+    public Empresa cargarEmpresaPorTeclado (Scanner scanner){
+        Empresa A= new Empresa();
+        char control = 's';
+        System.out.println("Cargue el nombre de la empresa");
+        scanner.nextLine();
+        A.setNombre(scanner.nextLine());
+
+        System.out.println("Ingrese las zonas que trabaja la empresa. Una a la vez");
+        mostrarTodasLasZonas();
+        HashSet<Zonas> setDeZonas= new HashSet<>();
+        do{
+            String zona= scanner.nextLine().toUpperCase();
+            setDeZonas.add(Zonas.valueOf(zona));
+
+            System.out.println("Desea ingresar otra zona? s/n");
+            control= scanner.nextLine().charAt(0);
+        }while (control == 's');
+        A.setZonas(setDeZonas);
+
+        System.out.println("Ingrese los tipos de productos que trabaja la empresa. Una a la vez");
+        mostrarTodosLosTiposDeProducto();
+        LinkedHashMap<TipoDeProductos, HashSet<Producto>> productos= new LinkedHashMap();
+        do{
+            String prod= scanner.nextLine().toUpperCase();
+            TipoDeProductos producto= TipoDeProductos.valueOf(prod);
+
+            crearListaDeProductos(Set.of(producto));
+
+            System.out.println("Desea ingresar otro tipo de producto? s/n");
+            control= scanner.nextLine().charAt(0);
+        }while (control == 's');
+        A.setProductosEmpresa(productos);
+
+        System.out.println("Cual es el costo de envio de sus productos?");
+        A.setCostoDeEnvio(scanner.nextDouble());
+
+
+        return A;
     }
 
-    static int minimo_editado(int... nums) {
-        return Arrays.stream(nums).min().orElse(
-                Integer.MAX_VALUE);
+    public void mostrarTodasLasZonas(){
+        // Obtener todos los valores del enum
+        Zonas[] elementos = Zonas.values();
+
+        // Mostrar los elementos
+        for (Zonas elemento : elementos) {
+            System.out.println(elemento);
+        }
     }
 
-    public List<Empresa> buscarEmpresasPorAproximacion(List<Empresa> listaEmpresas, String input){
-        List<Empresa> Coincidencias= new ArrayList<>();
-        if (!listaEmpresas.isEmpty()){
-            Map <Integer, Empresa> MapCoincidencias= new HashMap<>();
-            int distanciaLaveshtein;
-            for (int i=0; i<listaEmpresas.size(); i++){
-                distanciaLaveshtein=calcular_Distancia_Laveshtein(input, listaEmpresas.get(i).getNombre());
-                if (distanciaLaveshtein<8){ /// solo muestra coincidencias razonablemente cercanas.
-                    MapCoincidencias.put(distanciaLaveshtein, listaEmpresas.get(i));
-                }
+    public Empresa retornarUnaEmpresa(Scanner scanner) {
+        Empresa buscada = new Empresa();
 
-                // Ordenar el mapa por distancias de menor a mayor.
-                Map<Integer, Empresa> MapCoincidenciasOrdenado = new LinkedHashMap<>();
+        System.out.println("Lista de empresas posibles, elija especificamente la que desea");
+        mostrarEmpresasSoloNombre(listaDeEmpresas);
 
-                MapCoincidencias.entrySet()
-                        .stream()
-                        .sorted(Map.Entry.comparingByKey())
-                        .forEachOrdered(entry ->
-                                MapCoincidenciasOrdenado.put(entry.getKey(), entry.getValue()));
+        System.out.println("Ingrese el nombre de la empresa que busca.");
+        scanner.nextLine();
+        String nombre = scanner.nextLine().toUpperCase();
 
-                // Crear nueva lista de empresas con coincidencias para retorno del metodo.
-                Coincidencias=MapCoincidenciasOrdenado.values();
+        buscada = buscarEmpresaSegunNombre(nombre);
 
+        if (buscada!=null){
+            System.out.println("Esta seguro que desea elegir: " + buscada.getNombre() + "? s/n");
+            char confirmacion = scanner.nextLine().charAt(0);
+            if (confirmacion == 's') return buscada;
+            else {
+                System.out.println("Volviendo al menu principal");
+                return null;
             }
-
-
-        }else{
-            System.out.println("La lista de empresas donde intenta buscar se encuentra vacia.");
-        }
-        if(!Coincidencias.isEmpty()){
-            return Coincidencias;
-        }else{
+        } else {
+            System.out.println("La empresa no fue encontrada... error..... fatal.....");
             return null;
         }
-
     }
-    */
-
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// FINALIZA PARTE DE EMPRESA
 }

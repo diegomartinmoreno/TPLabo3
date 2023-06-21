@@ -1,17 +1,29 @@
 package Persona;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import model.Carrito;
+import model.HistorialDeCompras;
 import model.Tarjeta;
+import model.Zonas;
 
 import java.util.UUID;
 
 public class Administrador extends Persona implements UtilidadUserAdm {
     private UUID idAdmin;
+    private HistorialDeCompras historialDeCompras;
+    @JsonIgnore
+    private Carrito carrito;
     private Password password;
     private Tarjeta tarjeta;
+    private Zonas zonaActual=null;
 
     public Administrador() {
         super();
         idAdmin = UUID.randomUUID();
+        tarjeta = new Tarjeta();
+        carrito = new Carrito();
+        historialDeCompras=new HistorialDeCompras();
+        agregarDinero(999);
     }
     public Administrador(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
@@ -21,6 +33,14 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
         idAdmin = UUID.randomUUID();
         this.password = password;
+    }
+
+    public void setZonaActual(Zonas zonaActual) {
+        this.zonaActual = zonaActual;
+    }
+
+    public Zonas getZonaActual() {
+        return zonaActual;
     }
 
     public UUID getIdAdmin() {
@@ -39,7 +59,23 @@ public class Administrador extends Persona implements UtilidadUserAdm {
 
     public void setPassword(Password password) {
         this.password = password;
-        System.out.println(this.password.toString());
+    }
+    public Password getPassword() {
+        return password;
+    }
+
+    public HistorialDeCompras getHistorialDeCompras() {
+        return historialDeCompras;
+    }
+    public void setHistorialDeCompras(HistorialDeCompras historialDeCompras) {
+        this.historialDeCompras = historialDeCompras;
+    }
+
+    public Carrito getCarrito() {
+        return carrito;
+    }
+    public void setCarrito(Carrito carrito) {
+        this.carrito = carrito;
     }
 
     @Override
@@ -52,7 +88,5 @@ public class Administrador extends Persona implements UtilidadUserAdm {
     public boolean login(String contrasenia) {
         return password.validate(contrasenia);
     }
-
-
 }
 
