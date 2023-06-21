@@ -9,10 +9,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         PedidosYa pedidosYa = new PedidosYa();
-        Carrito carrito = new Carrito();
-        HistorialDeCompras historialDeCompras = new HistorialDeCompras();
         Scanner scanner = new Scanner(System.in);
-        Tarjeta tarjeta = new Tarjeta();
 
         Persona persona = menuDeSeleccionDeModoDeAcceso(scanner, pedidosYa);
 

@@ -20,6 +20,7 @@ public class Administrador extends Persona implements UtilidadUserAdm {
         idAdmin = UUID.randomUUID();
         tarjeta = new Tarjeta();
         carrito = new Carrito();
+        historialDeCompras=new HistorialDeCompras();
     }
     public Administrador(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);

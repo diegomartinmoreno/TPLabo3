@@ -24,6 +24,7 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         zonas = new HashSet<>();
         tarjeta = new Tarjeta();
         carrito=new Carrito();
+        historialDeCompras = new HistorialDeCompras();
     }
     public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<Zonas> zonas, Password contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
