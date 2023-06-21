@@ -1077,7 +1077,15 @@ public class PedidosYa {
             return listaBuscador;
     }
 
+    public Empresa cargarUnTipoProducto (Empresa A, TipoDeProductos tipo){
+        A.getProductosEmpresa().put(tipo,crearHashSetSegunTipoDeProducto(tipo));
+        return A;
+    }
 
+    public Empresa EliminarUnTipoProducto (Empresa A, TipoDeProductos tipo){
+        A.getProductosEmpresa().remove(tipo);
+        return A;
+    }
 
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos (Set < TipoDeProductos > tipoDeProductos)

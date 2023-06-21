@@ -383,16 +383,30 @@ public class Main {
 
                     case 7 -> {
                         System.out.println("Que desea hacer? ");
-                        System.out.println("(1) Agregar un producto a una empresa >>");
+                        System.out.println("(1) Agregar un tipo de producto a una empresa >>");
                         System.out.println("(2) Eliminar un producto >>");
 
                         int opcionConProductos = scanner.nextInt();
                         if (opcionConProductos == 1) {
                             //LLAMAMOS METODO DE AGREGAR PRODUCTO Y DEMAS.
+                            Empresa A=pedidosYa.retornarUnaEmpresa(scanner);
+                            System.out.println("Ingrese el tipo de producto que desea cargar");
+                            String tipo= scanner.nextLine();
+                            TipoDeProductos producto= TipoDeProductos.valueOf(tipo);
+
+                            pedidosYa.cargarUnTipoProducto(A,producto);
+                            pedidosYa.exportarEmpresasToJSON(PedidosYa.ARCHIVO_EMPRESAS);
 
                         } else if (opcionConProductos == 2) {
                             //BUSCAMOS EL PRODUCTO POR ALGUN CAMPO.
-                            pedidosYa.eliminarProductos(null, null); //PASAMOS POR PARAMETRO EL TIPO DE PRODUCTO QUE DESEA ELIMINAR Y EN QUE EMPRESA
+
+                            Empresa empresa=pedidosYa.retornarUnaEmpresa(scanner);
+                            System.out.println("Ingrese el tipo de producto que desea eliminar");
+                            String tipo= scanner.nextLine();
+                            TipoDeProductos producto= TipoDeProductos.valueOf(tipo);
+
+                            pedidosYa.eliminarProductos(producto, empresa); //PASAMOS POR PARAMETRO EL TIPO DE PRODUCTO QUE DESEA ELIMINAR Y EN QUE EMPRESA
+                            pedidosYa.exportarEmpresasToJSON(PedidosYa.ARCHIVO_EMPRESAS);
                         } else {
                             System.out.println("No ha seleccionado ningun caso. Regresando al menu principal.");
                         }
