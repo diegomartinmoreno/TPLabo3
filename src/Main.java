@@ -76,12 +76,7 @@ public class Main {
 
 
                     if(usuarioRetornar.getZonas().isEmpty()){
-                        System.out.println("ELEGIR TU ZONA ACTUAL: ");
-                        System.out.println(Arrays.toString(Zonas.values()));
-
-                        scanner.nextLine();
-                        String zonaElegida = scanner.nextLine();
-                        Zonas elegida = Zonas.valueOf(zonaElegida.toUpperCase());
+                        Zonas elegida=pedidosYa.elegirZona(scanner);
 
                         Set<Usuario> usuariosSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
                         Usuario user = pedidosYa.buscarUserPorDNI(usuarioRetornar.getDni(), usuariosSet);

@@ -1,1 +1,1 @@
-[]
+[{"nombre":"Pelado","apellido":"Corneta","nroDeTelefono":"2235123456","edad":20,"email":"pelado@gmail.com","dni":"43200111","zonas":["PUERTO"],"tarjeta":{"numeroTarjeta":"N/D.","titular":"N/D.","fechaDeVencimiento":"N/D.","codigoDeSeguridad":"N/D","saldo":-1.0,"activa":false},"historialDeCompras":{"pedidos":[]},"contrasenia":{"password":"pelado123"},"zonaActual":null}]
