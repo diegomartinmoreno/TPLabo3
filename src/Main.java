@@ -53,10 +53,13 @@ public class Main {
 
                     System.out.println("ELEGIR TU ZONA ACTUAL: ");
                     System.out.println(Arrays.toString(Zonas.values()));
-
-                    Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
-
-                    administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                    scanner.nextLine();
+                    try {
+                        Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
+                        administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                    }catch (IllegalArgumentException e){
+                        System.out.println("ZONA INEXISTENTE.");
+                    }
                     return administradorRetornar;
                 }
                 case 2 -> {
@@ -73,28 +76,14 @@ public class Main {
                         }
                         default -> throw new CasoInexistenteException();
                     }
-
-
-                    if(usuarioRetornar.getZonas().isEmpty()){
-                        Zonas elegida=pedidosYa.elegirZona(scanner);
-
-                        Set<Usuario> usuariosSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                        Usuario user = pedidosYa.buscarUserPorDNI(usuarioRetornar.getDni(), usuariosSet);
-
-                        if(user!=null){
-                            user.agregarUnaZona(elegida);////se agrega a las zonas del usuario
-                            pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuariosSet);
-                        } else{
-                            throw new RuntimeException("El usuario no existe....//*/**. ERROR..... fatal.....");
-                        }
-
-                        usuarioRetornar.setZonaActual(elegida);////se agrega a la zona elegida
-
-                    } else {
-                        System.out.println("Zonas: " + usuarioRetornar.getZonas());
-
-                        System.out.println("ELEGIR UNA ZONA: ");
-                        usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
+                    System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                    System.out.println(Arrays.toString(Zonas.values()));
+                    scanner.nextLine();
+                    try {
+                        Zonas elegida2 = Zonas.valueOf(scanner.nextLine().toUpperCase());
+                        usuarioRetornar.setZonaActual(elegida2);
+                    }catch (IllegalArgumentException e){
+                        System.out.println("ZONA INEXISTENTE.");
                     }
 
                     ////////////////////////////////////////////////////////////////////
@@ -215,35 +204,17 @@ public class Main {
                     case 7 -> {
                         do {
                             System.out.println("TUS ZONAS:"); //cambiarenmenuadministradorzonaactual
-                            System.out.println("(1) Agregar zona");
-                            System.out.println("(2) Eliminar zona");
-                            System.out.println("(3) Cambiar zona actual");
-                            System.out.println("(4) Ver tus zonas");
-                            System.out.println("(5) Salir");
+                            System.out.println("(1) Cambiar zona actual");
+                            System.out.println("(2) Salir");
+                            int opcionZona = scanner.nextInt();
 
-                            switch (scanner.nextInt()) {
+                            switch (opcionZona) {
                                 case 1 -> {
-                                    System.out.println("Zonas disponibles: \n " + Arrays.toString(Zonas.values()));
-                                    System.out.println("Ingresa una zona");
-                                    usuario.agregarUnaZona(Zonas.valueOf(scanner.nextLine()));
-                                    break;
-                                }
-
-                                case 2 -> {
-                                    System.out.println("Tus zonas: \n" + usuario.getZonas());
-                                    System.out.println("Ingrese el nombre de la zona a eliminar");
-                                    usuario.eliminarUnaZona(Zonas.valueOf(scanner.nextLine()));
-                                    break;
-                                }
-
-                                case 3 -> {
-                                    System.out.println("Tus zonas:" + usuario.getZonas());
+                                    System.out.println("Tus zona actual: " + usuario.getZonaActual());
                                     System.out.println("Ingrese el nombre de tu nueva zona actual:");
                                     usuario.setZonaActual(Zonas.valueOf(scanner.nextLine()));
-                                    break;
                                 }
-
-                                case 4 -> System.out.println("Tus zonas: " + usuario.getZonas());
+                                case 2 -> System.out.println("Volviendo al menu principal...");
                             }
 
                             System.out.println("Desea continuar? s/n");
