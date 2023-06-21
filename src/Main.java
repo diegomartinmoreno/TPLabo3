@@ -287,6 +287,7 @@ public class Main {
                     case 1 -> {
                         System.out.println("<< PERFIL >>");
                         System.out.println(administrador.toString());
+                        administrador.getTarjeta().mostrarTarjeta();
                     }
 
                     case 2 -> {
@@ -479,6 +480,7 @@ public class Main {
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Usuario usuario){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, usuario.getZonaActual());
+        usuario.getCarrito().setVendedor(elegida);
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
@@ -565,6 +567,8 @@ public class Main {
                         throw new RuntimeException("Usuario no existe....///*** ERROR... fatal.....");
                     }
 
+                    user.getCarrito().listarCarrito();
+                    break;
                 case 6:
                     usuario.getCarrito().listarCarrito();
                     break;
@@ -576,6 +580,7 @@ public class Main {
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Administrador administrador){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, administrador.getZonaActual());
+        administrador.getCarrito().setVendedor(elegida);
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
@@ -643,12 +648,17 @@ public class Main {
 
                     if (scanner.next().charAt(0) == 's') {
                         System.out.println("Ingrese la nota que desea enviarle al repartidor:");
-
                         scanner.nextLine();
-                        administrador.getCarrito().setNota(scanner.nextLine());
+                        String nota = scanner.nextLine();
+                        administrador.getCarrito().setNota(nota);
                     }
 
+                    administrador.getCarrito().setMontoTotal(administrador.getCarrito().calcularMontoTotalDeLaCompra());
+                    administrador.getCarrito().setDestino(administrador.getZonaActual());
+
                     administrador.getCarrito().pagarCarrito(administrador.getHistorialDeCompras(), administrador.getTarjeta());
+                    administrador.getCarrito().listarCarrito();
+                    break;
 
                 case 6:
                     administrador.getCarrito().listarCarrito();

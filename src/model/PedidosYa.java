@@ -584,7 +584,10 @@ public class PedidosYa {
             System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
         }
 
-        this.administradores.add(administrador);
+        if(!this.administradores.add(administrador)){
+            throw new RuntimeException("No agrego el administrador, ya existe...///***...error.....fatal......");
+        }
+
         exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
 
         return administrador;
@@ -950,9 +953,11 @@ public class PedidosYa {
 
         switch (numero){
             case 1->{
-                System.out.println("Empresas disponibles: ");
-                filtrarMostrarEmpresaSegunZona(zonaActual);
-                buscada=buscarPorNombreSinSerExacto(scanner, zonaActual);
+                do{
+                    System.out.println("Empresas disponibles: ");
+                    filtrarMostrarEmpresaSegunZona(zonaActual);
+                    buscada=buscarPorNombreSinSerExacto(scanner, zonaActual);
+                } while (buscada==null);
             }
             case 2->{
                 buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
@@ -969,6 +974,7 @@ public class PedidosYa {
         mostrarTodosLosTiposDeProducto();
         System.out.println("Que desea comer?");
 
+        scanner.nextLine();
         String comida = scanner.nextLine();
 
         TipoDeProductos dato = TipoDeProductos.valueOf(comida.toUpperCase());
@@ -986,15 +992,14 @@ public class PedidosYa {
     public Empresa buscarPorNombreSinSerExacto(Scanner scanner, Zonas zonaActual) {
         Empresa buscada = new Empresa();
         List<Empresa> listaEmpresas = new ArrayList<>();
+        String nombre=null;
+        scanner.nextLine();
+
         do {
             System.out.println("Ingrese el nombre de la empresa que busca.");
-            String nombre = scanner.nextLine().toUpperCase();
+            nombre = scanner.nextLine().toUpperCase();
 
             listaEmpresas = crearListaEmpresas(nombre, zonaActual);
-
-            System.out.println("Lista de empresas posibles, elija especificamente la que desea");
-            mostrarEmpresasSoloNombre(listaEmpresas);
-
         } while (listaEmpresas.size() != 1);
 
         System.out.println("Desea comprar en: " + listaEmpresas.get(0).getNombre() + "? s/n");

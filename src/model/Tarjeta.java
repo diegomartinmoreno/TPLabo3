@@ -297,25 +297,17 @@ public class Tarjeta {
 	}
 	
 	public boolean VerificarSaldoSuficiente(double monto){
-		if (this.saldo<monto){
-			return false;
-		}
-		return true;
+		return this.saldo >= monto;
 	}
 	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
-		if (this.VerificarSaldoSuficiente(monto)){
-			System.out.println("El saldo de la tarjeta es insuficiente para realizar la compra.");
+		if (this.VerificarVencimiento() && saldo < monto) {
+			this.saldo -= monto;
+			return true;
+		}else {
+			System.out.println("La tarjeta esta vencida.");
+			this.BloquearTarjeta();
 			return false;
-		} else {
-			if (this.VerificarVencimiento()) {
-				this.saldo -= monto;
-				return true;
-			}else {
-				System.out.println("La tarjeta esta vencida.");
-				this.BloquearTarjeta();
-				return false;
-			}
 		}
 	}
 /*

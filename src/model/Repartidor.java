@@ -53,7 +53,7 @@ public class Repartidor extends Persona {
 	}
 
 	public void mostrarRepartidor(){
-		System.out.println("Nombre: " + getNombre() + " " + getApellido());
+		System.out.println(getNombre() + " " + getApellido());
 	}
 
 	@Override
