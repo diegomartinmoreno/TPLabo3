@@ -7,11 +7,14 @@ public class Empresa {
     private LinkedHashMap <TipoDeProductos, HashSet<Producto>> productosEmpresa; ///AAAAA
     private Set<Zonas> zonas; /// AAAAAA
     private List <String> listaDeCupones;
-    private  double costoDeEnvio;
+    private double costoDeEnvio;
 
     private int puntuacion;
 
     public Empresa() {
+
+        generarCupones();
+        setPuntuacion(0);
     }
 
     public Empresa(String nombre, LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa, Set<Zonas> zonas, double costoDeEnvio, int puntuacion) {
@@ -46,7 +49,7 @@ public class Empresa {
         return listaDeCupones.remove(cupon);
     }
 
-    private void generarCupones(){
+    public void generarCupones(){
        for(int i=0;i<6;i++){
            listaDeCupones.add(generarCuponAleatorio(6));
        }
@@ -203,6 +206,8 @@ public class Empresa {
     public void setPuntuacion(int puntuacion) {
         this.puntuacion = puntuacion;
     }
+
+
 
     @Override
     public String toString() {

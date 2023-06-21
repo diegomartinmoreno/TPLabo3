@@ -369,13 +369,16 @@ public class Main {
 
                         if (opcionConEmpresas == 1) {
                             //METODO DE AGREGAR UNA EMPRESA CARGANDO POR TECLADO.
-                            pedidosYa.agregarEmpresa(null); //LE PASAMOS ALGO POR PARAMETRO.
+                            pedidosYa.agregarEmpresa(pedidosYa.cargarEmpresaPorTeclado(scanner));
+                            pedidosYa.exportarEmpresasToJSON(PedidosYa.ARCHIVO_EMPRESAS);
                         } else if (opcionConEmpresas == 2) {
                             //METODO DE BUSCAR UNA EMPRESA POR ALGUN CAMPO, POR EJ NOMBRE Y LA ELIMINAMOS.
-                            pedidosYa.eliminarEmpresa(null); //LE PASAMOS ALGO POR PARAMETRO.
+                            pedidosYa.eliminarEmpresa(pedidosYa.retornarUnaEmpresa(scanner)); //LE PASAMOS ALGO POR PARAMETRO.
+                            pedidosYa.exportarEmpresasToJSON(PedidosYa.ARCHIVO_EMPRESAS);
                         } else {
                             System.out.println("No ha seleccionado ningun caso. Regresando al menu principal.");
                         }
+
                     }
 
                     case 7 -> {
@@ -386,6 +389,7 @@ public class Main {
                         int opcionConProductos = scanner.nextInt();
                         if (opcionConProductos == 1) {
                             //LLAMAMOS METODO DE AGREGAR PRODUCTO Y DEMAS.
+
                         } else if (opcionConProductos == 2) {
                             //BUSCAMOS EL PRODUCTO POR ALGUN CAMPO.
                             pedidosYa.eliminarProductos(null, null); //PASAMOS POR PARAMETRO EL TIPO DE PRODUCTO QUE DESEA ELIMINAR Y EN QUE EMPRESA

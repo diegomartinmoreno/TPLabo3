@@ -28,6 +28,7 @@ public class PedidosYa {
     private Set<Usuario> usuarios;
     private Set<Administrador> administradores;
     public static final String ARCHIVO_USUARIOS = "Users.json";
+    public static final String ARCHIVO_EMPRESAS = "Empresas.json";
     public static final String ARCHIVO_ADMINISTRADORES = "Administradores.json";
     public static final int CANTIDAD_INTENTOS_INICIO_SESION = 3;
 
@@ -964,7 +965,7 @@ public class PedidosYa {
     }
 
     public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner, Zonas zonaActual) {
-        mostrarTodosLosEnums();
+        mostrarTodosLosTiposDeProducto();
         System.out.println("Que desea comer?");
 
         String comida = scanner.nextLine();
@@ -1029,7 +1030,7 @@ public class PedidosYa {
         }
     }
 
-    public void mostrarTodosLosEnums() {
+    public void mostrarTodosLosTiposDeProducto() {
         // Obtener todos los valores del enum
         TipoDeProductos[] elementos = TipoDeProductos.values();
 
@@ -1039,6 +1040,7 @@ public class PedidosYa {
         }
     }
 
+///Segun el tipo de comida permite buscar por nombre con una lista filtrada
     public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida, Zonas zonaActual){
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDisminuida) {
@@ -1048,12 +1050,23 @@ public class PedidosYa {
             }
             return listaBuscador;
     }
+    ///Crea una lista para el admin
+    public List<Empresa> crearListaEmpresas (String nombre, List < Empresa > listaDisminuida){
+        List<Empresa> listaBuscador = new ArrayList<>();
+        for (Empresa empresa : listaDisminuida) {
+            if (empresa.getNombre().contains(nombre)) {
+                listaBuscador.add(empresa);
+            }
+        }
+        return listaBuscador;
+    }
 
+    ///Permite buscar por nombre entre todas las opciones en la zona
     public List<Empresa> crearListaEmpresas (String nombre, Zonas zonaActual){
           return crearListaEmpresas(nombre,listaDeEmpresas,zonaActual);
     }
 
-    public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){
+    public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){ /// Crea una lista segun el tipo de comida
 
             List<Empresa> listaBuscador = new ArrayList<>();
             for (Empresa empresa : listaDeEmpresas) {
@@ -1063,6 +1076,9 @@ public class PedidosYa {
             }
             return listaBuscador;
     }
+
+
+
 
     private LinkedHashMap<TipoDeProductos, HashSet<Producto>> crearListaDeProductos (Set < TipoDeProductos > tipoDeProductos)
     {  ///LE PASO UN ARRAYLIST CON LOS TIPOS DE PRODUCTOS QUE POSEE LA EMPRESA
@@ -1250,8 +1266,8 @@ public class PedidosYa {
             carrito.setTieneCupon(true);
     }
 
-    public void exportarEmpresasToJSON(String path, Set<Administrador> administradores) {
-        File file = new File("Archivo");
+    public void exportarEmpresasToJSON(String path) {
+        File file = new File(ARCHIVO_EMPRESAS);
         ObjectMapper mapper = new ObjectMapper();
 
         try {
@@ -1262,7 +1278,7 @@ public class PedidosYa {
     }
 
     public List<Empresa> extraerEmpresasFromJSON(String path) {
-        File file = new File("archivo");
+        File file = new File(ARCHIVO_EMPRESAS);
         ObjectMapper mapper = new ObjectMapper();
         List<Empresa> listaEmpresas = new LinkedList<>();
 
@@ -1276,6 +1292,77 @@ public class PedidosYa {
         return listaEmpresas;
     }
 
+    public Empresa cargarEmpresaPorTeclado (Scanner scanner){
+        Empresa A= new Empresa();
+        char control = 's';
+        System.out.println("Cargue el nombre de la empresa");
+        A.setNombre(scanner.nextLine());
+
+        System.out.println("Ingrese las zonas que trabaja la empresa. Una a la vez");
+        mostrarTodasLasZonas();
+        HashSet<Zonas> setDeZonas= new HashSet<>();
+        do{
+            String zona= scanner.nextLine().toUpperCase();
+            setDeZonas.add(Zonas.valueOf(zona));
+
+            System.out.println("Desea ingresar otra zona? s/n");
+            control= scanner.nextLine().charAt(0);
+        }while (control == 's');
+        A.setZonas(setDeZonas);
+
+        System.out.println("Ingrese los tipos de productos que trabaja la empresa. Una a la vez");
+        mostrarTodosLosTiposDeProducto();
+        LinkedHashMap<TipoDeProductos, HashSet<Producto>> productos= new LinkedHashMap();
+        do{
+            String prod= scanner.nextLine().toUpperCase();
+            TipoDeProductos producto= TipoDeProductos.valueOf(prod);
+
+            crearListaDeProductos(Set.of(producto));
+
+            System.out.println("Desea ingresar otra zona? s/n");
+            control= scanner.nextLine().charAt(0);
+        }while (control == 's');
+        A.setProductosEmpresa(productos);
+
+        System.out.println("Cual es el costo de envio de sus productos?");
+        A.setCostoDeEnvio(scanner.nextDouble());
+
+
+        return A;
+    }
+
+    public void mostrarTodasLasZonas(){
+        // Obtener todos los valores del enum
+        Zonas[] elementos = Zonas.values();
+
+        // Mostrar los elementos
+        for (Zonas elemento : elementos) {
+            System.out.println(elemento);
+        }
+    }
+
+    public Empresa retornarUnaEmpresa(Scanner scanner) {
+        Empresa buscada = new Empresa();
+        List<Empresa> listaEmpresas = new ArrayList<>();
+        do {
+            System.out.println("Ingrese el nombre de la empresa que busca.");
+            String nombre = scanner.nextLine().toUpperCase();
+
+            listaEmpresas = crearListaEmpresas(nombre, listaEmpresas);
+
+            System.out.println("Lista de empresas posibles, elija especificamente la que desea");
+            mostrarEmpresasSoloNombre(listaEmpresas);
+
+        } while (listaEmpresas.size() != 1);
+
+        System.out.println("Esta seguro que desea elegir: " + listaEmpresas.get(0).getNombre() + "? s/n");
+        char confirmacion = scanner.nextLine().charAt(0);
+        if (confirmacion == 's') return listaEmpresas.get(0);
+        else {
+            System.out.println("Volviendo al menu principal");
+            return null;
+        }
+    }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// FINALIZA PARTE DE EMPRESA
 }
