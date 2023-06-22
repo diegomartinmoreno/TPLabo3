@@ -1014,11 +1014,7 @@ public class PedidosYa {
                 } while (buscada==null);
             }
             case 2->{
-                do{
-                    buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
-                    System.out.println("Aprete enter para continuar.....");
-                    scanner.nextLine();
-                } while (buscada==null);
+                buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
             }
             case default ->{
                 System.out.println("Saliendo");
@@ -1039,7 +1035,7 @@ public class PedidosYa {
 
                 String comida = scanner.nextLine();
 
-                dato = TipoDeProductos.valueOf(comida.toUpperCase());
+                 dato = TipoDeProductos.valueOf(comida.toUpperCase());
                 flag=true;
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de producto no valido, ingrese uno de la lista.");
