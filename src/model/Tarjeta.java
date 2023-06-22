@@ -40,37 +40,38 @@ public class Tarjeta {
 	}
 	
 	public boolean cargarTarjeta (Scanner lectura) {
+		/// CARGA UNA TARJETA ENTERA DESDE TECLADO.
 		boolean flag;
 		System.out.println("Inicio de carga de nueva tarjeta.");
 		do {
 			System.out.println("Ingrese nombre del titular:");
 			lectura.nextLine();
-			flag=!this.cargarNombreTitular(lectura.nextLine());
+			flag=!this.cargarNombreTitular(lectura.nextLine());///verificaciones dentro del metodo.
 		}while (flag);
 		////
 		do {
 			System.out.println("Ingrese numero de la tarjeta:");
-			flag=!this.cargarNumeroDeTarjeta(lectura.nextLine());
+			flag=!this.cargarNumeroDeTarjeta(lectura.nextLine());///verificaciones dentro del metodo.
 		}while(flag);
 		////
 		do {
 			flag=true;
 			System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
 			this.fechaDeVencimiento=lectura.nextLine();
-			if (!EstaVencida()) {
+			if (!EstaVencida()) {///verificaciones dentro del metodo.
 				flag=false;
 			}
 		}while (flag);
 		////
 		do {
 			System.out.println("Ingrese codigo de seguridad:");
-			flag=!this.cargarCodigoDeSeguridad(lectura.nextLine());
+			flag=!this.cargarCodigoDeSeguridad(lectura.nextLine());///verificaciones dentro del metodo.
 		}while(flag);
 		///
 		do {
 			System.out.println("Ingrese saldo limite de la tarjeta:");
 			String saldoLimite = lectura.nextLine();
-			flag = cargarSaldoLimiteTarjeta(saldoLimite);
+			flag = cargarSaldoLimiteTarjeta(saldoLimite);///verificaciones dentro del metodo.
 		}while(!flag);
 		
 		this.activa=true;
@@ -79,6 +80,7 @@ public class Tarjeta {
 	}
 	
 	public void modificarTarjeta (Scanner lectura) {
+		/// MODIFICA SOLO LOS CAMPOS SELECCIONADOS, DE UNA TARJETA YA EXISTENTE.
 		boolean flag;
 		System.out.println("Inicio de modificacion de tarjeta:");
 		///
@@ -86,7 +88,7 @@ public class Tarjeta {
 		if (this.SINO(lectura.nextLine())) {
 			do {
 				System.out.println("Ingrese nombre del titular:");
-				flag=!this.cargarNombreTitular(lectura.nextLine());
+				flag=!this.cargarNombreTitular(lectura.nextLine());///verificaciones dentro del metodo.
 			}while (flag);
 		}
 		///
@@ -94,7 +96,7 @@ public class Tarjeta {
 		if (this.SINO(lectura.nextLine())) {
 			do {
 				System.out.println("Ingrese numero de la tarjeta:");
-				flag=!this.cargarNumeroDeTarjeta(lectura.nextLine());
+				flag=!this.cargarNumeroDeTarjeta(lectura.nextLine());///verificaciones dentro del metodo.
 			}while(flag);
 		}
 		///
@@ -104,7 +106,7 @@ public class Tarjeta {
 				flag=true;
 				System.out.println("Ingrese fecha de vencimiento (MM/AAAA):");
 				this.fechaDeVencimiento=lectura.nextLine();
-				if (!EstaVencida()) {
+				if (!EstaVencida()) {///verificaciones dentro del metodo.
 					flag=false;
 				}
 			}while (flag);
@@ -114,14 +116,14 @@ public class Tarjeta {
 		if (this.SINO(lectura.nextLine())) {
 			do {
 				System.out.println("Ingrese codigo de seguridad:");
-				flag=!this.cargarCodigoDeSeguridad(lectura.nextLine());
+				flag=!this.cargarCodigoDeSeguridad(lectura.nextLine());///verificaciones dentro del metodo.
 			}while(flag);
 		}
 		System.out.println("Desea modificar el saldo limite de la tarjeta? S/N");
 		if (this.SINO(lectura.nextLine())) {
 			do {
 				System.out.println("Ingrese saldo limite de la tarjeta:");
-				flag = cargarSaldoLimiteTarjeta(lectura.nextLine());
+				flag = cargarSaldoLimiteTarjeta(lectura.nextLine());///verificaciones dentro del metodo.
 			}while(!flag);
 		}
 	}
@@ -185,6 +187,8 @@ public class Tarjeta {
 	}
 	
 	public boolean EstaVencida() {
+		/// Verifica que el string tenga el formato correcto, MM/AAAA
+		/// Verifica que la ingresada sea posterior a la actual.
 
 		LocalDate ahora=LocalDate.now();
 		
@@ -305,19 +309,23 @@ public class Tarjeta {
 	}
 	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
+		/// SI ESTA VENCIDA, LA BLOQUEA.
 		if (EstaVencida()) {
 			this.BloquearTarjeta();
 			return false;
 		}
+		/// SI NO TIENE SALDO, NO LA BLOQUEA PERO NO HACE LA COMPRA.
 		if (this.saldo<monto){
 			System.out.println("El saldo de la tarjeta es insuficiente para realizar la compra.");
 			System.out.println("Ingresa mas dinero....");
 			return false;
 		}
+		/// SI TIENE SALDO, RESTA EL MONTO DE LA COMPRA DEL SALDO DE LA TARJETA.
 		setSaldo(getSaldo() - monto);
 		System.out.println("Se le resta dinero a tu cuenta.....");
 		return true;
 	}
+
 }
 
 
