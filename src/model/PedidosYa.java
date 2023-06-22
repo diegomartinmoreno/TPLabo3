@@ -133,17 +133,26 @@ public class PedidosYa {
 
         usuario.setApellido(cadenaAux);
 
-        System.out.println("3) Ingrese su edad");
-        int edad = scanner.nextInt();
-        try {
-            flag = Usuario.verificarEdad(edad);
-            if (!flag)
-                throw new MenorDeEdadException();
-        } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
-        }
+        do {
+            System.out.println("3) Ingrese su edad");
+            try {
 
-        usuario.setEdad(edad);
+                int edad = scanner.nextInt();
+                flag = Persona.verificarEdad(edad);
+                if (!flag)
+                    throw new MenorDeEdadException();
+                else
+                    usuario.setEdad(edad);
+            } catch (NullPointerException e) {
+                flag = false;
+                System.out.println(e.getMessage());
+            } catch (InputMismatchException e) {
+                flag = false;
+                System.out.println("No ingresaste un numero! Error.");
+                scanner.nextLine();
+            }
+        }while (!flag);
+
 
         do {
             scanner.nextLine();
@@ -156,7 +165,7 @@ public class PedidosYa {
                     if (!flag)
                         System.out.println("Error en la longitud del DNI!. Son 8 digitos.");
                 } else
-                    System.out.println("Error en el dni, no son todos digitos.");
+                    System.out.println("Error en el dni, no son todos numeros.");
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
             }
@@ -560,7 +569,7 @@ public class PedidosYa {
                     else
                         administrador.setDni(cadenaAux);
                 } else
-                    System.out.println("Error en el dni, no son todos digitos.");
+                    System.out.println("Error en el dni, no son todos numeros.");
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
             }
