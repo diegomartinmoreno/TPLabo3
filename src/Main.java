@@ -773,6 +773,7 @@ public class Main {
                         break;
                     case 6:
                         carritoAdministrador.listarCarrito();
+                        System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
                         System.out.println("Pulse enter para continuar....");
                         scanner.nextLine();
                         scanner.nextLine();
