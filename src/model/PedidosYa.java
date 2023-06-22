@@ -1031,7 +1031,7 @@ public class PedidosYa {
                         control=scanner.nextLine().charAt(0);
                         control= Character.toLowerCase(control);
                     }
-                }while (buscada==null&& control=='n');
+                }while (buscada==null && control=='n');
 
             }
             case default ->{

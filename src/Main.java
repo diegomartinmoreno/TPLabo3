@@ -150,13 +150,16 @@ public class Main {
                     case 2 -> {
                         System.out.println("<< HISTORIAL DE COMPRAS >>");
 
-                        if(usuario.getHistorialDeCompras().getPedidos().isEmpty()){
+                        Set <Usuario> usuarios = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                        Usuario aux = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
+
+                        if(aux.getHistorialDeCompras().getPedidos().isEmpty()){
                             System.out.println("HISTORIAL DE COMPRAS VACIO");
                         } else {
-                            Set <Usuario> usuarios = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                            usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
 
-                            usuario.getHistorialDeCompras().listarHistorial();
+
+
+                            aux.getHistorialDeCompras().listarHistorial();
                             System.out.println("////////////////////////////////////////////////////////////");
                             System.out.println("Ingrese enter para continuar...");
                             scanner.nextLine();
@@ -557,117 +560,129 @@ public class Main {
         int decision;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, usuario.getZonaActual());
 
-        Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-        usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
+        if (elegida != null){
+            Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+            usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
 
-        usuario.setCarrito(new Carrito());
-        usuario.getCarrito().setVendedor(elegida);
-
-
-        do {
-            System.out.println("Que desea hacer?");
-            System.out.println("(1) Agregar producto al carrito");
-            System.out.println("(2) Eliminar producto del carrito");
-            System.out.println("(3) Editar cantidad del producto");
-            System.out.println("(4) Agregar cupon");
-            System.out.println("(5) Ir a pagar");
-            System.out.println("(6) Ver carrito");
-            System.out.println("(7) salir");
-
-            decision = scanner.nextInt();
-
-            
-            switch (decision) {
-                case 1:
-                    Producto prodAux;
-                    elegida.mostrarParaComprar();
-
-                    System.out.println("Ingrese el id del producto que desea llevar:");
-                    int idProducto = scanner.nextInt();
-
-                    try {
-                        prodAux = elegida.buscarProductoPorID(idProducto);
-                        System.out.println("Producto elegido: ");
-                        prodAux.productoElegido();
+            usuario.setCarrito(new Carrito());
+            usuario.getCarrito().setVendedor(elegida);
 
 
-                        System.out.println("Cuanto desea llevar del producto?");
-                        prodAux.setCantidadPedido(scanner.nextInt());
+            do {
+                System.out.println("Que desea hacer?");
+                System.out.println("(1) Agregar producto al carrito");
+                System.out.println("(2) Eliminar producto del carrito");
+                System.out.println("(3) Editar cantidad del producto");
+                System.out.println("(4) Agregar cupon");
+                System.out.println("(5) Ir a pagar");
+                System.out.println("(6) Ver carrito");
+                System.out.println("(7) salir");
 
-                        usuario.getCarrito().agregarProductoAlCarrito(elegida, prodAux);
-                    } catch (RuntimeException e){
-                        System.out.println(e.getMessage());
-                    }
-                    break;
+                decision = scanner.nextInt();
 
-                case 2:
-                    usuario.getCarrito().mostrarProductos();
 
-                    System.out.println("Ingrese el numero del producto que desea eliminar");
-                    usuario.getCarrito().eliminarProductoDelCarrito(scanner.nextInt());
-                    break;
+                switch (decision) {
+                    case 1:
+                        Producto prodAux;
+                        elegida.mostrarParaComprar();
 
-                case 3:
-                    usuario.getCarrito().mostrarProductos();
+                        System.out.println("Ingrese el id del producto que desea llevar:");
+                        int idProducto = scanner.nextInt();
 
-                    System.out.println("Ingrese el numero del producto que desea editar");
-                    int pos = scanner.nextInt();
-                    System.out.println("Producto elegido: " + usuario.getCarrito().getProductos().get(pos));
+                        try {
+                            prodAux = elegida.buscarProductoPorID(idProducto);
+                            System.out.println("Producto elegido: ");
+                            prodAux.productoElegido();
 
-                    System.out.println("Ingrese la nueva cantidad del producto elegido");
-                    usuario.getCarrito().editarCantidadDeProducto(scanner.nextInt(), pos);
-                    break;
 
-                case 4:
-                    System.out.println("Cupones disponibles de la empresa " + elegida.getNombre() + ": " +  usuario.getCarrito().getVendedor().getListaDeCupones());
+                            System.out.println("Cuanto desea llevar del producto?");
+                            prodAux.setCantidadPedido(scanner.nextInt());
 
-                    System.out.println("Ingresa un cupon de 6 caracteres: ");
-                    scanner.nextLine();
-                    try{
-                        pedidosYa.agregarDescuento(scanner.nextLine(), usuario.getCarrito());
-                    }catch (RuntimeException e){
-                        System.out.println(e.getMessage());
-                    }
+                            usuario.getCarrito().agregarProductoAlCarrito(elegida, prodAux);
+                        } catch (RuntimeException e){
+                            System.out.println(e.getMessage());
+                        }
+                        break;
 
-                    break;
+                    case 2:
+                        usuario.getCarrito().mostrarProductos();
 
-                case 5:
-                    System.out.println("Pagar carrito...................");
-                    System.out.println("Desea enviarle una nota al repartidor? s/n");
+                        System.out.println("Ingrese el numero del producto que desea eliminar");
+                        try {
+                            usuario.getCarrito().eliminarProductoDelCarrito(scanner.nextInt());
+                        }catch (IndexOutOfBoundsException  e){
+                            System.out.println("Posicion invalida...." + e.getMessage());
+                        }
+                        break;
 
-                    if (scanner.next().charAt(0) == 's') {
-                        System.out.println("Ingrese la nota que desea enviarle al repartidor:");
+                    case 3:
+                        usuario.getCarrito().mostrarProductos();
 
+                        System.out.println("Ingrese el numero del producto que desea editar");
+                        int pos = scanner.nextInt();
+                        try {
+                            System.out.println("Producto elegido: " + usuario.getCarrito().getProductos().get(pos));
+                            System.out.println("Ingrese la nueva cantidad del producto elegido");
+                            usuario.getCarrito().editarCantidadDeProducto(scanner.nextInt(), pos);
+                        }catch (IndexOutOfBoundsException  e){
+                            System.out.println("Posicion invalida...." + e.getMessage());
+                        }
+
+
+                        break;
+
+                    case 4:
+                        System.out.println("Cupones disponibles de la empresa " + elegida.getNombre() + ": " +  usuario.getCarrito().getVendedor().getListaDeCupones());
+
+                        System.out.println("Ingresa un cupon de 6 caracteres: ");
                         scanner.nextLine();
-                        usuario.getCarrito().setNota(scanner.nextLine());
-                    }
+                        try{
+                            pedidosYa.agregarDescuento(scanner.nextLine(), usuario.getCarrito());
+                        }catch (RuntimeException e){
+                            System.out.println(e.getMessage());
+                        }
+
+                        break;
+
+                    case 5:
+                        System.out.println("Pagar carrito...................");
+                        System.out.println("Desea enviarle una nota al repartidor? s/n");
+
+                        if (scanner.next().charAt(0) == 's') {
+                            System.out.println("Ingrese la nota que desea enviarle al repartidor:");
+
+                            scanner.nextLine();
+                            usuario.getCarrito().setNota(scanner.nextLine());
+                        }
 
 
-                    usuario.getCarrito().setMontoTotal(usuario.getCarrito().calcularMontoTotalDeLaCompra());
-                    usuario.getCarrito().setDestino(usuario.getZonaActual());
+                        usuario.getCarrito().setMontoTotal(usuario.getCarrito().calcularMontoTotalDeLaCompra());
+                        usuario.getCarrito().setDestino(usuario.getZonaActual());
 
-                    usuario.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta(), scanner); ////SUMAR AL MONTO TOTAL EL COSTO DE ENVIO
+                        usuario.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta(), scanner); ////SUMAR AL MONTO TOTAL EL COSTO DE ENVIO
 
 
-                    pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);
-                    pedidosYa.setUsuarios(usuarioSet);                     ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
-                    usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
+                        pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);
+                        pedidosYa.setUsuarios(usuarioSet);                     ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
+                        usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
 
-                    System.out.println("Pulse enter para salir....");
-                    scanner.nextLine();
-                    scanner.nextLine();
+                        System.out.println("Pulse enter para salir....");
+                        scanner.nextLine();
+                        scanner.nextLine();
 
-                    System.out.println("Saliendo.....");
-                    decision=7;
-                    break;
-                case 6:
-                    usuario.getCarrito().listarCarrito();
-                    System.out.println("Pulse enter para continuar....");
-                    scanner.nextLine();
-                    scanner.nextLine();
-                    break;
-            }
-        }while (decision != 7);
+                        System.out.println("Saliendo.....");
+                        decision=7;
+                        break;
+                    case 6:
+                        usuario.getCarrito().listarCarrito();
+                        System.out.println("Pulse enter para continuar....");
+                        scanner.nextLine();
+                        scanner.nextLine();
+                        break;
+                }
+            }while (decision != 7);
+        }
+
 
         usuario.setCarrito(new Carrito());
     }

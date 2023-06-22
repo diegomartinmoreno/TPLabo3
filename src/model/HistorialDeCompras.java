@@ -13,6 +13,7 @@ public class HistorialDeCompras {
     public void listarHistorial(){
         for (Pedido pedido : pedidos){
             pedido.mostrarPedido();
+            System.out.println("////////////////////////////////////////////////////////////");
         }
     }
 
