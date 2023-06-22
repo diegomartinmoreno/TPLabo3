@@ -513,10 +513,13 @@ public class PedidosYa {
             }
         } while (!flag);
 
-        System.out.println("3) Ingrese su edad");
-        int edad = scanner.nextInt();
+
+
         do {
+            System.out.println("3) Ingrese su edad");
             try {
+
+                int edad = scanner.nextInt();
                 flag = Persona.verificarEdad(edad);
                 if (!flag)
                     throw new MenorDeEdadException();
@@ -528,6 +531,7 @@ public class PedidosYa {
             } catch (InputMismatchException e) {
                 flag = false;
                 System.out.println("No ingresaste un numero! Error.");
+                scanner.nextLine();
             }
         }while (!flag);
 
