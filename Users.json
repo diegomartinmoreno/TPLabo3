@@ -1,1 +1,1 @@
-[]
+[{"nombre":"Diego","apellido":"Moreno","nroDeTelefono":"2235468134","edad":28,"email":"diegomorenovg@gmail.com","dni":"38303772","tarjeta":{"numeroTarjeta":"1234567890123456","titular":"diego moreno","fechaDeVencimiento":"12/2025","codigoDeSeguridad":"123","saldo":100000.0,"activa":true},"historialDeCompras":{"pedidos":[]},"contrasenia":{"password":"clave123"},"zonaActual":null}]

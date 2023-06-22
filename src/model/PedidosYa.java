@@ -1084,7 +1084,8 @@ public class PedidosYa {
         System.out.println("Ingrese el nombre de la empresa que busca.");
         String nombre = scanner.nextLine().toUpperCase();
         buscada=buscarEmpresaPorAproximacion(nombre);
-        /// busco por aproximacion, si eso falla, busco empresas que contengan el nombre.
+        /// busco primero por aproximacion, si eso falla,
+        // busco empresas que contengan el input dentro de su nombre.
         if (buscada==null){
             List<Empresa> listaEmpresas = new ArrayList<>();
             do {
@@ -1097,9 +1098,11 @@ public class PedidosYa {
                     mostrarEmpresasSoloNombre(listaEmpresas);
                     nombre = scanner.nextLine().toUpperCase();
                 }
+                /// Acortara la lista hasta que solo haya una coincidencia
+                // o hasta que no haya ninguna.
             } while (listaEmpresas.size() != 1);
             if (listaEmpresas.isEmpty()) {
-
+                /// SI NO SE ENCONTRO NINGUNA EMPRESA CON EL INPUT DE USUARIO.
                 return null;
             }else {
                 buscada=listaEmpresas.get(0);
@@ -1119,7 +1122,8 @@ public class PedidosYa {
         System.out.println("Ingrese el nombre de la empresa que busca.");
         String nombre = scanner.nextLine().toUpperCase();
         buscada=buscarEmpresaPorAproximacion(nombre, listaDisminuida);
-        /// busco por aproximacion, si eso falla, busco empresas que contengan el nombre.
+        /// busco primero por aproximacion, si eso falla,
+        // busco empresas que contengan el input dentro de su nombre.
         if (buscada==null){
             List<Empresa> listaEmpresas = new ArrayList<>();
             do {
@@ -1131,9 +1135,12 @@ public class PedidosYa {
                     System.out.println("Lista de empresas posibles, elija especificamente la que desea");
                     mostrarEmpresasSoloNombre(listaEmpresas);
                     nombre = scanner.nextLine().toUpperCase();
+                    /// Acortara la lista hasta que solo haya una coincidencia
+                    // o hasta que no haya ninguna.
                 }
             } while (listaEmpresas.size() != 1);
             if (listaEmpresas.isEmpty()) {
+                /// SI NO SE ENCONTRO NINGUNA EMPRESA CON EL INPUT DE USUARIO.
                 return null;
             }else {
                 buscada=listaEmpresas.get(0);
@@ -1515,46 +1522,7 @@ public class PedidosYa {
     }
 
     //// Inicio de busqueda de empresa por aproximacion
-/*
-    static int calcularDistanciaLaveshtein(String str1, String str2) {
 
-        if (str1.isEmpty())
-        {
-            return str2.length();
-        }
-        if (str2.isEmpty())
-        {
-            return str1.length();
-        }
-
-        /// calculo el numero de caracteres diferentes que necesitan ser reemplazados recursivamente.
-        int reemplazados = calcularDistanciaLaveshtein(
-                str1.substring(1), str2.substring(1))
-                + NumeroDeReemplazados(str1.charAt(0),str2.charAt(0));
-
-        /// calculo el numero de caracteres diferentes que necesitan ser insertados recursivamente.
-        int insertados = calcularDistanciaLaveshtein(
-                str1, str2.substring(1))+ 1;
-
-        /// calculo el numero de caracteres diferentes que necesitan ser eliminados recursivamente.
-        int eliminados = calcularDistanciaLaveshtein(
-                str1.substring(1), str2)+ 1;
-
-        // retorno el minimo entre las tres operaciones
-        return min_editados(reemplazados, insertados, eliminados);
-    }
-
-    static int NumeroDeReemplazados(char c1, char c2) {
-
-        return c1 == c2 ? 0 : 1;
-    }
-
-    static int min_editados(int... nums) {
-
-        return Arrays.stream(nums).min().orElse(
-                Integer.MAX_VALUE);
-    }
-*/
     public static int auxiliarDistanciaLaveshtein(String X, String Y)
     {
         int m = X.length();
@@ -1567,8 +1535,9 @@ public class PedidosYa {
         for (int j = 1; j <= n; j++) {
             T[0][j] = j;
         }
-
         int cost;
+        /// compara los strings como una matriz.
+        // Compara cada caracter individualmente a su relativo de posicion en el otro string.
         for (int i = 1; i <= m; i++) {
             for (int j = 1; j <= n; j++) {
                 cost = X.charAt(i - 1) == Y.charAt(j - 1) ? 0: 1;
@@ -1584,16 +1553,19 @@ public class PedidosYa {
         if (x == null || y == null) {
             throw new IllegalArgumentException("La busqueda esta vacia.");
         }
-
+        /// calcula cantidad de operaciones necesarias para transformar string X en string Y.
+        /// devuelve un valor entre 0 y 1, siendo 1 coincidencia total y 0 ninguna coincidencia.
         double maxLength = Double.max(x.length(), y.length());
         if (maxLength > 0) {
-            // opcionalmente ignora el caso si es necesario
             return (maxLength - auxiliarDistanciaLaveshtein(x, y)) / maxLength;
         }
         return 1.0;
     }
     public Empresa buscarEmpresaPorAproximacion(String nombreBuscada, List<Empresa> listaDisminuida){
-
+        /// Busco una empresa teniendo en cuenta posibles faltas
+        /// de ortografia en el ingreso por teclado.
+        /// Limito la busqueda a la lista recibida, que es la lista de empresas luego de haber sido
+        /// filtradas por zona y tipo de producto.
         nombreBuscada.toUpperCase();
         Empresa empresaBuscada=null;
         double distanciaActual=0;
@@ -1602,7 +1574,7 @@ public class PedidosYa {
         for (int i=0; i<listaDisminuida.size(); i++) {
             distanciaActual = calcularDistanciaLaveshtein(nombreBuscada, listaDisminuida.get(i).getNombre());
             /// mientras mas alto el numero, mas parecidos los strings.
-            if (distanciaMejorCoincidencia < distanciaActual && distanciaActual > 0.8) {/// Coincidencia razonablemente cercana.
+            if (distanciaMejorCoincidencia < distanciaActual && distanciaActual > 0.7) {/// Coincidencia razonablemente cercana.
                 indexMejorCoincidencia = i;
                 distanciaMejorCoincidencia = distanciaActual;
             }
@@ -1610,23 +1582,14 @@ public class PedidosYa {
         if (indexMejorCoincidencia==-1){
             return null; /// no se encontro coincidencias
         }else{
-            empresaBuscada=listaDeEmpresas.get(indexMejorCoincidencia);
+            empresaBuscada=listaDisminuida.get(indexMejorCoincidencia);
             return empresaBuscada;
         }
-            /*System.out.println("¿Busca la empresa: " + empresaBuscada.getNombre() + "? S/N");
-            char control='n';
-            control=lectura.nextLine().charAt(0);
-            control=Character.toUpperCase(control);
-            if (control=='S'){
-                return empresaBuscada;
-            }else{
-                return null;
-            }
-             */
-        }
+    }
 
     public Empresa buscarEmpresaPorAproximacion(String nombreBuscada){
-
+        /// Busco una empresa teniendo en cuenta posibles faltas
+        // de ortografia en el ingreso por teclado
         nombreBuscada.toUpperCase();
         Empresa empresaBuscada=null;
         double distanciaActual=0;
@@ -1635,7 +1598,7 @@ public class PedidosYa {
         for (int i=0; i<listaDeEmpresas.size(); i++){
             distanciaActual=calcularDistanciaLaveshtein(nombreBuscada, listaDeEmpresas.get(i).getNombre());
             /// mientras mas alto el numero, mas parecidos los strings.
-            if (distanciaMejorCoincidencia < distanciaActual && distanciaActual > 0.8){ /// Coincidencia razonablemente cercana.
+            if (distanciaMejorCoincidencia < distanciaActual && distanciaActual > 0.7){ /// Coincidencia razonablemente cercana.
                 indexMejorCoincidencia=i;
                 distanciaMejorCoincidencia=distanciaActual;
             }
@@ -1646,17 +1609,7 @@ public class PedidosYa {
             empresaBuscada=listaDeEmpresas.get(indexMejorCoincidencia);
             return empresaBuscada;
         }
-            /*System.out.println("¿Busca la empresa: " + empresaBuscada.getNombre() + "? S/N");
-            char control='n';
-            control=lectura.nextLine().charAt(0);
-            control=Character.toUpperCase(control);
-            if (control=='S'){
-                return empresaBuscada;
-            }else{
-                return null;
-            }
-             */
-        }
+    }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
