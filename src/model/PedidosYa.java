@@ -103,10 +103,9 @@ public class PedidosYa {
         this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes >> ");
-
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese su nombre: ");
-            scanner.nextLine();
             cadenaAux = scanner.nextLine();
             try {
                 flag = Usuario.verificarEsLetra(cadenaAux);
@@ -235,11 +234,18 @@ public class PedidosYa {
         } else {
             System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
         }
+        try {
+            if (!this.usuarios.add(usuario)){
+                throw new RuntimeException("No agrego el usuario, ya registrado en el sistema...///***...error.....fatal......");
+            }else{
+                exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
+                scanner.nextLine();
+            }
+        }catch (RuntimeException e){
+            System.out.println(e.getMessage());
+            usuario=null;
+        }
 
-        this.usuarios.add(usuario);
-        exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
-
-        scanner.nextLine();
         return usuario;
     }
 
@@ -502,10 +508,9 @@ public class PedidosYa {
         this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
 
         System.out.println("Bienvenido Administrador! Ingrese los datos correspondientes >> ");
-
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese su nombre: ");
-            scanner.nextLine();
             cadenaAux = scanner.nextLine();
             try {
                 flag = Persona.verificarEsLetra(cadenaAux);
@@ -636,13 +641,19 @@ public class PedidosYa {
         } else {
             System.out.println("Se equivoco de boton, no se cargara ningun dato de la tarjeta. Cuando desee comprar, debera cargar su tarjeta.");
         }
-
-        if(!this.administradores.add(administrador)){
-            throw new RuntimeException("No agrego el administrador, ya existe...///***...error.....fatal......");
+        try {
+            if (!this.administradores.add(administrador)) {
+                throw new RuntimeException("No agrego el administrador, ya registrado en el sistema...///***...error.....fatal......");
+            }else{
+                exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
+                scanner.nextLine();
+            }
+        }catch (RuntimeException e){
+            System.out.println(e.getMessage());
+            administrador=null;
         }
 
-        exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
-        scanner.nextLine();
+
         return administrador;
     }
 
