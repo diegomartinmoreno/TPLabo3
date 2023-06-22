@@ -63,7 +63,7 @@ public class Main {
                                 System.out.println("La zona ingresada no es valida. Intente nuevamente.");
                             }
                         } while (flag);
-                        administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                        administradorRetornar.establecerZonaActual(elegida);////se agrega a la zona elegida
                         return administradorRetornar;
                     }
 
