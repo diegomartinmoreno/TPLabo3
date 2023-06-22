@@ -133,17 +133,26 @@ public class PedidosYa {
 
         usuario.setApellido(cadenaAux);
 
-        System.out.println("3) Ingrese su edad");
-        int edad = scanner.nextInt();
-        try {
-            flag = Usuario.verificarEdad(edad);
-            if (!flag)
-                throw new MenorDeEdadException();
-        } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
-        }
+        do {
+            System.out.println("3) Ingrese su edad");
+            try {
 
-        usuario.setEdad(edad);
+                int edad = scanner.nextInt();
+                flag = Persona.verificarEdad(edad);
+                if (!flag)
+                    throw new MenorDeEdadException();
+                else
+                    usuario.setEdad(edad);
+            } catch (NullPointerException e) {
+                flag = false;
+                System.out.println(e.getMessage());
+            } catch (InputMismatchException e) {
+                flag = false;
+                System.out.println("No ingresaste un numero! Error.");
+                scanner.nextLine();
+            }
+        }while (!flag);
+
 
         do {
             scanner.nextLine();
@@ -156,7 +165,7 @@ public class PedidosYa {
                     if (!flag)
                         System.out.println("Error en la longitud del DNI!. Son 8 digitos.");
                 } else
-                    System.out.println("Error en el dni, no son todos digitos.");
+                    System.out.println("Error en el dni, no son todos numeros.");
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
             }
@@ -182,8 +191,19 @@ public class PedidosYa {
 
         usuario.setNroDeTelefono(cadenaAux);
 
-        System.out.println("6) Ingrese su email: ");
-        usuario.setEmail(scanner.nextLine());
+        do {
+            System.out.println("6) Ingrese su email: ");
+            String email= scanner.nextLine();
+
+            if (email.contains("@gmail.com")||email.contains("@hotmail.com")) {
+                usuario.setEmail(email);
+                flag = true;
+            }
+            else {
+                System.out.println("formato de email no valido");
+                flag = false;
+            }
+        }while (!flag);
 
         do {
             System.out.println("7) Finalmente ingrese su contrasenia (debera recordarla): ");
@@ -207,6 +227,7 @@ public class PedidosYa {
         System.out.println("[1] Ahora.\n[2] Mas tarde.");
         decision = scanner.nextInt();
 
+
         if (decision == 1) {
             usuario.getTarjeta().cargarTarjeta(scanner);
         } else if (decision == 2) {
@@ -218,6 +239,7 @@ public class PedidosYa {
         this.usuarios.add(usuario);
         exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
 
+        scanner.nextLine();
         return usuario;
     }
 
@@ -238,9 +260,9 @@ public class PedidosYa {
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
         boolean login = false;
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese el email: ");
-            scanner.nextLine();
             email = scanner.nextLine();
             System.out.println("2) Ingrese su contrasenia: ");
             contrasenia = scanner.nextLine();
@@ -308,6 +330,7 @@ public class PedidosYa {
     public boolean modificarEmailDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -337,6 +360,7 @@ public class PedidosYa {
     public boolean modificarNroTelefonoDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -376,7 +400,7 @@ public class PedidosYa {
     public boolean modificarNombreYapellidoDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
         char c = scanner.next().charAt(0);
-
+        scanner.nextLine();
         Usuario user = null;
         this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
@@ -417,6 +441,7 @@ public class PedidosYa {
     public boolean cambiarTarjetaDeUsuario(Scanner scanner) {
         System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -470,6 +495,7 @@ public class PedidosYa {
     }
 
     public Administrador registroDeCuentaDeAdmin(Scanner scanner) throws MenorDeEdadException {
+
         Administrador administrador = new Administrador();
         String cadenaAux = null, contrasenia = null;
         boolean flag = false;
@@ -479,6 +505,7 @@ public class PedidosYa {
 
         do {
             System.out.println("1) Ingrese su nombre: ");
+            scanner.nextLine();
             cadenaAux = scanner.nextLine();
             try {
                 flag = Persona.verificarEsLetra(cadenaAux);
@@ -507,17 +534,27 @@ public class PedidosYa {
             }
         } while (!flag);
 
-        System.out.println("3) Ingrese su edad");
-        int edad = scanner.nextInt();
-        try {
-            flag = Persona.verificarEdad(edad);
-            if (!flag)
-                throw new MenorDeEdadException();
-            else
-                administrador.setEdad(edad);
-        } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
-        }
+
+
+        do {
+            System.out.println("3) Ingrese su edad");
+            try {
+
+                int edad = scanner.nextInt();
+                flag = Persona.verificarEdad(edad);
+                if (!flag)
+                    throw new MenorDeEdadException();
+                else
+                    administrador.setEdad(edad);
+            } catch (NullPointerException e) {
+                flag = false;
+                System.out.println(e.getMessage());
+            } catch (InputMismatchException e) {
+                flag = false;
+                System.out.println("No ingresaste un numero! Error.");
+                scanner.nextLine();
+            }
+        }while (!flag);
 
         do {
             scanner.nextLine();
@@ -532,7 +569,7 @@ public class PedidosYa {
                     else
                         administrador.setDni(cadenaAux);
                 } else
-                    System.out.println("Error en el dni, no son todos digitos.");
+                    System.out.println("Error en el dni, no son todos numeros.");
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
             }
@@ -556,8 +593,19 @@ public class PedidosYa {
             }
         } while (!flag);
 
-        System.out.println("6) Ingrese su email: ");
-        administrador.setEmail(scanner.nextLine());
+        do {
+            System.out.println("6) Ingrese su email: ");
+            String email= scanner.nextLine();
+
+            if (email.contains("@gmail.com")||email.contains("@hotmail.com")) {
+                administrador.setEmail(email);
+                flag=true;
+            }
+            else {
+                System.out.println("formato de email no valido");
+                flag = false;
+            }
+        }while (!flag);
 
         do {
             System.out.println("7) Finalmente ingrese su clave de administrador (debera recordarla y saberla solo usted): ");
@@ -580,6 +628,7 @@ public class PedidosYa {
         System.out.println("[1] Ahora.\n[2] Mas tarde.");
         decision = scanner.nextInt();
 
+
         if (decision == 1) {
             administrador.getTarjeta().cargarTarjeta(scanner);
         } else if (decision == 2) {
@@ -593,7 +642,7 @@ public class PedidosYa {
         }
 
         exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
-
+        scanner.nextLine();
         return administrador;
     }
 
@@ -616,6 +665,7 @@ public class PedidosYa {
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
         boolean login = false;
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese su email: ");
             email = scanner.nextLine();
@@ -964,7 +1014,11 @@ public class PedidosYa {
                 } while (buscada==null);
             }
             case 2->{
-                buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
+                do{
+                    buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
+                    System.out.println("Aprete enter para continuar.....");
+                    scanner.nextLine();
+                } while (buscada==null);
             }
             case default ->{
                 System.out.println("Saliendo");
@@ -975,13 +1029,23 @@ public class PedidosYa {
     }
 
     public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner, Zonas zonaActual) {
-        mostrarTodosLosTiposDeProducto();
-        System.out.println("Que desea comer?");
-
         scanner.nextLine();
-        String comida = scanner.nextLine();
+        mostrarTodosLosTiposDeProducto();
+        boolean flag= false;
+        TipoDeProductos dato=null;
+        do {
+            System.out.println("Que desea comer?");
+            try {
 
-        TipoDeProductos dato = TipoDeProductos.valueOf(comida.toUpperCase());
+                String comida = scanner.nextLine();
+
+                dato = TipoDeProductos.valueOf(comida.toUpperCase());
+                flag=true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Tipo de producto no valido, ingrese uno de la lista.");
+                flag=false;
+            }
+        }while (!flag);
 
         List<Empresa> listaBuscador = new ArrayList<>();
         listaBuscador = crearListaEmpresas(dato, zonaActual);

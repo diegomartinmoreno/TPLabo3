@@ -184,7 +184,7 @@ public class Tarjeta {
 	}
 	
 	public boolean EstaVencida() {
-		
+
 		LocalDate ahora=LocalDate.now();
 		
 		//Convierto String almacenado a LocalDate para comparar las fechas.
@@ -275,7 +275,7 @@ public class Tarjeta {
 	@Override
 	public String toString() {
 		if (this.numeroTarjeta.length()==16) {
-			return "Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 16) + ", titular=" + titular;
+			return "Tarjeta Número= XXXX XXXX XXXX " + this.numeroTarjeta.substring(12, 16) + ", titular=" + titular + ", saldo= " + saldo + ", fechaVencimiento= " + fechaDeVencimiento;
 		}else {
 			return "La tarjeta no ha sido cargada aun.";
 		}
@@ -304,12 +304,13 @@ public class Tarjeta {
 	}
 	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
-		if (!EstaVencida()) {
+		if (EstaVencida()) {
 			this.BloquearTarjeta();
 			return false;
 		}
 		if (this.saldo<monto){
 			System.out.println("El saldo de la tarjeta es insuficiente para realizar la compra.");
+			System.out.println("Ingresa mas dinero....");
 			return false;
 		}
 		this.saldo -= monto;

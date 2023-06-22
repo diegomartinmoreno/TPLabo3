@@ -30,12 +30,9 @@ public class Main {
         Usuario usuarioRetornar = null;
         Administrador administradorRetornar = null;
         do {
-            System.out.println("En que modo va a querer acceder?");
-            System.out.println("(1) Administrador.");
-            System.out.println("(2) Usuario.");
-
-
-
+        System.out.println("En que modo va a querer acceder?");
+        System.out.println("(1) Administrador.");
+        System.out.println("(2) Usuario.");
 
             try {
                 int opcion = scanner.nextInt();
@@ -88,8 +85,7 @@ public class Main {
                         System.out.println(Arrays.toString(Zonas.values()));
                         do {
                             try {
-
-                                String zona1= scanner.nextLine();
+                                String zona1 = scanner.nextLine();
                                 elegida=Zonas.valueOf(zona1.toUpperCase());
                                 flag = false;
                             } catch (IllegalArgumentException e) {
@@ -127,7 +123,8 @@ public class Main {
             System.out.println("(5) Limpiar historial de compras."); //SE ACTUALIZA EN ARCHIVO
             System.out.println("(6) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
             System.out.println("(7) Tus zonas"); ///AGREGAR, ELIMINAR, VER ZONAS y ELEGIR  ZONA ACTUAL
-            System.out.println("(8) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+            System.out.println("(8) Tarjeta");
+            System.out.println("(9) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
 
             try {
                 opcion = scanner.nextInt();
@@ -186,6 +183,7 @@ public class Main {
                             }
                             default -> System.out.println("Volviendo al menu principal...");
                         }
+                        usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
                     }
 
                     case 5 -> {
@@ -203,7 +201,7 @@ public class Main {
                     }
 
                     case 6 -> {
-                        if (usuario.getTarjeta().isActiva()) System.out.println("Su tarjeta se encuentra cargada, si desea modificarla vaya al menu 3 para modificar su perfil");
+                        if (usuario.getTarjeta().isActiva()) System.out.println("Su tarjeta se encuentra cargada, si desea modificarla vaya al menu 4 para modificar su perfil");
                         else{
                             flag = usuario.getTarjeta().cargarTarjeta(scanner);
                             if (flag){
@@ -225,21 +223,69 @@ public class Main {
                             System.out.println("(1) Cambiar zona actual");
                             System.out.println("(2) Salir");
                             int opcionZona = scanner.nextInt();
+                            scanner.nextLine();
 
                             switch (opcionZona) {
                                 case 1 -> {
-                                    System.out.println("Tus zona actual: " + usuario.getZonaActual());
+                                    System.out.println("Tu zona actual: " + usuario.getZonaActual());
                                     System.out.println("Ingrese el nombre de tu nueva zona actual:");
-                                    usuario.setZonaActual(Zonas.valueOf(scanner.nextLine()));
+                                    System.out.println(Arrays.toString(Zonas.values()));
+                                    String zonaNueva =scanner.nextLine();
+                                    try {
+                                        Zonas zona = Zonas.valueOf(zonaNueva.toUpperCase());
+                                        usuario.setZonaActual(zona);
+                                    }catch (IllegalArgumentException e){
+                                        System.out.println("Zona inexistente. Volviendo al menu principal.");
+                                    }
                                 }
                                 case 2 -> System.out.println("Volviendo al menu principal...");
                             }
 
                             System.out.println("Desea continuar? s/n");
-                        }while (scanner.next().charAt(0) != 'n');
+                    }while (scanner.next().charAt(0) != 'n');
                     }
 
-                    case 8 -> control = 'n';
+                    case 8 -> {
+                        do{
+                            System.out.println("Tarjeta actual");
+                            System.out.println("(1) Ver datos de tarjeta");
+                            System.out.println("(2) Agregar saldo");
+                            System.out.println("(3) Salir");
+                            int decision = scanner.nextInt();
+                            scanner.nextLine();
+
+
+                                switch (decision){
+                                    case 1 -> {
+                                        System.out.println(usuario.getTarjeta().mostrarTarjeta());
+                                        System.out.println("Ingrese enter para continuar.....");
+                                        scanner.nextLine();
+                                        break;
+                                    }
+
+                                    case 2 -> {
+                                        System.out.println("Saldo actual: $" + usuario.getTarjeta().getSaldo());
+                                        System.out.println("Ingrese el saldo que desea agregar");
+
+
+                                        Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                                        usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
+
+                                        usuario.agregarDinero(scanner.nextInt());
+                                        System.out.println("Nuevo saldo: $" + usuario.getTarjeta().getSaldo());
+
+                                        pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);
+                                        break;
+                                    }
+                                }
+
+                                System.out.println("Desea continuar? s/n");
+                        }while (scanner.next().charAt(0) != 'n');
+
+
+                    }
+
+                    case 9 -> control = 'n';
 
                     default -> throw new CasoInexistenteException();
                 }
@@ -276,7 +322,13 @@ public class Main {
 
                     case 2 -> {
                         System.out.println("<< HISTORIAL DE COMPRAS >>");
-                        administrador.getHistorialDeCompras().listarHistorial();
+                        if(administrador.getHistorialDeCompras()==null){
+                            System.out.println("No hay compras realizadas....");
+                        } else{
+                            administrador.getHistorialDeCompras().listarHistorial();
+                        }
+
+
                     }
 
                     case 3 -> {
@@ -427,7 +479,7 @@ public class Main {
                     }
 
                     case 9 -> {
-                        if (administrador.getTarjeta().isActiva()) System.out.println("Su tarjeta se encuentra cargada, si desea modificarla vaya al menu 3 para modificar su perfil");
+                        if (administrador.getTarjeta().isActiva()) System.out.println("Su tarjeta se encuentra cargada, si desea modificarla vaya al menu 5 para modificar su perfil");
                         else{
                             flag = administrador.getTarjeta().cargarTarjeta(scanner);
                             if (flag){
@@ -463,8 +515,9 @@ public class Main {
     }
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Usuario usuario){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
+        int decision=-1;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, usuario.getZonaActual());
-        usuario.getCarrito().setVendedor(elegida);
+
         do {
             System.out.println("Que desea hacer?");
             System.out.println("(1) Agregar producto al carrito");
@@ -475,9 +528,18 @@ public class Main {
             System.out.println("(6) Ver carrito");
             System.out.println("(7) salir");
 
-            int decision = scanner.nextInt();
+            decision = scanner.nextInt();
+
+            Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+            usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
+            usuario.setCarrito(new Carrito());
 
             Carrito carritoUsuario = usuario.getCarrito();
+            carritoUsuario.setVendedor(elegida);
+
+
+
+
             switch (decision) {
                 case 1:
                     Producto prodAux = new Producto();
@@ -524,7 +586,12 @@ public class Main {
 
                     System.out.println("Ingresa un cupon de 6 caracteres: ");
                     scanner.nextLine();
-                    pedidosYa.agregarDescuento(scanner.nextLine(), carritoUsuario);
+                    try{
+                        pedidosYa.agregarDescuento(scanner.nextLine(), carritoUsuario);
+                    }catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                    }
+
                     break;
 
                 case 5:
@@ -539,32 +606,33 @@ public class Main {
                     }
 
 
-
                     carritoUsuario.setMontoTotal(carritoUsuario.calcularMontoTotalDeLaCompra());
                     carritoUsuario.setDestino(usuario.getZonaActual());
 
-                    Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                    Usuario user = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
+                    carritoUsuario.pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta(), scanner);
+                    pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);                       ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
 
-                    if(user != null){
-                        user.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta());
-                        pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);                       ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
-                    } else {
-                        throw new RuntimeException("Usuario no existe....///*** ERROR... fatal.....");
-                    }
+                    System.out.println("Pulse enter para salir....");
+                    scanner.nextLine();
+                    scanner.nextLine();
 
-                    user.getCarrito().listarCarrito();
+                    System.out.println("Saliendo.....");
+                    decision=7;
                     break;
                 case 6:
                     carritoUsuario.listarCarrito();
+                    System.out.println("Pulse enter para continuar....");
+                    scanner.nextLine();
+                    scanner.nextLine();
                     break;
             }
+        }while (decision != 7);
 
-            System.out.println("Desea continuar? s/n");
-        }while (scanner.next().charAt(0) != 'n');
+        usuario.setCarrito(new Carrito());
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Administrador administrador){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
+        int decision = -1;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, administrador.getZonaActual());
         administrador.getCarrito().setVendedor(elegida);
         do {
@@ -577,7 +645,7 @@ public class Main {
             System.out.println("(6) Ver carrito");
             System.out.println("(7) salir");
 
-            int decision = scanner.nextInt();
+            decision = scanner.nextInt();
 
             Carrito carritoAdministrador = administrador.getCarrito();
             switch (decision) {
@@ -606,8 +674,19 @@ public class Main {
                 case 2:
                     carritoAdministrador.mostrarProductos();
 
-                    System.out.println("Ingrese el numero del producto que desea eliminar");
-                    carritoAdministrador.eliminarProductoDelCarrito(scanner.nextInt());
+                    System.out.println("Ingrese el numero del producto que desea eliminar o un numero mayor a los mostrados para salir...");
+                    int posEliminar = scanner.nextInt();
+
+                    if(posEliminar > carritoAdministrador.getProductos().size()){
+                        break;
+                    }
+
+                    try {
+                        carritoAdministrador.eliminarProductoDelCarrito(posEliminar);
+                    }catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                    }
+
                     break;
 
                 case 3:
@@ -626,7 +705,12 @@ public class Main {
 
                     System.out.println("Ingresa un cupon de 6 caracteres: ");
                     scanner.nextLine();
-                    pedidosYa.agregarDescuento(scanner.nextLine(), carritoAdministrador);
+
+                    try{
+                        pedidosYa.agregarDescuento(scanner.nextLine(), carritoAdministrador);
+                    }catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                    }
                     break;
 
                 case 5:
@@ -643,16 +727,25 @@ public class Main {
                     carritoAdministrador.setMontoTotal(carritoAdministrador.calcularMontoTotalDeLaCompra());
                     carritoAdministrador.setDestino(administrador.getZonaActual());
 
-                    carritoAdministrador.pagarCarrito(administrador.getHistorialDeCompras(), administrador.getTarjeta());
-                    carritoAdministrador.listarCarrito();
-                    break;
+                    carritoAdministrador.pagarCarrito(administrador.getHistorialDeCompras(), administrador.getTarjeta(), scanner);
 
+                    System.out.println("Pulse enter para continuar....");
+                    scanner.nextLine();
+                    scanner.nextLine();
+
+                    System.out.println("Saliendo.....");
+                    decision=7;
+                    break;
                 case 6:
                     carritoAdministrador.listarCarrito();
+                    System.out.println("Pulse enter para continuar....");
+                    scanner.nextLine();
+                    scanner.nextLine();
                     break;
             }
+        }while (decision != 7);
 
-            System.out.println("Desea continuar? s/n");
-        }while (scanner.next().charAt(0) != 'n');
+        administrador.setCarrito(new Carrito());
     }
+
 }

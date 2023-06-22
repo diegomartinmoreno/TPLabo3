@@ -80,7 +80,6 @@ public class Administrador extends Persona implements UtilidadUserAdm {
 
     @Override
     public void agregarDinero(double dinero) {
-        System.out.println("ADMIN.....//***...//");
         tarjeta.setSaldo(999999999);
     }
 

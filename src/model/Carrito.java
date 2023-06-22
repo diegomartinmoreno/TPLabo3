@@ -1,5 +1,7 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.crypto.spec.DESedeKeySpec;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -7,6 +9,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Carrito {
+    @JsonProperty("Productos")
     private ColeccionGenerica<Producto> productos;
     private Empresa vendedor;
 	private String nota;
@@ -65,7 +68,7 @@ public class Carrito {
 
 
     //5
-    public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta) throws NullPointerException{
+    public void pagarCarrito (HistorialDeCompras historial, Tarjeta tarjeta, Scanner scanner) throws NullPointerException{
         if(historial==null || tarjeta==null) throw new NullPointerException("Error! Los parametros no pueden ser nulos.//***");
 
         repartidor = generarRepartidorAleatorio();
@@ -74,16 +77,32 @@ public class Carrito {
         montoTotal += vendedor.getCostoDeEnvio();
 
 
-
+        System.out.println("////////////////////////////////////////////////////////");
         System.out.printf("Encargado de llevar el pedido: ");
         repartidor.mostrarRepartidor();
         System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
 
         historial.agregarPedido(this);
 
-        System.out.println("SALDOOOOOOOOOO " + tarjeta.getSaldo());
 
-        if(tarjeta.RealizarPago(montoTotal)) clear();
+        boolean flag = false;
+
+        do {
+            flag = tarjeta.RealizarPago(montoTotal);
+            if (flag && tarjeta.isActiva()) {
+                System.out.println("La compra ha sido realizada!!!");
+                System.out.print("Aguarde, en unos instantes le va a llegar un pedido por manos de ");
+                repartidor.mostrarRepartidor();
+            } else {
+                if (!tarjeta.isActiva()){
+                    System.out.println("La tarjeta se encuentra inhabilitada..// Debe cargar una nueva...");
+                    tarjeta.cargarTarjeta(scanner);
+                }
+
+                System.out.println("Ingresa saldo: ");
+                tarjeta.setSaldo(tarjeta.getSaldo() + scanner.nextDouble());
+            }
+        } while (!flag);
     }
 
     public Repartidor generarRepartidorAleatorio(){
