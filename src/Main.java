@@ -27,74 +27,86 @@ public class Main {
     }
 
     public static Persona menuDeSeleccionDeModoDeAcceso (Scanner scanner, PedidosYa pedidosYa) throws CasoInexistenteException{
+        Usuario usuarioRetornar = null;
+        Administrador administradorRetornar = null;
+        do {
         System.out.println("En que modo va a querer acceder?");
         System.out.println("(1) Administrador.");
         System.out.println("(2) Usuario.");
-        Usuario usuarioRetornar = null;
-        Administrador administradorRetornar = null;
 
-        try {
-            int opcion = scanner.nextInt();
-            switch (opcion) {
-                case 1 -> {
-                    System.out.println("(1) Iniciar Sesion >>");
-                    System.out.println("(2) Registrarse >>");
-                    int caso = scanner.nextInt();
-                    scanner.nextLine();
-                    switch (caso) {
-                        case 1 -> {
-                            administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
+
+
+
+            try {
+                int opcion = scanner.nextInt();
+                switch (opcion) {
+                    case 1 -> {
+                        System.out.println("(1) Iniciar Sesion >>");
+                        System.out.println("(2) Registrarse >>");
+                        int caso = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch (caso) {
+                            case 1 -> {
+                                administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
+                            }
+                            case 2 -> {
+                                administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
+                            }
+                            default -> throw new CasoInexistenteException();
                         }
-                        case 2 -> {
-                            administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
+
+                        System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                        System.out.println(Arrays.toString(Zonas.values()));
+                        scanner.nextLine();
+                        try {
+                            Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
+                            administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("ZONA INEXISTENTE.");
                         }
-                        default -> throw new CasoInexistenteException();
+                        return administradorRetornar;
                     }
 
-                    System.out.println("ELEGIR TU ZONA ACTUAL: ");
-                    System.out.println(Arrays.toString(Zonas.values()));
-                    scanner.nextLine();
-                    try {
-                        Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
-                        administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
-                    }catch (IllegalArgumentException e){
-                        System.out.println("ZONA INEXISTENTE.");
+                    case 2 -> {
+                        System.out.println("(1) Iniciar Sesion >>");
+                        System.out.println("(2) Registrarse >>");
+                        int casoUser = scanner.nextInt();
+
+                        switch (casoUser) {
+                            case 1 -> {
+                                usuarioRetornar = pedidosYa.iniciarSesionComoUsuario(scanner);
+                                //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU. ////////////////////////////////////////////////
+                            }
+                            case 2 -> {
+                                usuarioRetornar = pedidosYa.registroDeCuentaDeUsuario(scanner);
+                            }
+                            default -> throw new CasoInexistenteException();
+                        }
+                        System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                        System.out.println(Arrays.toString(Zonas.values()));
+                        scanner.nextLine();
+                        try {
+                            Zonas elegida2 = Zonas.valueOf(scanner.nextLine().toUpperCase());
+                            usuarioRetornar.setZonaActual(elegida2);
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("ZONA INEXISTENTE.");
+                        }
+
+                        ////////////////////////////////////////////////////////////////////
+                        return usuarioRetornar;
                     }
-                    return administradorRetornar;
+                    default -> throw new CasoInexistenteException();
                 }
-                case 2 -> {
-                    System.out.println("(1) Iniciar Sesion >>");
-                    System.out.println("(2) Registrarse >>");
-                    int casoUser = scanner.nextInt();
-                    switch (casoUser) {
-                        case 1 -> {
-                            usuarioRetornar = pedidosYa.iniciarSesionComoUsuario(scanner);
-                            //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU. ////////////////////////////////////////////////
-                        }
-                        case 2 -> {
-                            usuarioRetornar = pedidosYa.registroDeCuentaDeUsuario(scanner);
-                        }
-                        default -> throw new CasoInexistenteException();
-                    }
-                    System.out.println("ELEGIR TU ZONA ACTUAL: ");
-                    System.out.println(Arrays.toString(Zonas.values()));
-                    scanner.nextLine();
-                    try {
-                        Zonas elegida2 = Zonas.valueOf(scanner.nextLine().toUpperCase());
-                        usuarioRetornar.setZonaActual(elegida2);
-                    }catch (IllegalArgumentException e){
-                        System.out.println("ZONA INEXISTENTE.");
-                    }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
 
-                    ////////////////////////////////////////////////////////////////////
-                    return usuarioRetornar;
-                }
-                default -> throw new CasoInexistenteException();
+            } catch (CasoInexistenteException E) {
+                scanner.nextLine();
+                System.out.println(E.getMessage());
             }
-        }catch (InputMismatchException e){
-            System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
-        }
-
+        }while (usuarioRetornar==null || administradorRetornar==null);
         return null;
     }
 
