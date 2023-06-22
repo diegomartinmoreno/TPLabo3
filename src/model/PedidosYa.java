@@ -967,7 +967,11 @@ public class PedidosYa {
                 } while (buscada==null);
             }
             case 2->{
-                buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
+                do{
+                    buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
+                    System.out.println("Aprete enter para continuar.....");
+                    scanner.nextLine();
+                } while (buscada==null);
             }
             case default ->{
                 System.out.println("Saliendo");
@@ -978,13 +982,23 @@ public class PedidosYa {
     }
 
     public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner, Zonas zonaActual) {
-        mostrarTodosLosTiposDeProducto();
-        System.out.println("Que desea comer?");
-
         scanner.nextLine();
-        String comida = scanner.nextLine();
+        mostrarTodosLosTiposDeProducto();
+        boolean flag= false;
+        TipoDeProductos dato=null;
+        do {
+            System.out.println("Que desea comer?");
+            try {
 
-        TipoDeProductos dato = TipoDeProductos.valueOf(comida.toUpperCase());
+                String comida = scanner.nextLine();
+
+                dato = TipoDeProductos.valueOf(comida.toUpperCase());
+                flag=true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Tipo de producto no valido, ingrese uno de la lista.");
+                flag=false;
+            }
+        }while (!flag);
 
         List<Empresa> listaBuscador = new ArrayList<>();
         listaBuscador = crearListaEmpresas(dato, zonaActual);
