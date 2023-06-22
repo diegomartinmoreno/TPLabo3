@@ -69,7 +69,8 @@ public class Tarjeta {
 		///
 		do {
 			System.out.println("Ingrese saldo limite de la tarjeta:");
-			flag=!this.cargarSaldoLimiteTarjeta(lectura.nextLine());
+			String saldoLimite = lectura.nextLine();
+			flag=!this.cargarSaldoLimiteTarjeta(saldoLimite);
 		}while(flag);
 		
 		this.activa=true;
@@ -313,7 +314,8 @@ public class Tarjeta {
 			System.out.println("Ingresa mas dinero....");
 			return false;
 		}
-		this.saldo -= monto;
+		setSaldo(getSaldo() - monto);
+		System.out.println("Se le resta dinero a tu cuenta.....");
 		return true;
 	}
 
