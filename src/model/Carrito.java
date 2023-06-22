@@ -93,7 +93,7 @@ public class Carrito {
                 System.out.println("Su pedido es el siguiente:");
                 listarCarrito();
 
-                Pedido pedido = new Pedido(fechaPedido, vendedor.getNombre());
+                Pedido pedido = new Pedido(fechaPedido, vendedor.getNombre(), montoTotal);
                 pasarProductosAlPedido(pedido);
 
                 historial.agregarPedido(pedido);

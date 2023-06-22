@@ -9,21 +9,24 @@ public class Pedido {
     private List<Producto> productos;
     private String fechaPedido;
     private String nombreEmpresaVendedor;
+    private double montoTotal;
 
     public Pedido() {
         productos = new ArrayList<>();
     }
 
-    public Pedido(String fechaPedido, String nombreEmpresaVendedor) {
+    public Pedido(String fechaPedido, String nombreEmpresaVendedor, double montoTotal) {
         productos = new ArrayList<>();
         this.fechaPedido = fechaPedido;
         this.nombreEmpresaVendedor = nombreEmpresaVendedor;
+        this.montoTotal = montoTotal;
     }
 
     public void mostrarPedido(){
         System.out.println("Productos= " + productos);
         System.out.println("Fecha= " + fechaPedido);
         System.out.println("Empresa= " + nombreEmpresaVendedor);
+        System.out.println("Monto total= " + montoTotal);
     }
 
     public boolean agregarProducto(Producto producto){
@@ -32,11 +35,13 @@ public class Pedido {
 
 
 
+    public double getMontoTotal() {
+        return montoTotal;
+    }
 
-
-
-
-
+    public void setMontoTotal(double montoTotal) {
+        this.montoTotal = montoTotal;
+    }
 
     public List<Producto> getProductos() {
         return productos;
