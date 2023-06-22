@@ -195,6 +195,9 @@ public class PedidosYa {
             } catch (NullPointerException e) {
                 System.out.println(e.getMessage());
                 flag = false;
+            }catch(IllegalArgumentException ex){
+                System.out.println("La contraseña debe ser mas segura");
+                flag= false;
             }
         } while (!flag);
 
@@ -235,6 +238,7 @@ public class PedidosYa {
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
         boolean login = false;
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese el email: ");
             email = scanner.nextLine();
@@ -304,6 +308,7 @@ public class PedidosYa {
     public boolean modificarEmailDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -333,6 +338,7 @@ public class PedidosYa {
     public boolean modificarNroTelefonoDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -372,7 +378,7 @@ public class PedidosYa {
     public boolean modificarNombreYapellidoDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
         char c = scanner.next().charAt(0);
-
+        scanner.nextLine();
         Usuario user = null;
         this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
@@ -413,6 +419,7 @@ public class PedidosYa {
     public boolean cambiarTarjetaDeUsuario(Scanner scanner) {
         System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -1380,6 +1387,27 @@ public class PedidosYa {
             System.out.println("La empresa no fue encontrada... error..... fatal.....");
             return null;
         }
+    }
+
+    public Zonas elegirZona (Scanner scanner){
+        Zonas elegida=null;
+        boolean flag=false;
+
+        do {
+            try {
+                System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                System.out.println(Arrays.toString(Zonas.values()));
+
+                //scanner.nextLine();
+                String zonaElegida = scanner.nextLine();
+                elegida = Zonas.valueOf(zonaElegida.toUpperCase());
+                flag=true;
+            } catch (IllegalArgumentException e) {
+                System.out.println("Zona inexistente, ingrese el nombre exacto de la zona");
+                flag=false;
+            }
+        }while (!flag);
+    return elegida;
     }
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ///////// FINALIZA PARTE DE EMPRESA

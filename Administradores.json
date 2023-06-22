@@ -1,1 +1,1 @@
-[{"nombre":"Pablo","apellido":"Escobar","nroDeTelefono":"2235291242","edad":19,"email":"papito@gmail.com","dni":"12345678","idAdmin":"934c013a-0c3d-479f-b19c-b0715995ca78","historialDeCompras":{"pedidos":[]},"password":{"password":"clave124"},"tarjeta":{"numeroTarjeta":"1234567890123455","titular":"juanito","fechaDeVencimiento":"04/2044","codigoDeSeguridad":"321","saldo":20000.0,"activa":true},"zonaActual":null}]
+[]
