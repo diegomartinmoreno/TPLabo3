@@ -182,8 +182,19 @@ public class PedidosYa {
 
         usuario.setNroDeTelefono(cadenaAux);
 
-        System.out.println("6) Ingrese su email: ");
-        usuario.setEmail(scanner.nextLine());
+        do {
+            System.out.println("6) Ingrese su email: ");
+            String email= scanner.nextLine();
+
+            if (email.contains("@gmail.com")||email.contains("@hotmail.com")) {
+                usuario.setEmail(email);
+                flag = true;
+            }
+            else {
+                System.out.println("formato de email no valido");
+                flag = false;
+            }
+        }while (!flag);
 
         do {
             System.out.println("7) Finalmente ingrese su contrasenia (debera recordarla): ");
@@ -475,6 +486,7 @@ public class PedidosYa {
     }
 
     public Administrador registroDeCuentaDeAdmin(Scanner scanner) throws MenorDeEdadException {
+
         Administrador administrador = new Administrador();
         String cadenaAux = null, contrasenia = null;
         boolean flag = false;
@@ -572,8 +584,19 @@ public class PedidosYa {
             }
         } while (!flag);
 
-        System.out.println("6) Ingrese su email: ");
-        administrador.setEmail(scanner.nextLine());
+        do {
+            System.out.println("6) Ingrese su email: ");
+            String email= scanner.nextLine();
+
+            if (email.contains("@gmail.com")||email.contains("@hotmail.com")) {
+                administrador.setEmail(email);
+                flag=true;
+            }
+            else {
+                System.out.println("formato de email no valido");
+                flag = false;
+            }
+        }while (!flag);
 
         do {
             System.out.println("7) Finalmente ingrese su clave de administrador (debera recordarla y saberla solo usted): ");

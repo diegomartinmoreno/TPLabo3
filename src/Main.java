@@ -122,7 +122,7 @@ public class Main {
             System.out.println("(4) Modificar perfil >>"); //SE ACTUALIZA EN ARCHIVO FUNCA
             System.out.println("(5) Limpiar historial de compras."); //SE ACTUALIZA EN ARCHIVO
             System.out.println("(6) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
-            System.out.println("(7) Tus zonas"); ///AGREGAR, ELIMINAR, VER ZONAS y ELEGIR  ZONA ACTUAL FUNCA
+            System.out.println("(7) Tu zona"); ///AGREGAR, ELIMINAR, VER ZONAS y ELEGIR  ZONA ACTUAL FUNCA
             System.out.println("(8) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO FUNCA
 
             try {
