@@ -76,15 +76,10 @@ public class Carrito {
         repartidor = generarRepartidorAleatorio();
         repartidor.llevarPedido();
 
-        montoTotal += vendedor.getCostoDeEnvio();
-
-
         System.out.println("////////////////////////////////////////////////////////");
         System.out.printf("Encargado de llevar el pedido: ");
         repartidor.mostrarRepartidor();
         System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
-
-
 
         boolean flag = false;
 
@@ -154,6 +149,8 @@ public class Carrito {
         for (Producto producto : productos.getProductos()){
             montoTotal = montoTotal + (producto.getPrecio() * producto.getCantidadPedido());
         }
+
+        montoTotal += vendedor.getCostoDeEnvio();
 
         if (tieneCupon){
             System.out.println("Usted posee un descuento del 15%!!");
