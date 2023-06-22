@@ -63,7 +63,7 @@ public class Main {
                                 System.out.println("La zona ingresada no es valida. Intente nuevamente.");
                             }
                         } while (flag);
-                        administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                        administradorRetornar.establecerZonaActual(elegida);////se agrega a la zona elegida
                         return administradorRetornar;
                     }
 
@@ -400,7 +400,7 @@ public class Main {
                                         System.out.println("La modificacion de nombre y apellido no se realizo exitosamente.");
                                 }
                                 case 3 -> {
-                                    flag = pedidosYa.modificarNroTelefonoDeUsuario(scanner);
+                                    flag = pedidosYa.modificarNroTelefonoDeAdministrador(scanner);
                                     if (flag)
                                         System.out.println("\nLa modificacion del numero telefonico se realizo con exito.");
                                     else

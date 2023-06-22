@@ -87,5 +87,11 @@ public class Administrador extends Persona implements UtilidadUserAdm {
     public boolean login(String contrasenia) {
         return password.validate(contrasenia);
     }
+
+    @Override
+    public void establecerZonaActual (Zonas zonaActual) throws NullPointerException {
+        if (zonaActual == null) throw new NullPointerException("Error! La zona es nula.");
+        this.zonaActual = zonaActual;
+    }
 }
 

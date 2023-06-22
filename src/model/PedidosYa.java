@@ -978,13 +978,6 @@ public class PedidosYa {
         }
     }
 
-    public void mostrarEmpresas() {
-        for (Empresa empresa : listaDeEmpresas) {
-            System.out.println("Muestro las empresas");
-            empresa.mostrarEmpresa();
-        }
-    }
-
     public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
         listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, MOGOTES),250, 4));
         listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS, CARNES, ENSALADAS, PARRILLA)), Set.of(CENTRO,ALEM,RUMENCO, MOGOTES),250, 5));

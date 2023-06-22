@@ -69,13 +69,11 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         this.zonaActual = zonaActual;
     }
 
-
+    @Override
     public void establecerZonaActual (Zonas zonaActual) throws NullPointerException {
         if (zonaActual == null) throw new NullPointerException("Error! La zona es nula.");
         this.zonaActual = zonaActual;
     }
-
-
 
     @Override
     public boolean login (String contrasenia) {
