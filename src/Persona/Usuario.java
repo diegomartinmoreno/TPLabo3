@@ -12,7 +12,6 @@ import java.util.Set;
 
 
 public class Usuario extends Persona implements UtilidadUserAdm{
-    private Set<Zonas> zonas;
     private Tarjeta tarjeta;
     @JsonIgnore
     private Carrito carrito;
@@ -23,26 +22,16 @@ public class Usuario extends Persona implements UtilidadUserAdm{
 
     public Usuario() {
         super();
-        zonas = new HashSet<>();
         tarjeta = new Tarjeta();
         carrito=new Carrito();
         historialDeCompras = new HistorialDeCompras();
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<Zonas> zonas, Password contrasenia) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Password contrasenia) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
-        this.zonas = zonas;
         this.contrasenia = contrasenia;
     }
-    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni, Set<Zonas> zonas) {
+    public Usuario(String nombre, String apellido, String nroDeTelefono, int edad, String email, String dni) {
         super(nombre, apellido, nroDeTelefono, edad, email, dni);
-        this.zonas = zonas;
-    }
-
-    public Set<Zonas> getZonas() {
-        return zonas;
-    }
-    public void setZonas(Set<Zonas> zonas) {
-        this.zonas = zonas;
     }
 
     public void setContrasenia(Password contrasenia) {
@@ -80,22 +69,6 @@ public class Usuario extends Persona implements UtilidadUserAdm{
         this.zonaActual = zonaActual;
     }
 
-    @Override
-    public String toString() {
-        return super.toString()
-                + "Zonas disponibles: " + zonas + contrasenia +
-                "\n------------------------\n";
-    }
-
-    public boolean agregarUnaZona (Zonas zonaNueva) throws NullPointerException{
-        if (zonaNueva == null) throw new NullPointerException("Error! La nueva zona es nula..//***");
-        return zonas.add(zonaNueva);
-    }
-
-    public boolean eliminarUnaZona(Zonas zona){
-        if(zona == null) throw new NullPointerException("Error! La zona no puede ser nula..//***");
-        return zonas.remove(zona);
-    }
 
     public void establecerZonaActual (Zonas zonaActual) throws NullPointerException {
         if (zonaActual == null) throw new NullPointerException("Error! La zona es nula.");

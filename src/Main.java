@@ -27,29 +27,34 @@ public class Main {
     }
 
     public static Persona menuDeSeleccionDeModoDeAcceso (Scanner scanner, PedidosYa pedidosYa) throws CasoInexistenteException{
+        Usuario usuarioRetornar = null;
+        Administrador administradorRetornar = null;
+        do {
         System.out.println("En que modo va a querer acceder?");
         System.out.println("(1) Administrador.");
         System.out.println("(2) Usuario.");
-        Usuario usuarioRetornar = null;
-        Administrador administradorRetornar = null;
 
-        try {
-            int opcion = scanner.nextInt();
-            switch (opcion) {
-                case 1 -> {
-                    System.out.println("(1) Iniciar Sesion >>");
-                    System.out.println("(2) Registrarse >>");
-                    int caso = scanner.nextInt();
-                    scanner.nextLine();
-                    switch (caso) {
-                        case 1 -> {
-                            administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
+
+
+
+            try {
+                int opcion = scanner.nextInt();
+                switch (opcion) {
+                    case 1 -> {
+                        System.out.println("(1) Iniciar Sesion >>");
+                        System.out.println("(2) Registrarse >>");
+                        int caso = scanner.nextInt();
+                        scanner.nextLine();
+
+                        switch (caso) {
+                            case 1 -> {
+                                administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
+                            }
+                            case 2 -> {
+                                administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
+                            }
+                            default -> throw new CasoInexistenteException();
                         }
-                        case 2 -> {
-                            administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
-                        }
-                        default -> throw new CasoInexistenteException();
-                    }
 
                     System.out.println("ELEGIR TU ZONA ACTUAL: ");
                     System.out.println(Arrays.toString(Zonas.values()));
@@ -114,15 +119,20 @@ public class Main {
 
                     }
 
-                    ////////////////////////////////////////////////////////////////////
-                    return usuarioRetornar;
+                        ////////////////////////////////////////////////////////////////////
+                        return usuarioRetornar;
+                    }
+                    default -> throw new CasoInexistenteException();
                 }
-                default -> throw new CasoInexistenteException();
-            }
-        }catch (InputMismatchException e){
-            System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
-        }
+            } catch (InputMismatchException e) {
+                scanner.nextLine();
+                System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
 
+            } catch (CasoInexistenteException E) {
+                scanner.nextLine();
+                System.out.println(E.getMessage());
+            }
+        }while (usuarioRetornar==null || administradorRetornar==null);
         return null;
     }
 
@@ -232,35 +242,17 @@ public class Main {
                     case 7 -> {
                         do {
                             System.out.println("TUS ZONAS:"); //cambiarenmenuadministradorzonaactual
-                            System.out.println("(1) Agregar zona");
-                            System.out.println("(2) Eliminar zona");
-                            System.out.println("(3) Cambiar zona actual");
-                            System.out.println("(4) Ver tus zonas");
-                            System.out.println("(5) Salir");
+                            System.out.println("(1) Cambiar zona actual");
+                            System.out.println("(2) Salir");
+                            int opcionZona = scanner.nextInt();
 
-                            switch (scanner.nextInt()) {
+                            switch (opcionZona) {
                                 case 1 -> {
-                                    System.out.println("Zonas disponibles: \n " + Arrays.toString(Zonas.values()));
-                                    System.out.println("Ingresa una zona");
-                                    usuario.agregarUnaZona(Zonas.valueOf(scanner.nextLine()));
-                                    break;
-                                }
-
-                                case 2 -> {
-                                    System.out.println("Tus zonas: \n" + usuario.getZonas());
-                                    System.out.println("Ingrese el nombre de la zona a eliminar");
-                                    usuario.eliminarUnaZona(Zonas.valueOf(scanner.nextLine()));
-                                    break;
-                                }
-
-                                case 3 -> {
-                                    System.out.println("Tus zonas:" + usuario.getZonas());
+                                    System.out.println("Tus zona actual: " + usuario.getZonaActual());
                                     System.out.println("Ingrese el nombre de tu nueva zona actual:");
                                     usuario.setZonaActual(Zonas.valueOf(scanner.nextLine()));
-                                    break;
                                 }
-
-                                case 4 -> System.out.println("Tus zonas: " + usuario.getZonas());
+                                case 2 -> System.out.println("Volviendo al menu principal...");
                             }
 
                             System.out.println("Desea continuar? s/n");
