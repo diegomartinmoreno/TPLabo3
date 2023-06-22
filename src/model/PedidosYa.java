@@ -238,9 +238,9 @@ public class PedidosYa {
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
         boolean login = false;
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese el email: ");
-            scanner.nextLine();
             email = scanner.nextLine();
             System.out.println("2) Ingrese su contrasenia: ");
             contrasenia = scanner.nextLine();
@@ -308,6 +308,7 @@ public class PedidosYa {
     public boolean modificarEmailDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su email? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -337,6 +338,7 @@ public class PedidosYa {
     public boolean modificarNroTelefonoDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su numero de telefono? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
@@ -376,7 +378,7 @@ public class PedidosYa {
     public boolean modificarNombreYapellidoDeUsuario(Scanner scanner) {
         System.out.println("Desea modificar su nombre y apellido de cuenta (si solo desea el nombre por ejemplo, aun asi ingrese el mismo apellido)? (s/n): ");
         char c = scanner.next().charAt(0);
-
+        scanner.nextLine();
         Usuario user = null;
         this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
 
@@ -417,6 +419,7 @@ public class PedidosYa {
     public boolean cambiarTarjetaDeUsuario(Scanner scanner) {
         System.out.println("Desea sacar su tarjeta actual y cargar una distinta? (s/n): ");
         char c = scanner.next().charAt(0);
+        scanner.nextLine();
 
         if (c == 's') {
             this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS); //OBTENGO EL ARCHIVO PORQUE ES NECESARIO PARA BUSCAR POR DNI Y LUEGO APLICAR LOS CAMBIOS.
