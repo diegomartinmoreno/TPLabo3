@@ -147,6 +147,7 @@ public class Main {
                             usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
 
                             usuario.getHistorialDeCompras().listarHistorial();
+                            System.out.println("////////////////////////////////////////////////////////////");
                             System.out.println("Ingrese enter para continuar...");
                             scanner.nextLine();
                             scanner.nextLine();
@@ -346,7 +347,9 @@ public class Main {
                             System.out.println("HISTORIAL DE COMPRAS VACIO");
                         } else{
                             administrador.getHistorialDeCompras().listarHistorial();
+                            System.out.println("////////////////////////////////////////////////////////////");
                             System.out.println("Ingrese enter para continuar...");
+                            scanner.nextLine();
                             scanner.nextLine();
                         }
 

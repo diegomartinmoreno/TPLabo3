@@ -239,6 +239,7 @@ public class PedidosYa {
                 throw new RuntimeException("No agrego el usuario, ya registrado en el sistema...///***...error.....fatal......");
             }else{
                 exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
+                System.out.println("Aprete enter para continuar.....");
                 scanner.nextLine();
             }
         }catch (RuntimeException e){
@@ -646,6 +647,7 @@ public class PedidosYa {
                 throw new RuntimeException("No agrego el administrador, ya registrado en el sistema...///***...error.....fatal......");
             }else{
                 exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
+                System.out.println("Aprete enter para continuar.....");
                 scanner.nextLine();
             }
         }catch (RuntimeException e){
@@ -1040,30 +1042,30 @@ public class PedidosYa {
 
     public Empresa buscarEmpresaSegunQueQuiereComer(Scanner scanner, Zonas zonaActual) {
         scanner.nextLine();
-        mostrarTodosLosTiposDeProducto();
         boolean flag= false;
         TipoDeProductos dato=null;
-        do {
-            try {
-                System.out.println("Que desea comer?");
-                String comida = scanner.nextLine();
 
-                 dato = TipoDeProductos.valueOf(comida.toUpperCase());
-                 flag=true;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Tipo de producto no valido, ingrese uno de la lista.");
-                flag=false;
-            }
-        }while (!flag);
+        do {
+            mostrarTodosLosTiposDeProducto();
+
+
+                try {
+                    System.out.println("Que desea comer?");
+                    String comida = scanner.nextLine();
+
+                     dato = TipoDeProductos.valueOf(comida.toUpperCase());
+                     flag=true;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Tipo de producto no valido, ingrese uno de la lista.");
+                }
+            } while (!flag);
 
         List<Empresa> listaBuscador = new ArrayList<>();
         listaBuscador = crearListaEmpresas(dato, zonaActual);
 
         mostrarEmpresasSoloNombre(listaBuscador);
 
-        Empresa empresa1 = buscarPorNombreSinSerExacto(scanner, listaBuscador, zonaActual);
-
-        return empresa1;
+        return buscarPorNombreSinSerExacto(scanner, listaBuscador, zonaActual);
     }
 
     public Empresa buscarPorNombreSinSerExacto(Scanner scanner, Zonas zonaActual) {
@@ -1149,7 +1151,7 @@ public class PedidosYa {
           return crearListaEmpresas(nombre,listaDeEmpresas,zonaActual);
     }
 
-    public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){ /// Crea una lista segun el tipo de comida
+    public List<Empresa> crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){ /// Crea una lista segun el tipo de comida
 
             List<Empresa> listaBuscador = new ArrayList<>();;
 
