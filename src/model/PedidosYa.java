@@ -207,6 +207,7 @@ public class PedidosYa {
         System.out.println("[1] Ahora.\n[2] Mas tarde.");
         decision = scanner.nextInt();
 
+
         if (decision == 1) {
             usuario.getTarjeta().cargarTarjeta(scanner);
         } else if (decision == 2) {
@@ -218,6 +219,7 @@ public class PedidosYa {
         this.usuarios.add(usuario);
         exportarUsuariosToJSON(ARCHIVO_USUARIOS, this.usuarios);
 
+        scanner.nextLine();
         return usuario;
     }
 
@@ -590,6 +592,7 @@ public class PedidosYa {
         System.out.println("[1] Ahora.\n[2] Mas tarde.");
         decision = scanner.nextInt();
 
+
         if (decision == 1) {
             administrador.getTarjeta().cargarTarjeta(scanner);
         } else if (decision == 2) {
@@ -603,7 +606,7 @@ public class PedidosYa {
         }
 
         exportarAdministradoresToJSON(ARCHIVO_ADMINISTRADORES, this.administradores);
-
+        scanner.nextLine();
         return administrador;
     }
 

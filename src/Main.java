@@ -99,15 +99,15 @@ public class Main {
                     default -> throw new CasoInexistenteException();
                 }
 
+            } catch (CasoInexistenteException E) {
+                scanner.nextLine();
+                System.out.println(E.getMessage());
 
             } catch (InputMismatchException e) {
                 scanner.nextLine();
                 System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
-
-            } catch (CasoInexistenteException E) {
-                scanner.nextLine();
-                System.out.println(E.getMessage());
             }
+
         }while (usuarioRetornar==null || administradorRetornar==null);
         return null;
     }
