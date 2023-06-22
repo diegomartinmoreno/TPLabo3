@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.crypto.spec.DESedeKeySpec;
@@ -11,6 +12,7 @@ import java.util.Scanner;
 public class Carrito {
     @JsonProperty("Productos")
     private ColeccionGenerica<Producto> productos;
+    @JsonIgnore
     private Empresa vendedor;
 	private String nota;
     private String fechaPedido;
@@ -82,7 +84,6 @@ public class Carrito {
         repartidor.mostrarRepartidor();
         System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
 
-        historial.agregarPedido(this);
 
 
         boolean flag = false;
@@ -93,8 +94,15 @@ public class Carrito {
                 System.out.println("La compra ha sido realizada!!!");
                 System.out.print("Aguarde, en unos instantes le va a llegar un pedido por manos de ");
                 repartidor.mostrarRepartidor();
+
                 System.out.println("Su pedido es el siguiente:");
                 listarCarrito();
+
+                Pedido pedido = new Pedido(fechaPedido, vendedor.getNombre());
+                pasarProductosAlPedido(pedido);
+
+                historial.agregarPedido(pedido);
+
                 System.out.println("//////////////////////////////////////////////////////////////////");
             } else {
                 if (!tarjeta.isActiva()){
@@ -102,10 +110,17 @@ public class Carrito {
                     tarjeta.cargarTarjeta(scanner);
                 }
 
-                System.out.println("Ingresa saldo: ");
+                System.out.println("Saldo insuficiente... \n Saldo total: $" + tarjeta.getSaldo());
+                System.out.println("Ingrese saldo: ");
                 tarjeta.setSaldo(tarjeta.getSaldo() + scanner.nextDouble());
             }
         } while (!flag);
+    }
+
+    public void pasarProductosAlPedido(Pedido pedido){
+        for(Producto producto : productos.getProductos()){
+            pedido.agregarProducto(producto);
+        }
     }
 
     public Repartidor generarRepartidorAleatorio(){
@@ -154,7 +169,7 @@ public class Carrito {
         System.out.println(productos.getProductos());
         System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
         System.out.println("Nota: " + nota);
-        System.out.println("Fecha del Pedido: " + fechaPedido + "\n");
+        System.out.println("Fecha del model.Pedido: " + fechaPedido + "\n");
     }
 
     public int buscarProductoPorNombre(String nombre) throws NullPointerException, RuntimeException{

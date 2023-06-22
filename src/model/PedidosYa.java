@@ -1025,7 +1025,10 @@ public class PedidosYa {
                 } while (buscada==null);
             }
             case 2->{
-                buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
+                do {
+                    buscada=buscarEmpresaSegunQueQuiereComer(scanner, zonaActual);
+                }while (buscada==null);
+
             }
             case default ->{
                 System.out.println("Saliendo");
@@ -1041,13 +1044,12 @@ public class PedidosYa {
         boolean flag= false;
         TipoDeProductos dato=null;
         do {
-            System.out.println("Que desea comer?");
             try {
-
+                System.out.println("Que desea comer?");
                 String comida = scanner.nextLine();
 
                  dato = TipoDeProductos.valueOf(comida.toUpperCase());
-                flag=true;
+                 flag=true;
             } catch (IllegalArgumentException e) {
                 System.out.println("Tipo de producto no valido, ingrese uno de la lista.");
                 flag=false;
@@ -1149,7 +1151,8 @@ public class PedidosYa {
 
     public List crearListaEmpresas (TipoDeProductos comida, Zonas zonaActual){ /// Crea una lista segun el tipo de comida
 
-            List<Empresa> listaBuscador = new ArrayList<>();
+            List<Empresa> listaBuscador = new ArrayList<>();;
+
             for (Empresa empresa : listaDeEmpresas) {
                 if (empresa.getProductosEmpresa().containsKey(comida) && empresa.getZonas().contains(zonaActual)) {
                     listaBuscador.add(empresa);

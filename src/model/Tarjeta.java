@@ -70,8 +70,8 @@ public class Tarjeta {
 		do {
 			System.out.println("Ingrese saldo limite de la tarjeta:");
 			String saldoLimite = lectura.nextLine();
-			flag=!this.cargarSaldoLimiteTarjeta(saldoLimite);
-		}while(flag);
+			flag = cargarSaldoLimiteTarjeta(saldoLimite);
+		}while(!flag);
 		
 		this.activa=true;
 		
@@ -121,8 +121,8 @@ public class Tarjeta {
 		if (this.SINO(lectura.nextLine())) {
 			do {
 				System.out.println("Ingrese saldo limite de la tarjeta:");
-				flag=!this.cargarSaldoLimiteTarjeta(lectura.nextLine());
-			}while(flag);
+				flag = cargarSaldoLimiteTarjeta(lectura.nextLine());
+			}while(!flag);
 		}
 	}
 	

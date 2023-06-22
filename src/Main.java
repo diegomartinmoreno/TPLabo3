@@ -132,13 +132,24 @@ public class Main {
                     case 1 -> {
                         System.out.println("<< PERFIL >>");
                         System.out.println(usuario.toString());
+                        usuario.getTarjeta().mostrarTarjeta();
+                        System.out.println("Ingrese enter para continuar...");
+                        scanner.nextLine();
+                        scanner.nextLine();
                     }
                     case 2 -> {
                         System.out.println("<< HISTORIAL DE COMPRAS >>");
-                        if(usuario.getHistorialDeCompras() == null){
-                            System.out.println("HISTORIAL DE COMOPRAS VACIO");
+
+                        if(usuario.getHistorialDeCompras().getPedidos().isEmpty()){
+                            System.out.println("HISTORIAL DE COMPRAS VACIO");
                         } else {
+                            Set <Usuario> usuarios = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+                            usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
+
                             usuario.getHistorialDeCompras().listarHistorial();
+                            System.out.println("Ingrese enter para continuar...");
+                            scanner.nextLine();
+                            scanner.nextLine();
                         }
 
                     }
@@ -201,7 +212,9 @@ public class Main {
                             if (aux!=null) {
                                 aux.getHistorialDeCompras().limpiarHistorialDeCompras();
                                 pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarios);
-                            }else System.out.println("No se ha podido limpiar el historial de busqueda.");
+                                aux = pedidosYa.buscarUserPorDNI(aux.getDni(), pedidosYa.getUsuarios());
+
+                            } else System.out.println("No se ha podido limpiar el historial de busqueda.");
                         }
                     }
 
@@ -259,6 +272,7 @@ public class Main {
                             int decision = scanner.nextInt();
                             scanner.nextLine();
 
+                            usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
 
                                 switch (decision){
                                     case 1 -> {
@@ -269,12 +283,10 @@ public class Main {
                                     }
 
                                     case 2 -> {
+                                        Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
+
                                         System.out.println("Saldo actual: $" + usuario.getTarjeta().getSaldo());
                                         System.out.println("Ingrese el saldo que desea agregar");
-
-
-                                        Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                                        usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
 
                                         usuario.agregarDinero(scanner.nextInt());
                                         System.out.println("Nuevo saldo: $" + usuario.getTarjeta().getSaldo());
@@ -323,14 +335,19 @@ public class Main {
                         System.out.println("<< PERFIL >>");
                         System.out.println(administrador.toString());
                         administrador.getTarjeta().mostrarTarjeta();
+                        System.out.println("Ingrese enter para continuar...");
+                        scanner.nextLine();
+                        scanner.nextLine();
                     }
 
                     case 2 -> {
                         System.out.println("<< HISTORIAL DE COMPRAS >>");
-                        if(administrador.getHistorialDeCompras()==null){
-                            System.out.println("No hay compras realizadas....");
+                        if(administrador.getHistorialDeCompras().getPedidos().isEmpty()){
+                            System.out.println("HISTORIAL DE COMPRAS VACIO");
                         } else{
                             administrador.getHistorialDeCompras().listarHistorial();
+                            System.out.println("Ingrese enter para continuar...");
+                            scanner.nextLine();
                         }
 
 
@@ -527,6 +544,8 @@ public class Main {
         usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarioSet);
 
         usuario.setCarrito(new Carrito());
+        usuario.getCarrito().setVendedor(elegida);
+
 
         do {
             System.out.println("Que desea hacer?");
@@ -539,9 +558,6 @@ public class Main {
             System.out.println("(7) salir");
 
             decision = scanner.nextInt();
-
-
-            usuario.getCarrito().setVendedor(elegida);
 
             
             switch (decision) {
@@ -613,10 +629,12 @@ public class Main {
                     usuario.getCarrito().setMontoTotal(usuario.getCarrito().calcularMontoTotalDeLaCompra());
                     usuario.getCarrito().setDestino(usuario.getZonaActual());
 
-                    usuario.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta(), scanner);
+                    usuario.getCarrito().pagarCarrito(usuario.getHistorialDeCompras(), usuario.getTarjeta(), scanner); ////SUMAR AL MONTO TOTAL EL COSTO DE ENVIO
 
 
-                    pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);                       ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
+                    pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarioSet);
+                    pedidosYa.setUsuarios(usuarioSet);                     ///PERSISTENCIA EN ARCHIVO EL HISTORIAL DE COMPRAS
+                    usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
 
                     System.out.println("Pulse enter para salir....");
                     scanner.nextLine();

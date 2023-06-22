@@ -4,31 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HistorialDeCompras {
-    private List<Carrito> pedidos;
+    private List<Pedido> pedidos;
 
     public HistorialDeCompras() {
         pedidos = new ArrayList<>();
     }
 
     public void listarHistorial(){
-        for (Carrito carrito : pedidos){
-            carrito.listarCarrito();
+        for (Pedido pedido : pedidos){
+            pedido.mostrarPedido();
         }
     }
 
-    public boolean agregarPedido(Carrito carrito){
-        return pedidos.add(carrito);
+    public boolean agregarPedido(Pedido pedido){
+        return pedidos.add(pedido);
     }
 
     public void limpiarHistorialDeCompras (){
         pedidos.clear();
     }
 
-    public List<Carrito> getPedidos() {
+    public List<Pedido> getPedidos() {
         return pedidos;
     }
 
-    public void setPedidos(List<Carrito> pedidos) {
+    public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
 
