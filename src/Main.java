@@ -30,9 +30,9 @@ public class Main {
         Usuario usuarioRetornar = null;
         Administrador administradorRetornar = null;
         do {
-        System.out.println("En que modo va a querer acceder?");
-        System.out.println("(1) Administrador.");
-        System.out.println("(2) Usuario.");
+            System.out.println("En que modo va a querer acceder?");
+            System.out.println("(1) Administrador.");
+            System.out.println("(2) Usuario.");
 
 
 
@@ -40,90 +40,70 @@ public class Main {
             try {
                 int opcion = scanner.nextInt();
                 switch (opcion) {
+
+                    ///MODO ADMIN
                     case 1 -> {
                         System.out.println("(1) Iniciar Sesion >>");
                         System.out.println("(2) Registrarse >>");
                         int caso = scanner.nextInt();
-                        scanner.nextLine();
 
                         switch (caso) {
-                            case 1 -> {
-                                administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
-                            }
-                            case 2 -> {
-                                administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
-                            }
+                            case 1 -> administradorRetornar = pedidosYa.iniciarSesionComoAdmin(scanner);
+                            case 2 -> administradorRetornar = pedidosYa.registroDeCuentaDeAdmin(scanner);
                             default -> throw new CasoInexistenteException();
                         }
 
-                    System.out.println("ELEGIR TU ZONA ACTUAL: ");
-                    System.out.println(Arrays.toString(Zonas.values()));
-                    boolean flag=true;
-                    Zonas elegida=null;
-                    do{
-                        try {
-                            elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
-                            flag=false;
-                        }catch(IllegalArgumentException e){
-                            System.out.println("La zona ingresada no es valida. Intente nuevamente.");
-                        }
-                    } while (flag);
-                    administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
-                    return administradorRetornar;
-                }
-                case 2 -> {
-                    System.out.println("(1) Iniciar Sesion >>");
-                    System.out.println("(2) Registrarse >>");
-                    int casoUser = scanner.nextInt();
-                    switch (casoUser) {
-                        case 1 -> {
-                            usuarioRetornar = pedidosYa.iniciarSesionComoUsuario(scanner);
-                            //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU. ////////////////////////////////////////////////
-                        }
-                        case 2 -> {
-                            usuarioRetornar = pedidosYa.registroDeCuentaDeUsuario(scanner);
-                        }
-                        default -> throw new CasoInexistenteException();
-                    }
-
-
-                    if(usuarioRetornar.getZonas().isEmpty()){
-                        Zonas elegida=pedidosYa.elegirZona(scanner);
-
-                        Set<Usuario> usuariosSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                        Usuario user = pedidosYa.buscarUserPorDNI(usuarioRetornar.getDni(), usuariosSet);
-
-                        if(user!=null){
-                            user.agregarUnaZona(elegida);////se agrega a las zonas del usuario
-                            pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuariosSet);
-                        } else{
-                            throw new RuntimeException("El usuario no existe....//*/**. ERROR..... fatal.....");
-                        }
-
-                        usuarioRetornar.setZonaActual(elegida);////se agrega a la zona elegida
-
-                    } else {
-                        System.out.println("Zonas: " + usuarioRetornar.getZonas());
-
-                        System.out.println("ELEGIR UNA ZONA: ");
-                        boolean flag=true;
+                        System.out.println("ELEGIR TU ZONA ACTUAL: ");
+                        System.out.println(Arrays.toString(Zonas.values()));
+                        boolean flag = true;
+                        Zonas elegida = null;
                         do {
-                            try{
-                                usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
-                                flag=false;
-                            }catch(IllegalArgumentException e){
+                            try {
+                                String zona1= scanner.nextLine();
+                                elegida = Zonas.valueOf(zona1.toUpperCase());
+                                flag = false;
+                            } catch (IllegalArgumentException e) {
                                 System.out.println("La zona ingresada no es valida. Intente nuevamente.");
                             }
-                        }while (flag);
-
-
+                        } while (flag);
+                        administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
+                        return administradorRetornar;
                     }
 
-                        ////////////////////////////////////////////////////////////////////
+                    ///MODO USUARIO
+                    case 2 -> {
+                        System.out.println("(1) Iniciar Sesion >>");
+                        System.out.println("(2) Registrarse >>");
+                        int casoUser = scanner.nextInt();
+                        switch (casoUser) {
+                            case 1 -> //AGREGAR ELEGIR LA ZONA ACTUAL PARA MANEJAR ESO EN EL MENU. ////////////////////////////////////////////////
+                                    usuarioRetornar = pedidosYa.iniciarSesionComoUsuario(scanner);
+                            case 2 -> usuarioRetornar = pedidosYa.registroDeCuentaDeUsuario(scanner);
+                            default -> throw new CasoInexistenteException();
+                        }
+
+                        System.out.println("ELEGIR UNA ZONA: ");
+                        boolean flag = true;
+                        Zonas elegida = null;
+                        System.out.println(Arrays.toString(Zonas.values()));
+                        do {
+                            try {
+
+                                String zona1= scanner.nextLine();
+                                elegida=Zonas.valueOf(zona1.toUpperCase());
+                                flag = false;
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("La zona ingresada no es valida. Intente nuevamente.");
+                            }
+                        } while (flag);
+                        usuarioRetornar.setZonaActual(elegida);
                         return usuarioRetornar;
                     }
+                    ////////////////////////////////////////////////////////////////////
                     default -> throw new CasoInexistenteException();
                 }
+
+
             } catch (InputMismatchException e) {
                 scanner.nextLine();
                 System.out.println("LO INGRESADO NO FUE UN NUMERO. CERRANDO EL PROGRAMA...");
@@ -256,7 +236,7 @@ public class Main {
                             }
 
                             System.out.println("Desea continuar? s/n");
-                    }while (scanner.next().charAt(0) != 'n');
+                        }while (scanner.next().charAt(0) != 'n');
                     }
 
                     case 8 -> control = 'n';
@@ -558,7 +538,7 @@ public class Main {
                         carritoUsuario.setNota(scanner.nextLine());
                     }
 
-                    
+
 
                     carritoUsuario.setMontoTotal(carritoUsuario.calcularMontoTotalDeLaCompra());
                     carritoUsuario.setDestino(usuario.getZonaActual());
