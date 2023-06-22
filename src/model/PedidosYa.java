@@ -482,6 +482,7 @@ public class PedidosYa {
 
         do {
             System.out.println("1) Ingrese su nombre: ");
+            scanner.nextLine();
             cadenaAux = scanner.nextLine();
             try {
                 flag = Persona.verificarEsLetra(cadenaAux);
@@ -512,15 +513,21 @@ public class PedidosYa {
 
         System.out.println("3) Ingrese su edad");
         int edad = scanner.nextInt();
-        try {
-            flag = Persona.verificarEdad(edad);
-            if (!flag)
-                throw new MenorDeEdadException();
-            else
-                administrador.setEdad(edad);
-        } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
-        }
+        do {
+            try {
+                flag = Persona.verificarEdad(edad);
+                if (!flag)
+                    throw new MenorDeEdadException();
+                else
+                    administrador.setEdad(edad);
+            } catch (NullPointerException e) {
+                flag = false;
+                System.out.println(e.getMessage());
+            } catch (InputMismatchException e) {
+                flag = false;
+                System.out.println("No ingresaste un numero! Error.");
+            }
+        }while (!flag);
 
         do {
             scanner.nextLine();
@@ -619,6 +626,7 @@ public class PedidosYa {
 
         System.out.println("Bienvenido! Ingrese los datos correspondientes para iniciar sesion >> ");
         boolean login = false;
+        scanner.nextLine();
         do {
             System.out.println("1) Ingrese su email: ");
             email = scanner.nextLine();
