@@ -116,13 +116,13 @@ public class Main {
         int opcion=0; char control = 's'; boolean flag = false;
         do {
             System.out.println("Bienvenido a PedidosYa! Que desea hacer? >>");
-            System.out.println("(1) Ver perfil >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
+            System.out.println("(1) Ver perfil >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO FUNCA
             System.out.println("(2) Ver Historial de compras >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
             System.out.println("(3) Comprar >>");
-            System.out.println("(4) Modificar perfil >>"); //SE ACTUALIZA EN ARCHIVO
+            System.out.println("(4) Modificar perfil >>"); //SE ACTUALIZA EN ARCHIVO FUNCA
             System.out.println("(5) Limpiar historial de compras."); //SE ACTUALIZA EN ARCHIVO
             System.out.println("(6) Cargar Tarjeta"); //SE ACTUALIZA EN ARCHIVO
-            System.out.println("(7) Tus zonas"); ///AGREGAR, ELIMINAR, VER ZONAS y ELEGIR  ZONA ACTUAL
+            System.out.println("(7) Tus zonas"); ///AGREGAR, ELIMINAR, VER ZONAS y ELEGIR  ZONA ACTUAL FUNCA
             System.out.println("(8) Salir >>"); //NO ES NECESARIO ACTUALIZAR ARCHIVO
 
             try {
