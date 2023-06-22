@@ -93,6 +93,9 @@ public class Carrito {
                 System.out.println("La compra ha sido realizada!!!");
                 System.out.print("Aguarde, en unos instantes le va a llegar un pedido por manos de ");
                 repartidor.mostrarRepartidor();
+                System.out.println("Su pedido es el siguiente:");
+                listarCarrito();
+                System.out.println("//////////////////////////////////////////////////////////////////");
             } else {
                 if (!tarjeta.isActiva()){
                     System.out.println("La tarjeta se encuentra inhabilitada..// Debe cargar una nueva...");
