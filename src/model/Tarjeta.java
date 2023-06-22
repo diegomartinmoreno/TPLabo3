@@ -303,7 +303,7 @@ public class Tarjeta {
 	}
 	
 	public boolean RealizarPago (double monto) { /// RETORNA SI SE PUDO REALIZAR EL PAGO
-		if (VerificarVencimiento()) {
+		if (!VerificarVencimiento()) {
 			this.BloquearTarjeta();
 			return false;
 		}

@@ -74,16 +74,19 @@ public class Carrito {
         montoTotal += vendedor.getCostoDeEnvio();
 
 
-
+        System.out.println("////////////////////////////////////////////////////////");
         System.out.printf("Encargado de llevar el pedido: ");
         repartidor.mostrarRepartidor();
         System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
 
         historial.agregarPedido(this);
 
-        System.out.println("SALDOOOOOOOOOO " + tarjeta.getSaldo());
-
-        if(tarjeta.RealizarPago(montoTotal)) clear();
+        if(tarjeta.RealizarPago(montoTotal)) {
+            listarCarrito();
+            System.out.println("La compra ha sido realizada!!!");
+            System.out.print("Aguarde, en unos instantes le va a llegar un pedido por manos de ");
+            repartidor.mostrarRepartidor();
+        }
     }
 
     public Repartidor generarRepartidorAleatorio(){

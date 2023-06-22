@@ -479,6 +479,7 @@ public class Main {
     }
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Usuario usuario){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
+        int decision=-1;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, usuario.getZonaActual());
         usuario.getCarrito().setVendedor(elegida);
         do {
@@ -491,7 +492,7 @@ public class Main {
             System.out.println("(6) Ver carrito");
             System.out.println("(7) salir");
 
-            int decision = scanner.nextInt();
+            decision = scanner.nextInt();
 
             Carrito carritoUsuario = usuario.getCarrito();
             switch (decision) {
@@ -568,19 +569,24 @@ public class Main {
                     } else {
                         throw new RuntimeException("Usuario no existe....///*** ERROR... fatal.....");
                     }
+                    System.out.println("Pulse enter para salir....");
+                    scanner.nextLine();
 
-                    user.getCarrito().listarCarrito();
+                    System.out.println("Saliendo.....");
+                    decision=7;
+                    usuario.setCarrito(new Carrito());
                     break;
                 case 6:
                     carritoUsuario.listarCarrito();
+                    System.out.println("Pulse enter para continuar....");
+                    scanner.nextLine();
                     break;
             }
-
-            System.out.println("Desea continuar? s/n");
-        }while (scanner.next().charAt(0) != 'n');
+        }while (decision != 7);
     }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Administrador administrador){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
+        int decision = -1;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, administrador.getZonaActual());
         administrador.getCarrito().setVendedor(elegida);
         do {
@@ -593,7 +599,7 @@ public class Main {
             System.out.println("(6) Ver carrito");
             System.out.println("(7) salir");
 
-            int decision = scanner.nextInt();
+            decision = scanner.nextInt();
 
             Carrito carritoAdministrador = administrador.getCarrito();
             switch (decision) {
@@ -622,8 +628,19 @@ public class Main {
                 case 2:
                     carritoAdministrador.mostrarProductos();
 
-                    System.out.println("Ingrese el numero del producto que desea eliminar");
-                    carritoAdministrador.eliminarProductoDelCarrito(scanner.nextInt());
+                    System.out.println("Ingrese el numero del producto que desea eliminar o un numero mayor a los mostrados para salir...");
+                    int posEliminar = scanner.nextInt();
+
+                    if(posEliminar > carritoAdministrador.getProductos().size()){
+                        break;
+                    }
+
+                    try {
+                        carritoAdministrador.eliminarProductoDelCarrito(posEliminar);
+                    }catch (RuntimeException e){
+                        System.out.println(e.getMessage());
+                    }
+
                     break;
 
                 case 3:
@@ -660,15 +677,22 @@ public class Main {
                     carritoAdministrador.setDestino(administrador.getZonaActual());
 
                     carritoAdministrador.pagarCarrito(administrador.getHistorialDeCompras(), administrador.getTarjeta());
-                    carritoAdministrador.listarCarrito();
+                    System.out.println("Pulse enter para continuar....");
+                    scanner.nextLine();
+                    System.out.println("Saliendo.....");
+                    decision=7;
+                    administrador.setCarrito(new Carrito());
                     break;
-
                 case 6:
                     carritoAdministrador.listarCarrito();
+                    System.out.println("Pulse enter para continuar....");
+                    scanner.nextLine();
+                    scanner.nextLine();
                     break;
             }
+        }while (decision != 7);
 
-            System.out.println("Desea continuar? s/n");
-        }while (scanner.next().charAt(0) != 'n');
+
     }
+
 }
