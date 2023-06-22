@@ -53,9 +53,16 @@ public class Main {
 
                     System.out.println("ELEGIR TU ZONA ACTUAL: ");
                     System.out.println(Arrays.toString(Zonas.values()));
-
-                    Zonas elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
-
+                    boolean flag=true;
+                    Zonas elegida=null;
+                    do{
+                        try {
+                            elegida = Zonas.valueOf(scanner.nextLine().toUpperCase());
+                            flag=false;
+                        }catch(IllegalArgumentException e){
+                            System.out.println("La zona ingresada no es valida. Intente nuevamente.");
+                        }
+                    } while (flag);
                     administradorRetornar.setZonaActual(elegida);////se agrega a la zona elegida
                     return administradorRetornar;
                 }
@@ -94,7 +101,17 @@ public class Main {
                         System.out.println("Zonas: " + usuarioRetornar.getZonas());
 
                         System.out.println("ELEGIR UNA ZONA: ");
-                        usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
+                        boolean flag=true;
+                        do {
+                            try{
+                                usuarioRetornar.setZonaActual(Zonas.valueOf(scanner.nextLine().toUpperCase()));
+                                flag=false;
+                            }catch(IllegalArgumentException e){
+                                System.out.println("La zona ingresada no es valida. Intente nuevamente.");
+                            }
+                        }while (flag);
+
+
                     }
 
                     ////////////////////////////////////////////////////////////////////
