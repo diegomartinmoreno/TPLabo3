@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class Producto {
     private static int ContadorID=0;

@@ -98,7 +98,6 @@ public class Empresa {
         System.out.println("\n                            Costo de envio: $" + costoDeEnvio);
         System.out.println("                                                                             ZONAS: " + getZonas());
         mostrarMap();
-        System.out.println("\n\n" + listaDeCupones); ////////////NO MOSTRAR
         System.out.println("-----------------------------------------------------------------------------------------------------------------------");
 
     }

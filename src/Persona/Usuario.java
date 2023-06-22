@@ -1,14 +1,7 @@
 package Persona;
 
-import Exceptions.CasoInexistenteException;
-import Exceptions.IntentosMaximosDeInicioSesionAlcanzadoException;
-import Exceptions.MenorDeEdadException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import model.*;
-
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
 
 
 public class Usuario extends Persona implements UtilidadUserAdm{

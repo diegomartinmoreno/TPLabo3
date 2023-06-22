@@ -6,7 +6,6 @@ import Persona.Password;
 import Persona.Persona;
 import Persona.Usuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.source.tree.NewArrayTree;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,7 +97,7 @@ public class PedidosYa {
 
     public Usuario registroDeCuentaDeUsuario(Scanner scanner) throws MenorDeEdadException {
         Usuario usuario = new Usuario();
-        String cadenaAux = null, contrasenia = null;
+        String cadenaAux, contrasenia;
         boolean flag = false;
         this.usuarios = extraerUsuariosFromJSON(ARCHIVO_USUARIOS);
 
@@ -220,7 +219,7 @@ public class PedidosYa {
             }
         } while (!flag);
 
-        int decision = 0;
+        int decision;
 
         System.out.println("Desea anadir la tarjeta ahora o luego?. ");
         System.out.println("[1] Ahora.\n[2] Mas tarde.");
@@ -261,7 +260,7 @@ public class PedidosYa {
     }
 
     public Usuario iniciarSesionComoUsuario(Scanner scanner) throws IntentosMaximosDeInicioSesionAlcanzadoException {
-        String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
+        String email, contrasenia; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
         Usuario usuario = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
         int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
 
@@ -504,7 +503,7 @@ public class PedidosYa {
     public Administrador registroDeCuentaDeAdmin(Scanner scanner) throws MenorDeEdadException {
 
         Administrador administrador = new Administrador();
-        String cadenaAux = null, contrasenia = null;
+        String cadenaAux, contrasenia;
         boolean flag = false;
         this.administradores = extraerAdministradoresFromJSON(ARCHIVO_ADMINISTRADORES);
 
@@ -628,7 +627,7 @@ public class PedidosYa {
             }
         } while (!flag);
 
-        int decision = 0;
+        int decision;
 
         System.out.println("Desea anadir su tarjeta ahora o luego?. ");
         System.out.println("[1] Ahora.\n[2] Mas tarde.");
@@ -672,7 +671,7 @@ public class PedidosYa {
     }
 
     public Administrador iniciarSesionComoAdmin (Scanner scanner) {
-        String email = null, contrasenia = null; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
+        String email, contrasenia; //VARIABLES PARA GUARDAR LOS DATOS IMPORTANTE POR SEPARADO.
         Administrador administrador = null; //DECLARO UN USUARIO, PARA QUE SI LO INGRESADO ES CORRECTO, EN EL MAIN ESTE COMO USUARIO ACTUAL.
         int i = 0; //REPRESENTA LOS INTENTOS DE INICIAR SESION.
 
@@ -1007,7 +1006,7 @@ public class PedidosYa {
     }
 
     public Empresa buscarEmpresaConMetodoElegido (Scanner scanner, Zonas zonaActual){
-        Empresa buscada=null;
+        Empresa buscada;
         System.out.println("Bienvenido!! Elija el metodo por el que quiere buscar locales\n 1_Buscar Empresa por nombre\n 2_Buscar por comidas.\n Presione cualquier otra tecla para salir");
         int numero= scanner.nextInt();
         char control='n';
@@ -1063,7 +1062,7 @@ public class PedidosYa {
                 }
             } while (!flag);
 
-        List<Empresa> listaBuscador = new ArrayList<>();
+        List<Empresa> listaBuscador;
         listaBuscador = crearListaEmpresas(dato, zonaActual);
 
         mostrarEmpresasSoloNombre(listaBuscador);
@@ -1072,14 +1071,14 @@ public class PedidosYa {
     }
 
     public Empresa buscarPorNombreSinSerExacto(Scanner scanner, Zonas zonaActual) {
-        Empresa buscada = new Empresa();
+        Empresa buscada;
         scanner.nextLine();
         System.out.println("Ingrese el nombre de la empresa que busca.");
         String nombre = scanner.nextLine().toUpperCase();
         buscada=buscarEmpresaPorAproximacion(nombre);
         /// busco por aproximacion, si eso falla, busco empresas que contengan el nombre.
         if (buscada==null){
-            List<Empresa> listaEmpresas = new ArrayList<>();
+            List<Empresa> listaEmpresas;
             do {
                 listaEmpresas = crearListaEmpresas(nombre, zonaActual);
                 if (listaEmpresas.size()==0){
@@ -1107,14 +1106,14 @@ public class PedidosYa {
     }
 
     public Empresa buscarPorNombreSinSerExacto(Scanner scanner, List<Empresa> listaDisminuida, Zonas zonaActual) {
-        Empresa buscada = new Empresa();
+        Empresa buscada;
         scanner.nextLine();
         System.out.println("Ingrese el nombre de la empresa que busca.");
         String nombre = scanner.nextLine().toUpperCase();
         buscada=buscarEmpresaPorAproximacion(nombre, listaDisminuida);
         /// busco por aproximacion, si eso falla, busco empresas que contengan el nombre.
         if (buscada==null){
-            List<Empresa> listaEmpresas = new ArrayList<>();
+            List<Empresa> listaEmpresas;
             do {
                 listaEmpresas = crearListaEmpresas(nombre, listaDisminuida, zonaActual);
                 if (listaEmpresas.size()==0){
@@ -1413,7 +1412,7 @@ public class PedidosYa {
 
     public Empresa cargarEmpresaPorTeclado (Scanner scanner){
         Empresa A= new Empresa();
-        char control = 's';
+        char control;
         System.out.println("Cargue el nombre de la empresa");
         scanner.nextLine();
         A.setNombre(scanner.nextLine());
@@ -1462,7 +1461,7 @@ public class PedidosYa {
     }
 
     public Empresa retornarUnaEmpresa(Scanner scanner) {
-        Empresa buscada = new Empresa();
+        Empresa buscada;
 
         System.out.println("Lista de empresas posibles, elija especificamente la que desea");
         mostrarEmpresasSoloNombre(listaDeEmpresas);
@@ -1488,7 +1487,7 @@ public class PedidosYa {
 
     public Zonas elegirZona (Scanner scanner){
         Zonas elegida=null;
-        boolean flag=false;
+        boolean flag;
 
         do {
             try {
@@ -1548,8 +1547,8 @@ public class PedidosYa {
     public Empresa buscarEmpresaPorAproximacion(String nombreBuscada, List<Empresa> listaDisminuida){
 
         nombreBuscada.toUpperCase();
-        Empresa empresaBuscada=null;
-        double distanciaActual=0;
+        Empresa empresaBuscada;
+        double distanciaActual;
         int indexMejorCoincidencia=-1;
         double distanciaMejorCoincidencia=0;
         for (int i=0; i<listaDisminuida.size(); i++) {
@@ -1571,8 +1570,8 @@ public class PedidosYa {
     public Empresa buscarEmpresaPorAproximacion(String nombreBuscada){
 
         nombreBuscada.toUpperCase();
-        Empresa empresaBuscada=null;
-        double distanciaActual=0;
+        Empresa empresaBuscada;
+        double distanciaActual;
         int indexMejorCoincidencia=-1;
         double distanciaMejorCoincidencia=0;
         for (int i=0; i<listaDeEmpresas.size(); i++){

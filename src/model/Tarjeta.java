@@ -190,7 +190,7 @@ public class Tarjeta {
 		
 		//Convierto String almacenado a LocalDate para comparar las fechas.
 		try {
-			LocalDate LDfechaDeVencimiento=LocalDate.now();
+			LocalDate LDfechaDeVencimiento;
 			DateTimeFormatter fmt = new DateTimeFormatterBuilder()
 				    .appendPattern("MM/yyyy")
 				    .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)

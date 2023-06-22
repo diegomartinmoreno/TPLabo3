@@ -3,9 +3,7 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.crypto.spec.DESedeKeySpec;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -81,7 +79,7 @@ public class Carrito {
         repartidor.mostrarRepartidor();
         System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
 
-        boolean flag = false;
+        boolean flag;
 
         do {
             flag = tarjeta.RealizarPago(montoTotal);
@@ -161,12 +159,24 @@ public class Carrito {
     }
 
     //6
-    public void listarCarrito(){
+    public void mostrarProductosDelCarrito(){
+        System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
         System.out.println("PRODUCTOS:");
-        System.out.println(productos.getProductos());
+        for(Producto producto : productos.getProductos()){
+            System.out.println(producto.getNombreProducto() + " - $" + producto.getPrecio() + " - Cantidad: " + producto.getCantidadPedido());
+        }
+        System.out.println("//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+    }
+    public void listarCarrito(){
+        mostrarProductosDelCarrito();
+        System.out.println("Costo de envio: " + vendedor.getCostoDeEnvio());
         System.out.println("Monto total: " + calcularMontoTotalDeLaCompra());
-        System.out.println("Nota: " + nota);
-        System.out.println("Fecha del model.Pedido: " + fechaPedido + "\n");
+        if(nota!=null){
+            System.out.println("Nota: " + nota);
+        } else {
+            System.out.println("Nota vacia....");
+        }
+        System.out.println("Fecha del pedido: " + fechaPedido + "\n");
     }
 
     public int buscarProductoPorNombre(String nombre) throws NullPointerException, RuntimeException{

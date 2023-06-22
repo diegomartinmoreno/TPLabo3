@@ -113,7 +113,9 @@ public class Main {
     }
 
     public static void menuPrincipalUsuario(Scanner scanner, Usuario usuario, PedidosYa pedidosYa){
-        int opcion=0; char control = 's'; boolean flag = false;
+        if  (usuario==null || scanner ==null || pedidosYa==null) throw new RuntimeException("Parametros nulos...ErRor..//***");
+
+        int opcion; char control = 's'; boolean flag;
         do {
             System.out.println("Bienvenido a PedidosYa! Que desea hacer? >>");
             System.out.println("(1) Ver perfil >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
@@ -200,7 +202,9 @@ public class Main {
                             }
                             default -> System.out.println("Volviendo al menu principal...");
                         }
+                        Zonas actual = usuario.getZonaActual();
                         usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
+                        usuario.setZonaActual(actual);
                     }
 
                     case 5 -> {
@@ -209,11 +213,11 @@ public class Main {
 
                         if (decision == 's'){
                             Set <Usuario> usuarios = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
-                            Usuario aux = pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
-                            if (aux!=null) {
-                                aux.getHistorialDeCompras().limpiarHistorialDeCompras();
+                            usuario= pedidosYa.buscarUserPorDNI(usuario.getDni(), usuarios);
+                            if (usuario!=null) {
+                                usuario.getHistorialDeCompras().limpiarHistorialDeCompras();
                                 pedidosYa.exportarUsuariosToJSON(PedidosYa.ARCHIVO_USUARIOS, usuarios);
-                                aux = pedidosYa.buscarUserPorDNI(aux.getDni(), pedidosYa.getUsuarios());
+                                usuario = pedidosYa.buscarUserPorDNI(usuario.getDni(), pedidosYa.getUsuarios());
 
                             } else System.out.println("No se ha podido limpiar el historial de busqueda.");
                         }
@@ -314,7 +318,8 @@ public class Main {
     }
 
     public static void menuPrincipalAdmin(Scanner scanner, Administrador administrador, PedidosYa pedidosYa) throws CasoInexistenteException{
-        int opcion=0; char control = 's'; boolean flag = false;
+        if  (administrador==null || scanner ==null || pedidosYa==null) throw new RuntimeException("Parametros nulos...ErRor..//***");
+        int opcion; char control = 's'; boolean flag;
         do {
             System.out.println("Bienvenido a PedidosYa administrador! Que desea hacer? >>");
             System.out.println("(1) Ver perfil de administrador >> "); //NO ES NECESARIO ACTUALIZAR ARCHIVO
@@ -420,8 +425,9 @@ public class Main {
                                 }
                                 default -> throw new CasoInexistenteException();
                             }
-
+                            Zonas zonaActualTemp = administrador.getZonaActual();
                             administrador=pedidosYa.buscarAdministradorPorDNI(administrador.getDni(), pedidosYa.getAdministradores());
+                            administrador.setZonaActual(zonaActualTemp);
                         } catch (CasoInexistenteException e) {
                             System.out.println(e.getMessage());
                         }
@@ -540,7 +546,7 @@ public class Main {
     }
 
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Usuario usuario){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
-        int decision=-1;
+        int decision;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, usuario.getZonaActual());
 
         Set<Usuario> usuarioSet = pedidosYa.extraerUsuariosFromJSON(PedidosYa.ARCHIVO_USUARIOS);
@@ -565,7 +571,7 @@ public class Main {
             
             switch (decision) {
                 case 1:
-                    Producto prodAux = new Producto();
+                    Producto prodAux;
                     elegida.mostrarParaComprar();
 
                     System.out.println("Ingrese el id del producto que desea llevar:");
@@ -605,7 +611,7 @@ public class Main {
                     break;
 
                 case 4:
-                    System.out.println("Cupones disponibles: " +  usuario.getCarrito().getVendedor().getListaDeCupones());
+                    System.out.println("Cupones disponibles de la empresa " + elegida.getNombre() + ": " +  usuario.getCarrito().getVendedor().getListaDeCupones());
 
                     System.out.println("Ingresa un cupon de 6 caracteres: ");
                     scanner.nextLine();
@@ -659,7 +665,7 @@ public class Main {
     }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     private static void menuDeCarrito(Scanner scanner, PedidosYa pedidosYa, Administrador administrador){ ///CARRITO< HISTORIAL< TARJETA< PERTENECENN A USUARIO.......
-        int decision = -1;
+        int decision;
         Empresa elegida = pedidosYa.buscarEmpresaConMetodoElegido(scanner, administrador.getZonaActual());
         if (elegida!=null){
 
@@ -679,7 +685,7 @@ public class Main {
                 Carrito carritoAdministrador = administrador.getCarrito();
                 switch (decision) {
                     case 1:
-                        Producto prodAux = new Producto();
+                        Producto prodAux;
                         elegida.mostrarParaComprar();
 
                         System.out.println("Ingrese el id del producto que desea llevar:");

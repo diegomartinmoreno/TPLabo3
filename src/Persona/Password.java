@@ -1,7 +1,5 @@
 package Persona;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Password {
     private static final int LONGITUD_MINIMA = 7;
     private static final int CANTIDAD_MINIMA_DE_CARACTERES = 5;

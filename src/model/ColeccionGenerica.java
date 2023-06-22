@@ -40,6 +40,8 @@ public class ColeccionGenerica<T> implements Serializable {
         return null;
     }
 
+
+
     public List<T> getProductos() {
         return productos;
     }
