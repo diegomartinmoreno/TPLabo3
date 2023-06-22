@@ -318,19 +318,6 @@ public class Tarjeta {
 		System.out.println("Se le resta dinero a tu cuenta.....");
 		return true;
 	}
-
-/*
-	public static void main (String[] Args) {
-		Tarjeta tar= new Tarjeta();
-		System.out.println(tar.toString());
-		Scanner s= new Scanner(System.in);
-		if (tar.cargarTarjeta(s)) {
-			System.out.println(tar.toString());
-		}
-		tar.modificarTarjeta(s);
-		System.out.println(tar.toString());
-	}
-*/
 }
 
 

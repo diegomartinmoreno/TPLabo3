@@ -978,13 +978,6 @@ public class PedidosYa {
         }
     }
 
-    public void mostrarEmpresas() {
-        for (Empresa empresa : listaDeEmpresas) {
-            System.out.println("Muestro las empresas");
-            empresa.mostrarEmpresa();
-        }
-    }
-
     public void cargarListaDeEmpresas(){ ///Los precios varian, hay empresas que no cobran envio al estar a cargo de la misma.
         listaDeEmpresas.add(new Empresa("LA MUSA", crearListaDeProductos(Set.of(BEBIDAS, EMPANADAS, PAPAS, PIZZA)), Set.of(PUERTO,CONSTITUCION,INDEPENDENCIA, BOSQUE, MOGOTES),250, 4));
         listaDeEmpresas.add(new Empresa("HAMBURGO", crearListaDeProductos(Set.of(BEBIDAS, HAMBURGUESAS, PAPAS, CARNES, ENSALADAS, PARRILLA)), Set.of(CENTRO,ALEM,RUMENCO, MOGOTES),250, 5));
@@ -1515,46 +1508,6 @@ public class PedidosYa {
     }
 
     //// Inicio de busqueda de empresa por aproximacion
-/*
-    static int calcularDistanciaLaveshtein(String str1, String str2) {
-
-        if (str1.isEmpty())
-        {
-            return str2.length();
-        }
-        if (str2.isEmpty())
-        {
-            return str1.length();
-        }
-
-        /// calculo el numero de caracteres diferentes que necesitan ser reemplazados recursivamente.
-        int reemplazados = calcularDistanciaLaveshtein(
-                str1.substring(1), str2.substring(1))
-                + NumeroDeReemplazados(str1.charAt(0),str2.charAt(0));
-
-        /// calculo el numero de caracteres diferentes que necesitan ser insertados recursivamente.
-        int insertados = calcularDistanciaLaveshtein(
-                str1, str2.substring(1))+ 1;
-
-        /// calculo el numero de caracteres diferentes que necesitan ser eliminados recursivamente.
-        int eliminados = calcularDistanciaLaveshtein(
-                str1.substring(1), str2)+ 1;
-
-        // retorno el minimo entre las tres operaciones
-        return min_editados(reemplazados, insertados, eliminados);
-    }
-
-    static int NumeroDeReemplazados(char c1, char c2) {
-
-        return c1 == c2 ? 0 : 1;
-    }
-
-    static int min_editados(int... nums) {
-
-        return Arrays.stream(nums).min().orElse(
-                Integer.MAX_VALUE);
-    }
-*/
     public static int auxiliarDistanciaLaveshtein(String X, String Y)
     {
         int m = X.length();
@@ -1613,17 +1566,7 @@ public class PedidosYa {
             empresaBuscada=listaDeEmpresas.get(indexMejorCoincidencia);
             return empresaBuscada;
         }
-            /*System.out.println("¿Busca la empresa: " + empresaBuscada.getNombre() + "? S/N");
-            char control='n';
-            control=lectura.nextLine().charAt(0);
-            control=Character.toUpperCase(control);
-            if (control=='S'){
-                return empresaBuscada;
-            }else{
-                return null;
-            }
-             */
-        }
+    }
 
     public Empresa buscarEmpresaPorAproximacion(String nombreBuscada){
 
@@ -1646,17 +1589,7 @@ public class PedidosYa {
             empresaBuscada=listaDeEmpresas.get(indexMejorCoincidencia);
             return empresaBuscada;
         }
-            /*System.out.println("¿Busca la empresa: " + empresaBuscada.getNombre() + "? S/N");
-            char control='n';
-            control=lectura.nextLine().charAt(0);
-            control=Character.toUpperCase(control);
-            if (control=='S'){
-                return empresaBuscada;
-            }else{
-                return null;
-            }
-             */
-        }
+    }
 
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

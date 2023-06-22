@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Empresa {
     private String nombre;
-    private LinkedHashMap <TipoDeProductos, HashSet<Producto>> productosEmpresa; ///AAAAA
+    private LinkedHashMap <TipoDeProductos, HashSet<Producto>> productosEmpresa;
     private Set<Zonas> zonas; /// AAAAAA
     private List <String> listaDeCupones;
     private double costoDeEnvio;
@@ -70,39 +70,6 @@ public class Empresa {
         }
 
         return sb.toString();
-    }
-
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public double getCostoDeEnvio() {
-        return costoDeEnvio;
-    }
-
-    public void setCostoDeEnvio(double costoDeEnvio) {
-        this.costoDeEnvio = costoDeEnvio;
-    }
-
-    public LinkedHashMap<TipoDeProductos, HashSet<Producto>> getProductosEmpresa() {
-        return productosEmpresa;
-    }
-
-    public void setProductosEmpresa(LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa) {
-        this.productosEmpresa = productosEmpresa;
-    }
-
-    public List<String> getListaDeCupones() {
-        return listaDeCupones;
-    }
-
-    public void setListaDeCupones(List<String> listaDeCupones) {
-        this.listaDeCupones = listaDeCupones;
     }
 
     private void mostrarProductosEmpresa(){
@@ -197,19 +164,39 @@ public class Empresa {
     public Set<Zonas> getZonas() {
         return zonas;
     }
-
     public void setZonas(Set<Zonas> zonas) {
         this.zonas = zonas;
     }
-
     public int getPuntuacion() {
         return puntuacion;
     }
-
     public void setPuntuacion(int puntuacion) {
         this.puntuacion = puntuacion;
     }
-
+    public String getNombre() {
+        return nombre;
+    }
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+    public double getCostoDeEnvio() {
+        return costoDeEnvio;
+    }
+    public void setCostoDeEnvio(double costoDeEnvio) {
+        this.costoDeEnvio = costoDeEnvio;
+    }
+    public LinkedHashMap<TipoDeProductos, HashSet<Producto>> getProductosEmpresa() {
+        return productosEmpresa;
+    }
+    public void setProductosEmpresa(LinkedHashMap<TipoDeProductos, HashSet<Producto>> productosEmpresa) {
+        this.productosEmpresa = productosEmpresa;
+    }
+    public List<String> getListaDeCupones() {
+        return listaDeCupones;
+    }
+    public void setListaDeCupones(List<String> listaDeCupones) {
+        this.listaDeCupones = listaDeCupones;
+    }
 
 
     @Override
